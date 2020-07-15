@@ -1,16 +1,9 @@
 <template>
   <div class="orderForm">
-    <van-nav-bar
-      left-arrow
-      class="navBar"
-      @click-left="$router.go(-1)"
-      fixed
-      placeholder
-      title="订单"
-    />
+    <van-nav-bar left-arrow class="navBar" @click-left="$router.go(-1)" :fixed="false" title="订单" />
     <ul>
-      <li>
-        <div>
+      <li v-for="item in 5" :key="item">
+        <div class="orderNum">
           <p>DH-O-20200714-275691</p>
           <p>待订单审核</p>
         </div>
@@ -30,9 +23,9 @@
         </div>
         <p>种类:2,数量:22,总计: ￥176.64</p>
         <div class="btnBox">
-          <van-button type="default" size="mini">迷你按钮</van-button>
-          <van-button type="default" size="mini">迷你按钮</van-button>
-          <van-button type="default" size="mini">迷你按钮</van-button>
+          <van-button class="paybtn" type="default" size="small">立即支付</van-button>
+          <van-button type="default" size="small">再次购买</van-button>
+          <van-button type="default" size="small">修改订单</van-button>
         </div>
       </li>
     </ul>
@@ -59,6 +52,9 @@ export default {
 <style scoped>
 .orderForm {
   height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: #f5f5f5;
 }
 .imgBox {
   display: flex;
@@ -70,6 +66,51 @@ export default {
 }
 .imgBox div img {
   width: 100%;
+}
+ul {
+  overflow-y: auto;
+}
+ul::-webkit-scrollbar {
+  display: none;
+}
+li {
+  background: #fff;
+  margin-bottom: 1rem;
+}
+/* 最后一个li */
+li:last-child {
+  margin-bottom: 0;
+}
+.orderNum {
+  display: flex;
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid #f5f5f5;
+  justify-content: space-between;
+}
+.orderNum p:nth-child(2) {
+  color: #feb35c;
+}
+/* 种类 */
+li > p {
+  text-align: right;
+  padding: 0 1rem;
+  font-size: 0.9rem;
+}
+/* 按钮 */
+.btnBox {
+  display: flex;
+  padding: 0.7rem 1rem;
+  flex-direction: row-reverse;
+}
+.btnBox button {
+  color: #8c8c8c;
+  padding: 0 0.8rem;
+  margin-left: 0.5rem;
+  border-radius: 0.5rem;
+}
+.btnBox .paybtn {
+  color: #feb35c;
+  border: 1px solid #feb35c;
 }
 </style>
 <style>

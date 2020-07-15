@@ -8,6 +8,7 @@
       </div>
     </div>
     <div class="content">
+      <div class="bgc"></div>
       <!-- 轮播 -->
       <div class="swipeBox">
         <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
@@ -33,9 +34,9 @@
       <!-- 商品列表 -->
       <topic name="推荐商品" color="#3ba8fa" />
       <ul>
-        <li v-for="item in 8" :key="item">
+        <li v-for="(item,index) in 8" :key="index">
           <div class="goodsList">
-            <img src="../../assets/img/home/cp.png" @click="($router.push('/product/particulars'))" />
+            <img :src="item" @click="($router.push('/product/particulars'))" />
             <p class="goodsName">超级无敌 办公桌办公桌办公桌</p>
             <div class="goodsPrice">
               <!-- <p class="three">市场价: 90.00￥</p> -->
@@ -46,15 +47,6 @@
               <div class="stepperBox">
                 <van-stepper v-model="value1" theme="round" />
               </div>
-              <!-- <span class="numBox">
-              <div>
-                <img src="../../assets/img/home/jian.png" alt />
-              </div>
-              <b>0</b>
-              <div>
-                <img src="../../assets/img/home/jia.png" alt />
-              </div>
-              </span>-->
             </div>
             <div class="moneyBox" v-else>
               <span>
@@ -69,7 +61,6 @@
         </li>
       </ul>
     </div>
-    <!-- <div class="bgc"></div> -->
   </div>
 </template>
 <script>
@@ -133,19 +124,38 @@ export default {
           name: "售后及维修"
         }
       ],
-      picUrls: [] //轮播图
+      picUrls: [], //轮播图
+      recommend: [] //推荐商品
     };
   },
+  created() {
+    this.getswipeImg();
+  },
   mounted() {
-    // this.getswipeImg();
+    this.gethomeRecommend();
   },
   methods: {
     getswipeImg: function() {
       this.axios
-        .get("http://192.168.1.189:3000/api/slideshow")
+        .get(this.$api.slideshow)
         .then(data => {
           if (data.code == 200) {
             this.picUrls = data.data;
+          } else {
+            // this.$toast(data.msg);
+          }
+        })
+        .catch(() => {
+          console.info(500);
+          //   this.$toast.fail(this.$api.monmsg);
+        });
+    },
+    gethomeRecommend: function() {
+      this.axios
+        .get(this.$api.cate)
+        .then(data => {
+          if (data.code == 200) {
+            this.recommend = data.data;
           } else {
             // this.$toast(data.msg);
           }
@@ -160,7 +170,7 @@ export default {
         console.info(index);
       } else if (index == 7) {
         // console.info(index);
-        this.$router.push("/maintain")
+        this.$router.push("/maintain");
       }
     },
     onSearch: function(val) {
@@ -187,6 +197,7 @@ export default {
 }
 /* 头部以下内容 */
 .content {
+  position: relative;
   display: flex;
   overflow-y: auto;
   flex-direction: column;
@@ -209,10 +220,10 @@ export default {
 }
 .swipeBox {
   width: 90%;
-  margin: 3rem auto;
-  margin-bottom: 0;
-  overflow: hidden;
-  border-radius: 1.2rem;
+  margin: 0.5rem auto;
+  /* margin-bottom: 0; */
+  /* overflow: hidden; */
+  /* border-radius: 1.2rem; */
 }
 .my-swipe .van-swipe-item {
   color: #fff;
@@ -333,7 +344,7 @@ li:nth-child(even) {
   top: 0;
   left: 0;
   width: 100%;
-  height: 7rem;
+  height: 5rem;
   z-index: -1;
   background-image: linear-gradient(to right, #ffc474, #ff855a);
 }

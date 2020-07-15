@@ -9,7 +9,7 @@
       <van-cell title="关于开心兔" is-link />
       <van-cell title="检测更新" value="1.02" />
     </div>
-    <div class="btnBox">切换用户</div>
+    <div class="btnBox" @click="quitClick">切换用户</div>
     <div class="btnBox" @click="quitClick">退出登录</div>
     <van-popup v-model="popupShow" position="right" :style="{ height: '100%',width: '100%' }">
       <phone v-if="tarbarType == 0" />

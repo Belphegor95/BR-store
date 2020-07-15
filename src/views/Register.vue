@@ -23,8 +23,16 @@
         <van-field v-model="text" label="所属地区" placeholder="请输入所属地区" />
         <van-field v-model="text" label="详细地址" placeholder="请输入详细地址" />
       </div>
-      <van-button class="btnForm" type="default">完成注册</van-button>
+      <van-button class="btnForm" type="default" @click="saveUser">完成注册</van-button>
     </div>
+    <van-popup v-model="popupShow" position="right" :style="{ height: '100%',width: '100%' }">
+      <head_ />
+      <div class="popupbox">
+        <img src="../assets/img/form/wc.png" />
+        <p>恭喜你账号注册成功</p>
+        <van-button class="btnForm" type="default" @click="saveUser">立即进入</van-button>
+      </div>
+    </van-popup>
   </div>
 </template>
 <script>
@@ -40,8 +48,14 @@ export default {
   },
   data() {
     return {
-      text: ""
+      text: "",
+      popupShow: false
     };
+  },
+  methods: {
+    saveUser: function() {
+      this.popupShow = true;
+    }
   }
 };
 </script>
@@ -75,6 +89,23 @@ export default {
 }
 .btnForm {
   margin-top: 2rem;
+}
+.popupbox {
+  display: flex;
+  padding: 2rem 1rem;
+  align-items: center;
+  flex-direction: column;
+}
+.popupbox > img {
+  width: 8rem;
+}
+.popupbox > p {
+  background: linear-gradient(to right, #ffd8a4, #fcaa8d);
+  -webkit-background-clip: text;
+  background-clip: text;
+  margin-top: 1.5rem;
+  color: transparent;
+  font-size: 1.2rem;
 }
 </style>
 <style >

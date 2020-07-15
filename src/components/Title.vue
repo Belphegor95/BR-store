@@ -22,7 +22,7 @@
     </div>
     <div v-else-if="titleId === '2'">
       <div class="topicBox">
-        <p @click="forgetPadClick">忘记密码</p>
+        <p>忘记密码</p>
         <div class="gradientBg" style="width: 7.1rem;"></div>
       </div>
       <p class="prompt">
@@ -46,11 +46,7 @@ export default {
     go: function() {
       this.titleId == 0
         ? this.$router.push("/register")
-        : this.$router.push("/");
-    },
-    forgetPadClick: function() {
-      console.info(123)
-      // this.$router.push("/password");
+        : this.$router.push("/login");
     }
   }
 };

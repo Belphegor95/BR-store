@@ -1,6 +1,12 @@
 <template>
   <div class="head">
-    <img @click="($router.go(-1))" src="../assets/img/home/fanhui.png" alt />
+    <van-nav-bar
+      left-arrow
+      class="navBar"
+      @click-left="$router.go(-1)"
+      :fixed="false"
+    />
+    <!-- <img @click="($router.go(-1))" src="../assets/img/home/fanhui.png" alt /> -->
   </div>
 </template>
 <script>
@@ -21,5 +27,11 @@ export default {
 }
 img {
   width: 2rem;
+}
+
+</style>
+<style >
+.head .van-nav-bar__left .van-icon {
+  color: #000!important;
 }
 </style>

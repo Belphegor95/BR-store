@@ -54,6 +54,9 @@ body,
 .navBar .van-nav-bar .van-icon {
   color: #fff;
 }
+.van-nav-bar__left .van-icon {
+  color: #fff!important;
+}
 /* 字体颜色 */
 .van-nav-bar__title {
   font-size: 1.2rem !important;

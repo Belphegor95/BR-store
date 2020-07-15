@@ -13,7 +13,6 @@
           待订单审核
           <span>DH-O-20200714-275691</span>
         </p>
-
         <van-icon name="ellipsis" />
       </div>
       <!-- 地址 -->
@@ -50,7 +49,6 @@
         </div>
         <div>
           <p>应付金额</p>
-          <!-- <p></p> -->
         </div>
       </div>
       <div class="settlement">

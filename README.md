@@ -1,4 +1,4 @@
-# cli
+# store
 
 ## Project setup
 ```
