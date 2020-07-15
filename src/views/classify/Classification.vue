@@ -86,6 +86,7 @@ export default {
     };
   },
   mounted() {
+    // this.$store.commit("show_activeid", 1);
     this.getcate()
   },
   methods: {

@@ -7,10 +7,14 @@
         <p>还差11包邮</p>
       </div>
     </div>
-    <van-checkbox-group class="checkboxBox" v-model="result" ref="checkboxGroup">
-      <div class="van-card" v-for="item in 8" :key="item">
+    <van-checkbox-group
+      class="checkboxBox"
+      v-model="result"
+      ref="checkboxGroup"
+    >
+      <div class="van-card" v-for="item in 3" :key="item">
         <div class="van-card__header">
-          <van-checkbox :name="item"></van-checkbox>
+          <van-checkbox @click="toggle" :name="item"></van-checkbox>
           <a class="van-card__thumb">
             <div class="van-image" style="width: 100%; height: 100%;">
               <img
@@ -34,7 +38,7 @@
     </van-checkbox-group>
 
     <van-submit-bar :price="3050" button-text="结算" @submit="onSubmit">
-      <van-checkbox @change="checkedClick" v-model="checked">全选</van-checkbox>
+      <van-checkbox @click="checkedClick" v-model="checked">全选</van-checkbox>
     </van-submit-bar>
   </div>
 </template>
@@ -46,15 +50,24 @@ export default {
       checked: false
     };
   },
+  mounted() {
+    // this.$store.commit("show_activeid", 2);
+  },
   methods: {
     //   点击结算
     onSubmit: function() {
       this.$router.push("/shopping/order");
     },
     checkedClick: function(is) {
-      is
-        ? this.$refs.checkboxGroup.toggleAll(true)
-        : this.$refs.checkboxGroup.toggleAll();
+      // console.info(this.checked)
+      // is
+      //   ? this.$refs.checkboxGroup.toggleAll(true)
+      //   : this.result.length == 0
+      //   ? this.$refs.checkboxGroup.toggleAll()
+      //   : "";
+    },
+    toggle() {
+      this.result.length == 3 ? (this.checked = true) : (this.checked = false);
     }
   }
 };

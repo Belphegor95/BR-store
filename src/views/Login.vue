@@ -5,7 +5,7 @@
       <van-field v-model="text" placeholder="请输入手机号/用户名" />
       <van-field v-model="text1" type="password" placeholder="请输入密码" />
       <span class="losePassword" @click="( $router.push('/password'))">忘记密码</span>
-      <van-button class="btnForm" type="default" @click="loginClick" >登录</van-button>
+      <van-button class="btnForm" type="default" @click="loginClick">登录</van-button>
     </div>
   </div>
 </template>
@@ -25,11 +25,12 @@ export default {
     };
   },
   methods: {
-    loginClick: function () {
-      this.$router.push("/homePage")
+    loginClick: function() {
+      localStorage.clear();
+      this.$store.commit("show_activeid", 0);
+      this.$router.push("/homePage");
     }
   }
-  
 };
 </script>
 

@@ -128,10 +128,9 @@ export default {
       recommend: [] //推荐商品
     };
   },
-  created() {
-    this.getswipeImg();
-  },
   mounted() {
+    this.$store.commit("show_activeid", 0);
+    this.getswipeImg();
     this.gethomeRecommend();
   },
   methods: {

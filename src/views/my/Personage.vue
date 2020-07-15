@@ -65,6 +65,9 @@ export default {
       ]
     };
   },
+  mounted() {
+    // this.$store.commit("show_activeid", 3);
+  },
   methods: {
     popupClick: function(rutname, id) {
       this.$router.push(`/manage/${rutname}`);
