@@ -5,16 +5,9 @@
       class="navBar"
       @click-left="$router.go(-1)"
       :fixed="false"
-      title="订单详情"
+      title="填写订单"
     />
     <div class="content">
-      <div class="orderidBox">
-        <p>
-          待订单审核
-          <span>DH-O-20200714-275691</span>
-        </p>
-        <van-icon name="ellipsis" />
-      </div>
       <!-- 地址 -->
       <div class="siteBox">
         <p>张三 123456789</p>
@@ -43,34 +36,20 @@
           <p>订单金额</p>
           <p>￥9.60</p>
         </div>
-        <div>
-          <p>免费配送</p>
-          <p style="color: #e75858;">￥9.60</p>
-        </div>
-        <div>
-          <p>应付金额</p>
-        </div>
-      </div>
-      <div class="settlement">
-        <van-button class="btnForm" size="small" type="default">立即付款</van-button>
-        <p>待付: ￥9.60</p>
-      </div>
-      <div>
-        <van-cell title="应付金额" is-link value="备货中/待发货" />
       </div>
       <!-- 配送方式 -->
       <div class="distributionBox">
-        <van-cell title="备注信息" is-link value="无" />
-        <van-cell title="发票信息" value="无" />
-        <van-cell title="附件" is-link value="无" />
-        <van-cell title="操作日志" is-link value="1" />
+        <van-cell title="配送方式" value="免费配送" />
+        <van-cell title="备注信息" value="请输入" />
+        <van-cell title="发票信息" is-link value="不开发票" />
       </div>
     </div>
-    <div class="btnBox">
+    <van-submit-bar label="应付金额：" :price="3050" button-text="提交订单" @submit="onSubmit" />
+    <!-- <div class="btnBox">
       <div>催办</div>
       <div>订单作废</div>
       <div>再次购买</div>
-    </div>
+    </div>-->
   </div>
 </template>
 <script>
@@ -94,24 +73,8 @@ export default {
   flex: auto;
   overflow-y: auto;
 }
-.orderidBox {
-  display: flex;
-  padding: 0.6rem 1rem;
-  margin-bottom: 1rem;
-  background-color: #fff;
-  justify-content: space-between;
-}
-.orderidBox p {
-  color: #fec281;
-  font-weight: 700;
-}
-.orderidBox span {
-  color: #000;
-  margin-left: 0.5rem;
-}
 .siteBox,
-.inventoryBox,
-.settlement {
+.inventoryBox {
   margin-bottom: 1rem;
 }
 .distributionBox {
@@ -192,24 +155,6 @@ export default {
 .distributionBox > div:nth-child(1),
 .distributionBox > div:nth-child(2) {
   border-bottom: 1px solid #f5f5f5;
-}
-/* 结算 */
-.settlement {
-  display: flex;
-  align-items: center;
-  margin-top: 1px;
-  padding: 0.6rem 0.4rem;
-  background-color: #fff;
-  flex-direction: row-reverse;
-}
-.settlement p {
-  color: #f93404;
-}
-.btnForm {
-  width: 6rem;
-  margin-left: 1rem;
-  font-size: 0.9rem !important;
-  border-radius: 2rem !important;
 }
 /* 底部按钮 */
 .btnBox {

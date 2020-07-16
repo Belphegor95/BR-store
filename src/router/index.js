@@ -73,6 +73,16 @@ const routes = [
     component: () => import('../views/shopping/Order.vue')
   },
   {
+    path: '/shopping/addOrder',
+    name: 'AddOrder',
+    component: () => import('../views/shopping/AddOrder.vue')
+  },
+  {
+    path: '/shopping/orderForm',
+    name: 'OrderForm',
+    component: () => import('../views/shopping/OrderForm.vue'),
+  },
+  {
     path: '/manage',
     name: 'manage',
     component: () => import('../views/my/Manage.vue'),
@@ -98,15 +108,16 @@ const routes = [
     },
     ]
   },
-  {
-    path: '/orderForm',
-    name: 'OrderForm',
-    component: () => import('../views/orderForm/OrderForm.vue'),
-  },
+  
   {
     path: '/maintain',
     name: 'Maintain',
     component: () => import('../views/home/Maintain.vue'),
+  },
+  {
+    path: '/ball',
+    name: 'ball',
+    component: () => import('../views/ball.vue'),
   },
 ]
 

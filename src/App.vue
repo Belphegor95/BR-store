@@ -68,6 +68,9 @@ body,
   border-color: #feb35c !important;
 }
 /* 步进器 */
+.van-stepper {
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+}
 .stepperBox .van-stepper--round .van-stepper__minus {
   border: none;
   color: #c8c9cc;

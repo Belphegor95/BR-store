@@ -7,7 +7,7 @@
           <p>DH-O-20200714-275691</p>
           <p>待订单审核</p>
         </div>
-        <div class="imgBox">
+        <div class="imgBox" @click="($router.push('/shopping/order'))">
           <div>
             <img src="../../assets/img/product/particulars/chanpin.png" alt />
           </div>

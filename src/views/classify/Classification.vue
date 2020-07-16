@@ -2,17 +2,17 @@
   <div class="classification">
     <van-nav-bar class="navBar" title="分类" :fixed="false" :placeholder="true" />
     <div class="nav">
-      <sidebar />
+      <sidebar @cateid="getcatePlist" />
       <div class="contentBox">
         <van-dropdown-menu>
           <van-dropdown-item v-model="value1" :options="option1" />
           <van-dropdown-item v-model="value2" :options="option2" />
         </van-dropdown-menu>
         <ul>
-          <li v-for="item in 8" :key="item">
-            <h4>得力打印机456201(12345)</h4>
+          <li v-for="(item,index) in catePlist" :key="index">
+            <h4>{{ item.plist_name }}</h4>
             <div class="tagBox" @click="rutClick">
-              <img src="../../assets/img/product/particulars/chanpin.png" />
+              <img :src="item.plist_img_url.length !=0? item.plist_img_url[0]: '' " />
               <div class="tagRight">
                 <p>蓝</p>
                 <p>市场价: 19.8/个</p>
@@ -82,27 +82,17 @@ export default {
           show: false
         }
       ],
-      dropBalls: [] // 在动画中的小球集合
+      dropBalls: [], // 在动画中的小球集合
+      catePlist: [] // 分类商品列表
     };
   },
   mounted() {
     // this.$store.commit("show_activeid", 1);
-    this.getcate()
+    // this.getcate();
   },
   methods: {
     rutClick: function() {
       this.$router.push("/product/particulars");
-    },
-    getcate: function() {
-      this.axios
-        .get(this.$api.cate)
-        .then(data => {
-          if (data.code == 200) {
-            console.info(data);
-          } else {
-          }
-        })
-        .catch(() => {});
     },
     // 购物车动画
     addGoods(e) {
@@ -117,6 +107,21 @@ export default {
           return;
         }
       });
+    },
+    getcatePlist: function(obj) {
+      this.axios
+        .post(this.$api.getCatePlist, {
+          cateone: obj.one,
+          catetwo: obj.two
+        })
+        .then(data => {
+          if (data.code == 200) {
+            this.catePlist = data.data;
+            // console.info(data)
+          } else {
+          }
+        })
+        .catch(() => {});
     },
     beforeEnter(el) {
       let count = this.balls.length;
@@ -149,6 +154,7 @@ export default {
         // console.info(inner.style.webkitTransform)
         inner.style.webkitTransform = "translate3d(175px, 0, 0)";
         el.style.transform = "translate3d(0, 0, 0)";
+        // console.info(inner)
       });
     },
     afterEnter(el) {
@@ -216,14 +222,17 @@ li > h4 {
   bottom: 45px;
 }
 .drop-enter-active {
-  transition: all 0.2s cubic-bezier(0.49, -0.29, 0.75, 0.41);
+  transition: all .3s cubic-bezier(0.49, -0.29, 0.75, 0.41);
 }
 .inner {
-  width: 0.3rem;
-  height: 0.3rem;
+  width: 5px;
+  height: 5px;
   border-radius: 50%;
+  overflow: hidden;
   background: red;
-  transition: all 0.2s;
+  transition: all .3s;
+  /* transform: rotate(0deg);
+  -webkit-transform: rotate(0deg); */
 }
 </style>
 

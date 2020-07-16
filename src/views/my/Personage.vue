@@ -13,7 +13,12 @@
     <van-cell title="我的订单" @click="rutClick(0)" is-link />
     <div>
       <van-grid>
-        <van-grid-item class="navigationBox" v-for="(item,index) in navigations" :key="index">
+        <van-grid-item
+          class="navigationBox"
+          v-for="(item,index) in navigations"
+          :key="index"
+          @click="rutClick(index + 1)"
+        >
           <img :src="item.img" alt />
           <p>{{ item.name }}</p>
         </van-grid-item>
@@ -73,14 +78,16 @@ export default {
       this.$router.push(`/manage/${rutname}`);
     },
     rutClick: function(id) {
-      this.$router.push(`/orderForm?formid=${id}`);
+      this.$router.push(`/shopping/orderForm?formid=${id}`);
     }
   }
 };
 </script>
 <style scoped>
 .personage {
-  height: calc(100% - 50px);
+  flex: auto;
+  height: 1px;
+  overflow-y: auto;
   background-color: #f5f5f5;
 }
 .userImg {

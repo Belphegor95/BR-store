@@ -8,21 +8,22 @@
           欢迎加入开心兔商城,注册后,即可了解产品订货价格,可直接下单订货采购;支持货到付款,支持微信,信用卡,...
           <i>点击查看更多</i>
         </p>
-        <van-field v-model="text" label="+86" placeholder="请输入手机号/用户名">
+        <van-field v-model="yzm" label="+86" placeholder="请输入手机号/用户名">
           <template #button>
             <van-button size="small" class="btn">获取验证码</van-button>
           </template>
         </van-field>
-        <van-field v-model="text" label="验证码" placeholder="请输入验证码" />
+        <van-field v-model="phoneNum" label="验证码" placeholder="请输入验证码" />
+        <van-field v-model="phoneNum" label="密码" type="password"  placeholder="请输入密码" />
       </div>
       <!-- 详细信息 -->
-      <topic name="详细信息" color="#feb35c" />
+      <!-- <topic name="详细信息" color="#feb35c" />
       <div>
-        <van-field v-model="text" label="购货单位" placeholder="请输入购货单位" />
-        <van-field v-model="text" label="联系人" placeholder="请输入联系人" />
-        <van-field v-model="text" label="所属地区" placeholder="请输入所属地区" />
-        <van-field v-model="text" label="详细地址" placeholder="请输入详细地址" />
-      </div>
+        <van-field v-model="company" label="购货单位" placeholder="请输入购货单位" />
+        <van-field v-model="linkman" label="联系人" placeholder="请输入联系人" />
+        <van-field v-model="address" label="所属地区" placeholder="请输入所属地区" />
+        <van-field v-model="address_detail" label="详细地址" placeholder="请输入详细地址" />
+      </div> -->
       <van-button class="btnForm" type="default" @click="saveUser">完成注册</van-button>
     </div>
     <van-popup v-model="popupShow" position="right" :style="{ height: '100%',width: '100%' }">
@@ -48,13 +49,50 @@ export default {
   },
   data() {
     return {
-      text: "",
+      yzm: "", // 手机/用户
+      phoneNum: "", // 验证码
+      pwd: "", // 密码
+      
+      company: 0, // 购货单位
+      linkman: 0, // 联系人
+      address: 0, // 地址
+      address_detail: 0, // 详细地址
       popupShow: false
     };
   },
   methods: {
     saveUser: function() {
-      this.popupShow = true;
+      // this.popupShow = true;
+    },
+    getVerificationCode: function() {
+      this.axios
+        .post(this.$api.getVerificationCode, {
+          phoneNum: 0
+        })
+        .then(data => {
+          if (data.code) {
+          } else {
+          }
+        })
+        .catch(() => {});
+    },
+    saveregist: function() {
+      // this.axios
+      //   .post(this.$api.regist, {
+      //     phoneNum: 0, // 验证码
+      //     pwd: 0, // 密码
+      //     yzm: 0, // 手机/用户
+      //     company: 0, // 购货单位
+      //     linkman: 0, // 联系人
+      //     address: 0, // 地址
+      //     address_detail: 0 // 详细地址
+      //   })
+      //   .then(data => {
+      //     if (data.code) {
+      //     } else {
+      //     }
+      //   })
+      //   .catch(() => {});
     }
   }
 };
@@ -88,7 +126,7 @@ export default {
   color: transparent;
 }
 .btnForm {
-  margin-top: 2rem;
+  margin: 2rem 0;
 }
 .popupbox {
   display: flex;

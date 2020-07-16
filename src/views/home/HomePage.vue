@@ -34,33 +34,40 @@
       <!-- 商品列表 -->
       <topic name="推荐商品" color="#3ba8fa" />
       <ul>
-        <li v-for="(item,index) in 8" :key="index">
+        <li v-for="(item,index) in recommend" :key="index">
           <div class="goodsList">
-            <img :src="item" @click="($router.push('/product/particulars'))" />
-            <p class="goodsName">超级无敌 办公桌办公桌办公桌</p>
-            <div class="goodsPrice">
+            <img :src="item.plist_img_url[0]" @click="rutparClick(item)" />
+            <p class="goodsName">{{ item.plist_name }}</p>
+            <div
+              class="goodsPrice"
+              v-for="(unitList,index1) in item.price_lv.unitList"
+              :key="index1"
+            >
               <!-- <p class="three">市场价: 90.00￥</p> -->
-              <p>会员价: 90.00￥</p>
+              <p v-if="unitList.rate == 1">会员价: ￥{{ `${unitList.orderPrice}/${unitList.unitName}` }}</p>
             </div>
-            <div class="moneyBox" v-if="item%2 != 0">
+            <div
+              class="moneyBox"
+              v-if="item.price_lv.cate.length > 1 || item.price_lv.unitList.length > 1"
+            >
+              <span>
+                {{ item.price_lv.unitList.length }}个规格可选
+              </span>
+              <span @click="shoppingclick(item)">
+                <img class="shoppingCart" src="../../assets/img/home/gouwu.png" />
+              </span>
+            </div>
+            <div class="moneyBox" v-else>
               <span>库存充足</span>
               <div class="stepperBox">
                 <van-stepper v-model="value1" theme="round" />
               </div>
             </div>
-            <div class="moneyBox" v-else>
-              <span>
-                ￥
-                <i>27</i>
-              </span>
-              <span>
-                <img class="shoppingCart" src="../../assets/img/home/gouwu.png" />
-              </span>
-            </div>
           </div>
         </li>
       </ul>
     </div>
+    <popUp :popUpShow="popUpShow" :popUpData="popUpData" @showClick="showClick" />
   </div>
 </template>
 <script>
@@ -75,9 +82,11 @@ import shouhou from "../../assets/img/home/shouhou.png";
 
 // 组件
 import topic from "@/components/Topic.vue";
+import PopUp from "@/components/PopUp.vue";
 export default {
   components: {
-    topic
+    topic,
+    PopUp
   },
   data() {
     return {
@@ -125,7 +134,9 @@ export default {
         }
       ],
       picUrls: [], //轮播图
-      recommend: [] //推荐商品
+      recommend: [], //推荐商品
+      popUpShow: false, //购物车详情弹窗
+      popUpData: {} //购物车详情
     };
   },
   mounted() {
@@ -151,7 +162,7 @@ export default {
     },
     gethomeRecommend: function() {
       this.axios
-        .get(this.$api.cate)
+        .get(this.$api.homeRecommend)
         .then(data => {
           if (data.code == 200) {
             this.recommend = data.data;
@@ -171,6 +182,20 @@ export default {
         // console.info(index);
         this.$router.push("/maintain");
       }
+    },
+    rutparClick: function(data) {
+      this.$router.push({
+        path: "/product/particulars",
+        query: data
+      });
+    },
+    // 点击购物车 弹出购物车弹窗
+    shoppingclick: function(data) {
+      this.popUpData = data;
+      this.popUpShow = true;
+    },
+    showClick: function(is) {
+      this.popUpShow = is;
     },
     onSearch: function(val) {
       Toast(val);

@@ -1,6 +1,11 @@
 <template>
   <div class="shopping">
-    <van-nav-bar class="navBar" :fixed="false" placeholder title="购物车"></van-nav-bar>
+    <van-nav-bar class="navBar" :fixed="false" placeholder title="购物车">
+      <template #right>
+        <span @click="fold = !fold">{{ fold? '折叠':'收起' }}</span>
+        <span @click="operate = !operate">{{ operate? '编辑':'完成' }}</span>
+      </template>
+    </van-nav-bar>
     <div>
       <div class="shortofBox">
         <p>满50包邮</p>
@@ -11,6 +16,7 @@
       class="checkboxBox"
       v-model="result"
       ref="checkboxGroup"
+      checked-color="#feb35c"
     >
       <div class="van-card" v-for="item in 3" :key="item">
         <div class="van-card__header">
@@ -25,21 +31,38 @@
             </div>
           </a>
           <div class="van-card__content">
-            <div>
+            <div class="contentbox">
               <div class="van-card__title van-multi-ellipsis--l2">5777 得力 120张名片册 （1/12/96）</div>
-              <!-- <div class="van-card__desc van-ellipsis">描述信息</div> -->
+              <van-button round size="mini" type="info">
+                <p>{{ fold? '折叠':'收起' }}</p>
+                <van-icon name="arrow-up" />
+              </van-button>
             </div>
             <div class="van-card__bottom">
               <div class="van-card__num">x2</div>
             </div>
           </div>
         </div>
+        <div class="van-card_content" v-if="!fold">
+          <van-checkbox checked-color="#feb35c" @click="checkedClick" v-model="checked">￥439.00/台</van-checkbox>
+          <van-stepper v-model="value" theme="round" />
+        </div>
       </div>
     </van-checkbox-group>
-
-    <van-submit-bar :price="3050" button-text="结算" @submit="onSubmit">
-      <van-checkbox @click="checkedClick" v-model="checked">全选</van-checkbox>
+    <van-submit-bar v-if="operate" :price="0" button-text="结算" @submit="onSubmit">
+      <van-checkbox checked-color="#feb35c" @click="checkedClick" v-model="checked">全选</van-checkbox>
     </van-submit-bar>
+    <div v-else class="submitBar">
+      <van-checkbox checked-color="#feb35c" @click="checkedClick" v-model="checked">全选</van-checkbox>
+      <p>种类3数量24</p>
+      <button
+        class="van-button van-button--danger van-button--normal van-button--round van-submit-bar__button van-submit-bar__button--danger"
+      >
+        <div class="van-button__content">
+          <span class="van-button__text">删除</span>
+        </div>
+      </button>
+    </div>
   </div>
 </template>
 <script>
@@ -47,7 +70,10 @@ export default {
   data() {
     return {
       result: [],
-      checked: false
+      checked: false,
+      value: 0,
+      fold: true,
+      operate: true
     };
   },
   mounted() {
@@ -83,7 +109,7 @@ export default {
 .checkboxBox {
   flex: auto;
   overflow-y: auto;
-  margin-bottom: 50px;
+  background-color: #f5f5f5;
 }
 .shortofBox {
   display: flex;
@@ -95,6 +121,34 @@ export default {
   color: #e75858;
   font-size: 1rem;
 }
+.contentbox {
+  display: flex;
+}
+.contentbox button {
+  width: 4rem;
+}
+.van-card_content {
+  display: flex;
+  margin-top: 0.5rem;
+  margin-left: 0.5rem;
+  justify-content: space-between;
+}
+
+/* 删除操作栏 */
+.submitBar {
+  height: 50px;
+  display: flex;
+  padding: 0 1rem;
+  align-items: center;
+  background-color: #fff;
+  justify-content: flex-end
+}
+.submitBar p {
+  flex: 1;
+  padding-right: 0.5rem;
+  text-align: right;
+  color: #ee0a24;
+}
 </style>
 <style  >
 .shopping .van-submit-bar {
@@ -104,5 +158,45 @@ export default {
 .shopping .van-card {
   margin-bottom: 8px;
   margin-top: 0;
+}
+/* 头部 按钮样式 */
+.shopping .van-nav-bar__right span {
+  color: #fff;
+  margin-left: 1rem;
+}
+/* 折叠按钮 */
+.shopping .checkboxBox .van-button--info {
+  background-color: #f5f5f5;
+  border: 1px solid #a3a3a1;
+  color: #a3a3a1;
+}
+.van-button__text {
+  display: flex;
+}
+.van-card_content .van-checkbox__label {
+  color: red !important;
+  font-size: 1rem;
+}
+.shopping .van-checkbox__label {
+  font-size: 1rem;
+}
+/* 步进器 */
+/* .van-stepper {
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+} */
+.van-stepper--round .van-stepper__minus {
+  border: none;
+  color: #c8c9cc;
+  background-color: #f4f4f4;
+}
+.van-stepper--round .van-stepper__plus {
+  color: #feb35c;
+  background-color: #f4f4f4;
+}
+.van-stepper {
+  display: inline-block;
+  padding: 0.1rem 0.2rem;
+  border-radius: 1rem;
+  background-color: #f4f4f4;
 }
 </style>

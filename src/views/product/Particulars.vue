@@ -64,8 +64,12 @@ export default {
   },
   data() {
     return {
-      show: false
+      show: false,
+      particularsData: this.$route.query
     };
+  },
+  mounted() {
+    console.info(this.particularsData)
   },
   methods: {
     backClick: function() {

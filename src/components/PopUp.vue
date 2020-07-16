@@ -1,82 +1,87 @@
 <template>
   <van-action-sheet
-    v-model="show"
+    v-model="popUpShow"
     class="popup"
     @click-overlay="showClick"
     :close-on-click-overlay="false"
   >
-    <div class="content">
-      <div class="headBox">
-        <img src="../assets/img/product/particulars/chanpin.png" alt />
-        <h4>73381得力图画书(10/200)</h4>
-      </div>
-      <div class="trailBox">
+    <div class="headBox">
+      <img :src="popUpData.plist_img_url?popUpData.plist_img_url[0]: '' " alt />
+      <h4>{{ popUpData.plist_name }}</h4>
+    </div>
+    <div class="content" v-if="popUpData.price_lv">
+      <div class="trailBox" v-for="(cate,indexcate) in popUpData.price_lv.cate" :key="indexcate">
         <div class="trail">
           <div class="trailName">
-            <img src="../assets/img/product/particulars/chanpin.png" alt />
-            <p style="margin-right:0.2rem">蓝色</p>
-            <p>( P42358341256 )</p>
+            <p style="margin-right:0.2rem">{{ cate.cateName }}</p>
           </div>
           <div class="stepperBox">
-            <van-stepper v-model="value" theme="round" />
+            <van-stepper v-model="cate.num" theme="round" />
           </div>
         </div>
-        <div class="price">
-          <div>
-            <p>市场价￥35/包</p>
+        <div class="price" v-if="popUpData.price_lv">
+          <div
+            v-show="item.rate == cate.unitId"
+            v-for="(item,index) in popUpData.price_lv.unitList"
+            :key="index"
+          >
+            <p>市场价￥{{ `${item.marketPrice}/${item.unitName}` }}</p>
             <p>
               ￥
-              <i>27.9</i> /包
+              <i>{{ item.marketPrice }}</i>
+              /{{ item.unitName }}
             </p>
           </div>
           <span>库存充足</span>
         </div>
         <ul>
-          <li>
+          <li
+            v-if="popUpData.price_lv && popUpData.price_lv.unitList && popUpData.price_lv.unitList.length > 1"
+          >
             <span>单位</span>
-            <van-radio-group v-model="radio" direction="horizontal">
-              <van-radio icon-size="16px" name="1">包</van-radio>
-              <van-radio icon-size="16px" name="2">件</van-radio>
-            </van-radio-group>
-          </li>
-          <li>
-            <span>颜色</span>
-            <van-radio-group v-model="radio" direction="horizontal">
-              <van-radio icon-size="16px" name="1">蓝色</van-radio>
-              <van-radio icon-size="16px" name="2">红色</van-radio>
+            <van-radio-group v-model="cate.unitId" direction="horizontal">
+              <van-radio
+                icon-size="16px"
+                :name="item.rate"
+                v-for="(item,index) in popUpData.price_lv.unitList"
+                :key="index"
+              >{{ item.unitName }}</van-radio>
             </van-radio-group>
           </li>
         </ul>
       </div>
-      <van-button class="btnForm" type="default">确定</van-button>
-      <!-- <van-button class="btnClass" type="default">添加购物车</van-button> -->
     </div>
+    <van-button class="btnForm" @click="ok" type="default">确定</van-button>
   </van-action-sheet>
 </template>
 <script>
 export default {
   name: "popUp",
   props: {
-    show: Boolean
+    popUpShow: Boolean,
+    popUpData: Object
   },
   data() {
     return {
-      radio: 0,
-      value: 0
+      rate: 1,
+      value: ""
     };
   },
   methods: {
     showClick: function() {
       this.$emit("showClick", false);
+    },
+    ok() {
+      console.info(this.popUpData);
     }
   }
 };
 </script>
 <style scoped>
-.content {
-  height: 20rem;
-}
 .popup {
+  height: 70%;
+  /* width: 100%;
+  display: flex; */
   border-radius: 0 !important;
 }
 .headBox {
@@ -88,7 +93,9 @@ export default {
   height: 100%;
   margin-right: 0.8rem;
 }
-
+.content {
+  flex: auto;
+}
 .trail,
 .price {
   padding: 0 1rem;
@@ -115,7 +122,7 @@ export default {
   justify-content: space-between;
 }
 /* 价格 */
-.price > div:nth-child(1) {
+.price > div {
   margin-top: 0.5rem;
 }
 /* 库存充足 */
@@ -157,5 +164,9 @@ li > span {
 .popup .van-radio__icon--checked .van-icon {
   background-color: #faa062;
   border-color: #faa062;
+}
+.popup .van-action-sheet__content {
+  display: flex;
+  flex-direction: column;
 }
 </style>
