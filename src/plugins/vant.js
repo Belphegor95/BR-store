@@ -17,13 +17,13 @@ import { Card } from 'vant';
 import { NavBar } from 'vant';
 import { Stepper } from 'vant';
 import { Cell, CellGroup } from 'vant';
-
-
 import { AddressEdit } from 'vant';
 import { Area } from 'vant';
 import { Popup } from 'vant';
-
 import { Tab, Tabs } from 'vant';
+import { Toast } from 'vant';
+
+
 
 
 
@@ -64,3 +64,4 @@ Vue.use(Area);
 Vue.use(Popup);
 Vue.use(Tab);
 Vue.use(Tabs);
+Vue.use(Toast);

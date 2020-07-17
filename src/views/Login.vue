@@ -2,8 +2,8 @@
   <div class="login">
     <title_ titleId="0" />
     <div class="formBox">
-      <van-field v-model="text" placeholder="请输入手机号/用户名" />
-      <van-field v-model="text1" type="password" placeholder="请输入密码" />
+      <van-field v-model="phoneNum" maxlength="11" placeholder="请输入手机号/用户名" />
+      <van-field v-model="pwd" maxlength="18" type="password" placeholder="请输入密码" />
       <span class="losePassword" @click="( $router.push('/password'))">忘记密码</span>
       <van-button class="btnForm" type="default" @click="loginClick">登录</van-button>
     </div>
@@ -20,15 +20,35 @@ export default {
   },
   data() {
     return {
-      text: "",
-      text1: ""
+      phoneNum: "",
+      pwd: ""
     };
   },
   methods: {
     loginClick: function() {
-      localStorage.clear();
-      this.$store.commit("show_activeid", 0);
-      this.$router.push("/homePage");
+      if (!/^1[3456789]\d{9}$/.test(this.phoneNum)) {
+        this.$toast("手机号输入有误");
+        return;
+      } else if (!this.pwd || this.pwd.length < 6) {
+        this.$toast("密码输入有误");
+        return;
+      }
+      this.axios
+        .post(this.$api.login, {
+          phoneNum: this.phoneNum,
+          pwd: this.pwd
+        })
+        .then(data => {
+          if (data.code == 200) {
+            this.$toast("登录成功");
+            localStorage.clear();
+            this.$store.commit("show_activeid", 0);
+            this.$router.push("/homePage");
+          } else {
+            this.$toast(this.ErrCode(data.msg));
+          }
+        })
+        .catch(() => {});
     }
   }
 };

@@ -37,8 +37,19 @@
         </div>
       </div>
     </div>
-    <van-cell title="常用收货地址" @click="popupClick('address')" is-link></van-cell>
-    <van-cell title="客服电话" icon="shop-o" value="0371-123456"></van-cell>
+    <van-cell @click="popupClick('address')" is-link>
+      <template #title>
+        <img style="width: 0.8rem;vertical-align:middle;margin-right:0.4rem" src="../../assets/img/my/shdz.png" alt="">
+        
+        <span class="custom-title">常用收货地址</span>
+      </template>
+    </van-cell>
+    <van-cell  value="0371-123456">
+      <template #title>
+        <img style="width: 0.8rem;vertical-align:middle;margin-right:0.4rem" src="../../assets/img/my/kf.png" alt="">
+        <span class="custom-title">客服电话</span>
+      </template>
+    </van-cell>
   </div>
 </template>
 <script>

@@ -178,7 +178,7 @@ export default {
   font-size: 1rem;
 }
 .shopping .van-checkbox__label {
-  font-size: 1rem;
+  font-size: 0.9rem;
 }
 /* 步进器 */
 /* .van-stepper {

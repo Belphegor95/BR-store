@@ -13,7 +13,7 @@
           待订单审核
           <span>DH-O-20200714-275691</span>
         </p>
-        <van-icon name="ellipsis" />
+        <!-- <van-icon name="ellipsis" /> -->
       </div>
       <!-- 地址 -->
       <div class="siteBox">
@@ -189,8 +189,7 @@ export default {
 .distributionBox > div > p:nth-child(2) {
   color: #707070;
 }
-.distributionBox > div:nth-child(1),
-.distributionBox > div:nth-child(2) {
+.distributionBox > div {
   border-bottom: 1px solid #f5f5f5;
 }
 /* 结算 */
