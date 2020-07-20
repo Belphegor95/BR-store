@@ -94,20 +94,7 @@ export default {
     rutClick: function() {
       this.$router.push("/product/particulars");
     },
-    // 购物车动画
-    addGoods(e) {
-      // 利用事件冒泡  获取 组件的+号点击event对象
-      if (e.path[0].classList[0] != "van-stepper__plus") return; //判断你是否是+号
-      let el = e.target;
-      this.balls.forEach(v => {
-        if (!v.show) {
-          v.show = true; // 当切换元素的display:block/none时，会触发vue的动画
-          v.el = el; // 将触发点击事件的“+”号保定道小球对象上，方便获取动画初始时的位置
-          this.dropBalls.push(v); // 取一个小球加入动画队列
-          return;
-        }
-      });
-    },
+    // 获取分类商品
     getcatePlist: function(obj) {
       this.axios
         .post(this.$api.getCatePlist, {
@@ -122,6 +109,20 @@ export default {
           }
         })
         .catch(() => {});
+    },
+    // 购物车动画
+    addGoods(e) {
+      // 利用事件冒泡  获取 组件的+号点击event对象
+      if (e.path[0].classList[0] != "van-stepper__plus") return; //判断你是否是+号
+      let el = e.target;
+      this.balls.forEach(v => {
+        if (!v.show) {
+          v.show = true; // 当切换元素的display:block/none时，会触发vue的动画
+          v.el = el; // 将触发点击事件的“+”号保定道小球对象上，方便获取动画初始时的位置
+          this.dropBalls.push(v); // 取一个小球加入动画队列
+          return;
+        }
+      });
     },
     beforeEnter(el) {
       let count = this.balls.length;
@@ -222,7 +223,7 @@ li > h4 {
   bottom: 45px;
 }
 .drop-enter-active {
-  transition: all .3s cubic-bezier(0.49, -0.29, 0.75, 0.41);
+  transition: all 0.3s cubic-bezier(0.49, -0.29, 0.75, 0.41);
 }
 .inner {
   width: 5px;
@@ -230,7 +231,7 @@ li > h4 {
   border-radius: 50%;
   overflow: hidden;
   background: red;
-  transition: all .3s;
+  transition: all 0.3s;
   /* transform: rotate(0deg);
   -webkit-transform: rotate(0deg); */
 }

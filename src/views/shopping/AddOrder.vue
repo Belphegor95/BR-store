@@ -9,7 +9,7 @@
     />
     <div class="content">
       <!-- 地址 -->
-      <div class="siteBox">
+      <div class="siteBox" >
         <p>张三 123456789</p>
         <div class="site">
           <p>
@@ -44,7 +44,7 @@
         <van-cell title="发票信息" is-link value="不开发票" />
       </div>
     </div>
-    <van-submit-bar label="应付金额：" :price="3050" button-text="提交订单" @submit="onSubmit" />
+    <van-submit-bar label="应付金额：" :price="960" button-text="提交订单" @submit="onSubmit" />
     <!-- <div class="btnBox">
       <div>催办</div>
       <div>订单作废</div>
@@ -58,7 +58,7 @@ export default {
     return {};
   },
   methods: {
-    onSubmit: function() {}
+    onSubmit: function() {},
   }
 };
 </script>

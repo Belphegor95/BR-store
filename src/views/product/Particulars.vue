@@ -1,48 +1,69 @@
 <template>
   <div class="particulars">
-    <div class="imgBox">
-      <van-swipe class="my-swipe" :loop="false" indicator-color="white" :show-indicators="false">
-        <van-swipe-item v-for="(item, index) in 4" :key="index">
-          <img src="../../assets/img/product/particulars/chanpin.png" style="width:100%" />
-        </van-swipe-item>
-      </van-swipe>
-      <img
-        class="backImg"
-        @click="backClick"
-        src="../../assets/img/product/particulars/fanhui.png"
-        alt
-      />
-    </div>
-    <!-- 商品价格 -->
-    <div class="attributeBox">
-      <div class="priceBox">
-        <div>
-          <p>
-            ￥
-            <i>27</i> .9/包
-          </p>
-        </div>
-        <div>
-          <p>
-            <i>558</i>/件
-          </p>
-          <p>￥27.9/包</p>
-        </div>
+    <div class="content">
+      <div class="imgBox">
+        <van-swipe
+          class="my-swipe"
+          :loop="false"
+          indicator-color="white"
+          :show-indicators="false"
+          @change="onChange"
+        >
+          <van-swipe-item v-for="(item, index) in particularsData.plist_img_url" :key="index">
+            <img :src="item" style="width:100%" />
+          </van-swipe-item>
+          <template #indicator>
+            <div
+              class="custom-indicator"
+            >{{ current + 1 }}/{{ particularsData.plist_img_url.length }}</div>
+          </template>
+        </van-swipe>
+        <img
+          class="backImg"
+          @click="backClick"
+          src="../../assets/img/product/particulars/fanhui.png"
+          alt
+        />
+        <div
+          class="swipeindex"
+        >1/{{ particularsData.plist_img_url ? particularsData.plist_img_url.length: "0" }}</div>
       </div>
-      <h4>73381得力图画本(10/200)</h4>
-    </div>
-    <!-- 规格 -->
-    <div class="specificationBox">
-      <div class="specification">
-        <p>规格</p>
-        <p>颜色: 蓝色</p>
+      <!-- 商品价格 -->
+      <div class="attributeBox">
+        <div class="priceBox">
+          <div v-for="(item,index) in particularsData.price_lv.unitList" :key="index">
+            <p>
+              ￥
+              <i>27</i> .9/包
+            </p>
+          </div>
+          <div>
+            <p>
+              <i>558</i>/件
+            </p>
+            <p>￥27.9/包</p>
+          </div>
+        </div>
+        <h4>{{ particularsData.plist_name }}</h4>
       </div>
-      <div @click="popClick">...</div>
-    </div>
-    <!-- 商品详情页 -->
-    <div class="presentationBox">
-      <topic name="商品介绍" color="#3ba8fa" />
-      <img v-for="item in 4" :key="item" src="../../assets/img/product/particulars/chanpin.png" alt />
+      <!-- 规格 -->
+      <div class="specificationBox">
+        <div class="specification">
+          <p>规格</p>
+          <p>颜色: 蓝色</p>
+        </div>
+        <div @click="popClick">...</div>
+      </div>
+      <!-- 商品详情页 -->
+      <div class="presentationBox" v-if="particularsData.plist_detail_img_url">
+        <topic name="商品介绍" color="#3ba8fa" />
+        <img
+          v-for="(item,index) in particularsData.plist_detail_img_url"
+          :key="index"
+          :src="item"
+          alt
+        />
+      </div>
     </div>
     <van-goods-action>
       <van-goods-action-icon icon="chat-o" text="客服" @click="onClickIcon" />
@@ -51,7 +72,7 @@
       <van-goods-action-icon v-else icon="star" text="已收藏" color="#feb35c" />
       <van-goods-action-button type="warning" text="加入购物车" @click="popClick" />
     </van-goods-action>
-    <popUp :show="show" @showClick="showClick" />
+    <popUp :popUpShow="popUpShow" :popUpData="particularsData" @showClick="showClick" />
   </div>
 </template>
 <script>
@@ -64,25 +85,29 @@ export default {
   },
   data() {
     return {
-      show: false,
+      current: 0,
+      popUpShow: false,
       particularsData: this.$route.query
     };
   },
   mounted() {
-    console.info(this.particularsData)
+    this.particularsData.price_lv = JSON.parse(this.particularsData.price_lv);
   },
   methods: {
     backClick: function() {
       this.$router.go(-1);
     },
     popClick: function() {
-      this.show = !this.show;
+      this.popUpShow = true;
     },
     onClickIcon() {
       Toast("点击图标");
     },
     showClick: function(is) {
-      this.show = is;
+      this.popUpShow = is;
+    },
+    onChange: function(index) {
+      this.current = index;
     }
   }
 };
@@ -90,14 +115,17 @@ export default {
 <style scoped>
 .particulars {
   background: #f5f5f5;
-  height: 1px;
+  height: 100%;
   display: flex;
   flex: 1;
   flex-direction: column;
 }
+.content {
+  height: 100%;
+  overflow-y: auto;
+}
 .attributeBox,
-.specificationBox,
-.presentationBox {
+.specificationBox {
   background: #fff;
   margin-bottom: 1rem;
 }
@@ -114,6 +142,27 @@ export default {
   position: fixed;
   top: 0.5rem;
   left: 0.5rem;
+}
+/* 轮播下标 */
+.swipeindex {
+  position: absolute;
+  right: 1rem;
+  bottom: 2rem;
+  /* width: 2rem;
+  height: 1rem; */
+  /* z-index: 99;
+  color: red; */
+  background-color: #eee;
+}
+.custom-indicator {
+  position: absolute;
+  right: 5px;
+  bottom: 5px;
+  color: #fff;
+  padding: 0.2rem 0.5rem;
+  font-size: 12px;
+  border-radius: 1rem;
+  background: rgba(0, 0, 0, 0.1);
 }
 /* 价格 */
 .attributeBox {
@@ -135,6 +184,7 @@ h4 {
 .priceBox > div > p:nth-child(1) {
   color: #e75858;
   font-size: 0.9rem;
+  font-weight: 700;
 }
 .priceBox > div > p:nth-child(2) {
   color: #acacac;
@@ -158,6 +208,7 @@ h4 {
 }
 /* 商品介绍 */
 .presentationBox {
+  background-color: #fff;
   font-size: 0;
 }
 .presentationBox img {

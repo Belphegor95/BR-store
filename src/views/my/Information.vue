@@ -23,7 +23,7 @@ export default {
 </script>
 <style scoped>
 .information {
-  height: calc(100% - 46px);
+  height: 100%;
 }
 .information > div {
   padding: 1rem;

@@ -56,6 +56,7 @@
 import daifuk from "../../assets/img/my/daifuk.png";
 import dpl from "../../assets/img/my/dpl.png";
 import dsk from "../../assets/img/my/dsk.png";
+import sh from "../../assets/img/my/sh.png";
 export default {
   data() {
     return {
@@ -75,7 +76,7 @@ export default {
           name: "待评论"
         },
         {
-          img: dsk,
+          img: sh,
           name: "售后"
         }
       ]

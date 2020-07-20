@@ -62,7 +62,7 @@ export default {
 </script>
 <style scoped>
 .setting {
-  height: calc(100% - 46px);
+  height: 100%;
   background-color: #f5f5f5;
 }
 .setting > div {

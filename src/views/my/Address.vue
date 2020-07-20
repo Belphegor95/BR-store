@@ -1,15 +1,15 @@
 <template>
   <div class="address">
     <div class="siteBox">
-      <div class="site" v-for="item in 4" :key="item">
-        <p>张三 133****1698</p>
-        <p>郑州市高新区科学大道瑞达路广告产业园2号8116室</p>
+      <div class="site" v-for="(item,index) in address" :key="index">
+        <p>{{ item.linkman }} {{ item.phone }}</p>
+        <p>{{ item.address | site }}{{ item.address_detail }}</p>
         <div class="operationBox">
-          <van-radio-group v-model="radio">
-            <van-radio :name="item">默认地址</van-radio>
+          <van-radio-group v-model="default_">
+            <van-radio :name="index">默认地址</van-radio>
           </van-radio-group>
           <div>
-            <van-button type="default" size="small" @click="rut">编辑</van-button>
+            <van-button type="default" size="small" @click="rut(item)">编辑</van-button>
             <van-button type="default" size="small">删除</van-button>
           </div>
         </div>
@@ -24,19 +24,55 @@
 export default {
   data() {
     return {
-      radio: 0
+      address: [],
+      default_: 0
     };
   },
+  mounted() {
+    this.getAllAddress();
+  },
   methods: {
-    rut: function() {
-      this.$router.push("/manage/addressRedact");
+    rut: function(data) {
+      // console.info(data.address)
+      if (data.address) {
+        this.$router.push({
+          path: "/manage/addressRedact",
+          query: data
+        });
+      } else {
+        this.$router.push("/manage/addressRedact");
+      }
+    },
+    // 获取用户所有地址
+    getAllAddress: function() {
+      this.axios
+        .get(this.$api.getAllAddress)
+        .then(data => {
+          if (data.code == 200) {
+            this.address = data.data;
+            for (let i = 0; i < this.address.length; i++) {
+              let item = this.address[i];
+              // 默认地址展示
+              if (item.address_default == "1") {
+                this.default_ = i;
+              }
+            }
+          }
+        })
+        .catch(() => {});
+    }
+  },
+  filters: {
+    site: function(value) {
+      // 替换地址 /
+      return value.replace(/\//g, "");
     }
   }
 };
 </script>
 <style scoped>
 .address {
-  height: calc(100% - 46px);
+  height: 100%;
   background-color: #f5f5f5;
 }
 /* .siteBox {
@@ -64,7 +100,7 @@ export default {
   color: #999999;
 }
 .btnBox {
-  padding:0.5rem 1rem;
+  padding: 0.5rem 1rem;
 }
 </style>
 

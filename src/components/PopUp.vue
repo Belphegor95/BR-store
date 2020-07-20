@@ -19,7 +19,7 @@
             <van-stepper v-model="cate.num" theme="round" />
           </div>
         </div>
-        <div class="price" v-if="popUpData.price_lv">
+        <div class="price" v-if="popUpData.price_lv.unitList">
           <div
             v-show="item.rate == cate.unitId"
             v-for="(item,index) in popUpData.price_lv.unitList"
@@ -66,6 +66,9 @@ export default {
       rate: 1,
       value: ""
     };
+  },
+  mounted() {
+    // if (this.popUpData.price_lv) this.popUpData.price_lv = JSON.parse(popUpData.price_lv)
   },
   methods: {
     showClick: function() {

@@ -70,6 +70,8 @@ export default {
               }
             }
             this.cateList = data_;
+            // 默认打开第一个
+            this.sidebarClick(this.cateList.cateOneList[0]);
           } else {
           }
         })
@@ -123,14 +125,14 @@ export default {
 }
 /* 过度动画 */
 .van-sidebar_two {
-  transition: all .5s;
+  transition: all 0.5s;
 }
-.list-complete-enter, .list-complete-leave-to{
+.list-complete-enter,
+.list-complete-leave-to {
   opacity: 0;
   transform: translateY(30px);
 }
 .list-complete-leave-active {
   position: absolute;
 }
-
 </style>

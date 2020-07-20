@@ -50,9 +50,7 @@
               class="moneyBox"
               v-if="item.price_lv.cate.length > 1 || item.price_lv.unitList.length > 1"
             >
-              <span>
-                {{ item.price_lv.unitList.length }}个规格可选
-              </span>
+              <span>{{ item.price_lv.unitList.length }}个规格可选</span>
               <span @click="shoppingclick(item)">
                 <img class="shoppingCart" src="../../assets/img/home/gouwu.png" />
               </span>
@@ -184,6 +182,7 @@ export default {
       }
     },
     rutparClick: function(data) {
+      data.price_lv = JSON.stringify(data.price_lv);
       this.$router.push({
         path: "/product/particulars",
         query: data
@@ -191,6 +190,7 @@ export default {
     },
     // 点击购物车 弹出购物车弹窗
     shoppingclick: function(data) {
+      // data.price_lv = JSON.stringify(data.price_lv);
       this.popUpData = data;
       this.popUpShow = true;
     },

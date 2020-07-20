@@ -20,7 +20,7 @@
     >
       <div class="van-card" v-for="item in 3" :key="item">
         <div class="van-card__header">
-          <van-checkbox @click="toggle" :name="item"></van-checkbox>
+          <van-checkbox @click="checkedClural" :name="item"></van-checkbox>
           <a class="van-card__thumb">
             <div class="van-image" style="width: 100%; height: 100%;">
               <img
@@ -44,7 +44,18 @@
           </div>
         </div>
         <div class="van-card_content" v-if="!fold">
-          <van-checkbox checked-color="#feb35c" @click="checkedClick" v-model="checked">￥439.00/台</van-checkbox>
+          <van-checkbox-group
+            class="checkboxBox"
+            v-model="singles"
+            ref="checkboxGroup"
+            checked-color="#feb35c"
+          >
+            <van-checkbox
+              checked-color="#feb35c"
+              :name="item + '-'"
+              @click="checkedSingle"
+            >￥439.00/台</van-checkbox>
+          </van-checkbox-group>
           <van-stepper v-model="value" theme="round" />
         </div>
       </div>
@@ -70,6 +81,7 @@ export default {
   data() {
     return {
       result: [],
+      singles: [],
       checked: false,
       value: 0,
       fold: true,
@@ -82,7 +94,16 @@ export default {
   methods: {
     //   点击结算
     onSubmit: function() {
-      this.$router.push("/shopping/order");
+      this.$router.push("/shopping/addOrder");
+    },
+    // 单个
+    checkedSingle: function(a) {
+      console.info(a);
+      console.info(this.singles);
+    },
+    // 多个点击
+    checkedClural: function() {
+      console.info(this.result);
     },
     checkedClick: function(is) {
       // console.info(this.checked)
@@ -141,7 +162,7 @@ export default {
   padding: 0 1rem;
   align-items: center;
   background-color: #fff;
-  justify-content: flex-end
+  justify-content: flex-end;
 }
 .submitBar p {
   flex: 1;
