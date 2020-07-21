@@ -2,7 +2,7 @@
   <div class="homePage">
     <!-- 头部 -->
     <div class="head">
-      <van-search v-model="value" placeholder="请输入搜索关键词" />
+      <van-search disabled @click="searchShow= true" placeholder="请输入搜索关键词" />
       <div class="icoBox">
         <van-icon :name="lingdang" badge="1" />
       </div>
@@ -42,6 +42,7 @@
               class="goodsPrice"
               v-for="(unitList,index1) in item.price_lv.unitList"
               :key="index1"
+              v-show="unitList.rate == 1"
             >
               <!-- <p class="three">市场价: 90.00￥</p> -->
               <p v-if="unitList.rate == 1">会员价: ￥{{ `${unitList.orderPrice}/${unitList.unitName}` }}</p>
@@ -65,6 +66,7 @@
         </li>
       </ul>
     </div>
+    <search :popUpShow="searchShow" @showClick="searchShow = false" />
     <popUp :popUpShow="popUpShow" :popUpData="popUpData" @showClick="showClick" />
   </div>
 </template>
@@ -81,14 +83,17 @@ import shouhou from "../../assets/img/home/shouhou.png";
 // 组件
 import topic from "@/components/Topic.vue";
 import PopUp from "@/components/PopUp.vue";
+import search from "@/components/Search.vue";
 export default {
   components: {
     topic,
-    PopUp
+    PopUp,
+    search
   },
   data() {
     return {
       lingdang: require("../../assets/img/home/lingdang.png"),
+      searchShow: false,
       value: "",
       value1: 0,
       option1: [
@@ -165,7 +170,7 @@ export default {
           if (data.code == 200) {
             this.recommend = data.data;
           } else {
-            // this.$toast(data.msg);
+            this.$toast(this.ErrCode(data.msg));
           }
         })
         .catch(() => {
@@ -182,7 +187,6 @@ export default {
       }
     },
     rutparClick: function(data) {
-      data.price_lv = JSON.stringify(data.price_lv);
       this.$router.push({
         path: "/product/particulars",
         query: data
@@ -190,7 +194,6 @@ export default {
     },
     // 点击购物车 弹出购物车弹窗
     shoppingclick: function(data) {
-      // data.price_lv = JSON.stringify(data.price_lv);
       this.popUpData = data;
       this.popUpShow = true;
     },
@@ -208,6 +211,9 @@ export default {
     },
     onClickButton() {
       Toast("点击按钮");
+    },
+    onSearch: function() {
+      console.info(123);
     }
   }
 };
@@ -230,9 +236,6 @@ export default {
   display: flex;
   width: 100%;
   height: 3rem;
-  /* position: fixed;
-  top: 0;
-  left: 0; */
   z-index: 1;
   background-image: linear-gradient(to right, #ffc474, #ff855a);
 }
@@ -294,17 +297,14 @@ li:nth-child(even) {
   padding: 0.6rem 0.6rem 0.6rem 0.3rem;
 }
 .goodsList {
-  /* boder-top-left-radius: 30px; */
   border-radius: 1rem 1rem 0 0;
   overflow: hidden;
 }
-/* .goodsName {
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-} */
 .goodsList > img {
   width: 100%;
+}
+.goodsName {
+  height: 3rem;
 }
 .goodsPrice {
   font-size: 0.7rem;
@@ -329,13 +329,12 @@ li:nth-child(even) {
 .moneyBox i {
   font-size: 1.4rem;
 }
-.numBox {
+/* .numBox {
   width: 4.5rem;
   height: 2rem;
   border-radius: 1rem;
   display: flex;
   justify-content: space-around;
-  /* 阴影 */
   -webkit-box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.1);
   -moz-box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.1);
   box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.1);
@@ -351,7 +350,7 @@ li:nth-child(even) {
   display: flex;
   color: #000;
   align-items: center;
-}
+} */
 .shoppingCart {
   height: 2rem;
 }
@@ -374,18 +373,6 @@ li:nth-child(even) {
 }
 </style>
 <style >
-.homePage .van-search {
-  flex: auto;
-}
-.homePage .van-search__content {
-  border-radius: 5rem;
-}
-.homePage .van-dropdown-menu {
-  width: 4rem;
-}
-.homePage .van-search {
-  background-color: transparent;
-}
 .homePage .van-dropdown-menu__bar {
   background-color: transparent !important;
   box-shadow: none !important;

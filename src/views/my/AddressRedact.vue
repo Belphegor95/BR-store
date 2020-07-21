@@ -51,24 +51,23 @@ export default {
   },
   methods: {
     onSave(data) {
-      console.info(data);
-      // this.axios
-      //   .post(this.$api.addAddress, {
-      //     linkman: data.name,
-      //     phone: data.tel,
-      //     address: `${data.province}/${data.city}/${data.county}`,
-      //     address_detail: data.addressDetail,
-      //     address_default: data.isDefault ? 1 : 0
-      //   })
-      //   .then(data => {
-      //     if (data.code == 200) {
-      //       this.$router.push("/manage/address");
-      //       this.$toast("地址保存成功!");
-      //     } else {
-      //       this.$toast(this.ErrCode(data.msg));
-      //     }
-      //   })
-      //   .catch(() => {});
+      this.axios
+        .post(this.$api.addAddress, {
+          linkman: data.name,
+          phone: data.tel,
+          address: `${data.province}/${data.city}/${data.county}`,
+          address_detail: data.addressDetail,
+          address_default: data.isDefault ? 1 : 0
+        })
+        .then(data => {
+          if (data.code == 200) {
+            this.$router.push("/manage/address");
+            this.$toast("地址保存成功!");
+          } else {
+            this.$toast(this.ErrCode(data.msg));
+          }
+        })
+        .catch(() => {});
     }
   }
 };

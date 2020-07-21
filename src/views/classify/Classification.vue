@@ -1,6 +1,13 @@
 <template>
   <div class="classification">
-    <van-nav-bar class="navBar" title="分类" :fixed="false" :placeholder="true" />
+    <!-- 头部 -->
+    <div class="head">
+      <van-search disabled @click="searchShow= true" placeholder="请输入搜索关键词" />
+      <div class="icoBox">
+        <van-icon :name="lingdang" badge="1" />
+      </div>
+    </div>
+    <!-- <van-nav-bar class="navBar" title="分类" :fixed="false" :placeholder="true" /> -->
     <div class="nav">
       <sidebar @cateid="getcatePlist" />
       <div class="contentBox">
@@ -11,7 +18,7 @@
         <ul>
           <li v-for="(item,index) in catePlist" :key="index">
             <h4>{{ item.plist_name }}</h4>
-            <div class="tagBox" @click="rutClick">
+            <div class="tagBox" @click="rutClick(item)">
               <img :src="item.plist_img_url.length !=0? item.plist_img_url[0]: '' " />
               <div class="tagRight">
                 <p>蓝</p>
@@ -20,6 +27,7 @@
                 <p>15.86/个</p>
               </div>
             </div>
+            <!-- 小球动画 -->
             <div class="stepperBox" @click="addGoods($event)">
               <van-stepper v-model="value" theme="round" />
               <div class="ball-wrapper" v-for="(ball, index) of balls" :key="index">
@@ -40,16 +48,21 @@
         </ul>
       </div>
     </div>
+    <search :popUpShow="searchShow" @showClick="searchShow = false" />
   </div>
 </template>
 <script>
 import sidebar from "@/components/Sidebar.vue";
+import search from "@/components/Search.vue";
 export default {
   components: {
-    sidebar
+    sidebar,
+    search
   },
   data() {
     return {
+      lingdang: require("../../assets/img/home/lingdang.png"),
+      searchShow: false,
       value: 0,
       value1: 0,
       value2: "a",
@@ -91,8 +104,11 @@ export default {
     // this.getcate();
   },
   methods: {
-    rutClick: function() {
-      this.$router.push("/product/particulars");
+    rutClick: function(data) {
+      this.$router.push({
+        path: "/product/particulars",
+        query: data
+      });
     },
     // 获取分类商品
     getcatePlist: function(obj) {
@@ -104,7 +120,6 @@ export default {
         .then(data => {
           if (data.code == 200) {
             this.catePlist = data.data;
-            // console.info(data)
           } else {
           }
         })
@@ -174,6 +189,20 @@ export default {
   display: flex;
   flex: 1;
   flex-direction: column;
+}
+/* 头部 */
+.head {
+  display: flex;
+  width: 100%;
+  height: 3rem;
+  z-index: 1;
+  background-image: linear-gradient(to right, #ffc474, #ff855a);
+}
+.icoBox {
+  display: flex;
+  width: 1.2rem;
+  padding-right: 1rem;
+  align-items: center;
 }
 .nav {
   height: 100%;

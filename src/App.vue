@@ -55,7 +55,7 @@ body,
   color: #fff;
 }
 .van-nav-bar__left .van-icon {
-  color: #fff!important;
+  color: #fff !important;
 }
 /* 字体颜色 */
 .van-nav-bar__title {
@@ -85,5 +85,15 @@ body,
   padding: 0.1rem 0.2rem;
   border-radius: 1rem;
   background-color: #f4f4f4;
+}
+/* 首页-分类  顶部 */
+.van-search {
+  flex: auto!important;
+}
+.van-search__content {
+  border-radius: 5rem!important;
+}
+.van-search {
+  background-color: transparent!important;
 }
 </style>

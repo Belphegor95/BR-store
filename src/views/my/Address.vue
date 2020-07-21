@@ -1,9 +1,10 @@
+<!-- 收货地址列表 -->
 <template>
   <div class="address">
     <div class="siteBox">
       <div class="site" v-for="(item,index) in address" :key="index">
-        <p>{{ item.linkman }} {{ item.phone }}</p>
-        <p>{{ item.address | site }}{{ item.address_detail }}</p>
+        <p @click="addressClick(item)">{{ item.linkman }} {{ item.phone }}</p>
+        <p @click="addressClick(item)">{{ item.address | site }}{{ item.address_detail }}</p>
         <div class="operationBox">
           <van-radio-group v-model="default_">
             <van-radio :name="index">默认地址</van-radio>
@@ -46,7 +47,7 @@ export default {
     // 获取用户所有地址
     getAllAddress: function() {
       this.axios
-        .get(this.$api.getAllAddress)
+        .post(this.$api.getAllAddress)
         .then(data => {
           if (data.code == 200) {
             this.address = data.data;
@@ -60,6 +61,10 @@ export default {
           }
         })
         .catch(() => {});
+    },
+    // 选择地址时候
+    addressClick: function(data) {
+      this.$emit("address", data);
     }
   },
   filters: {
@@ -73,11 +78,15 @@ export default {
 <style scoped>
 .address {
   height: 100%;
+  display: flex;
+  flex-direction: column;
   background-color: #f5f5f5;
 }
-/* .siteBox {
-  
-} */
+.siteBox {
+  flex: auto;
+  height: 1px;
+  overflow-y: auto;
+}
 .site {
   padding-top: 1rem;
   background: #fff;

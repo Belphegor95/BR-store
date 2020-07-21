@@ -20,5 +20,7 @@ api.addAddress = "/api/addAddress"  // 保存地址
 
 api.getAllAddress = "/api/getAllAddress"  // 获取所有地址
 
+api.search = "/api/search"  // 搜索商品
+
 
 export { api };

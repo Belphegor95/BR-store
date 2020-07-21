@@ -30,18 +30,14 @@
       </div>
       <!-- 商品价格 -->
       <div class="attributeBox">
-        <div class="priceBox">
+        <div class="priceBox" v-if="particularsData.price_lv.unitList">
           <div v-for="(item,index) in particularsData.price_lv.unitList" :key="index">
-            <p>
-              ￥
-              <i>27</i> .9/包
+            <p v-html="integer(item)">
+              <!-- {{ `￥${item.orderPrice}/${item.unitName}` }} -->
+              <!-- ￥{{ item.orderPrice | integer }}/{{ item.unitName }} -->
+              <!-- ￥
+              <i>27</i> .9/-->
             </p>
-          </div>
-          <div>
-            <p>
-              <i>558</i>/件
-            </p>
-            <p>￥27.9/包</p>
           </div>
         </div>
         <h4>{{ particularsData.plist_name }}</h4>
@@ -91,9 +87,26 @@ export default {
     };
   },
   mounted() {
-    this.particularsData.price_lv = JSON.parse(this.particularsData.price_lv);
+    // this.particularsData.price_lv = JSON.parse(this.particularsData.price_lv);
   },
   methods: {
+    integer: function(data) {
+      // 整数和小数
+      if (!data.orderPrice) return;
+      let num = data.orderPrice;
+      let numStr = num + "";
+      let decimals = numStr.split(".");
+      console.info(decimals);
+      if (decimals.length == 2) {
+        return `￥<i style="font-size: 1.3rem;">${parseInt(num)}</i>.${
+          decimals[1]
+        }/${data.unitName}`;
+      } else {
+        return `￥<i style="font-size: 1.3rem;">${parseInt(num)}</i>/${
+          data.unitName
+        }`;
+      }
+    },
     backClick: function() {
       this.$router.go(-1);
     },
@@ -110,6 +123,11 @@ export default {
       this.current = index;
     }
   }
+  // filters: {
+  //   integer: function(value) {
+  //     return `<i>${parseInt(value)}</i>.${value.toFixed(2)}`;
+  //   }
+  // }
 };
 </script>
 <style scoped>
@@ -170,16 +188,21 @@ export default {
 }
 .priceBox {
   display: flex;
+  margin-bottom: 0.5rem;
 }
 h4 {
   margin: 0.2rem 0;
 }
 .priceBox > div {
-  width: 25%;
+  flex: auto;
+  /* width: 25%; */
   height: 2.8rem;
   display: flex;
   justify-content: space-between;
   flex-direction: column;
+}
+.priceBox > div > p {
+  text-align: center;
 }
 .priceBox > div > p:nth-child(1) {
   color: #e75858;
@@ -190,7 +213,7 @@ h4 {
   color: #acacac;
   font-size: 0.5rem;
 }
-.priceBox > div > p > i {
+.i_integer {
   font-size: 1.5rem;
 }
 /* 规格 */

@@ -1,3 +1,4 @@
+<!-- 填写订单 -->
 <template>
   <div class="order">
     <van-nav-bar
@@ -9,7 +10,7 @@
     />
     <div class="content">
       <!-- 地址 -->
-      <div class="siteBox" >
+      <div class="siteBox">
         <p>张三 123456789</p>
         <div class="site">
           <p>
@@ -58,7 +59,7 @@ export default {
     return {};
   },
   methods: {
-    onSubmit: function() {},
+    onSubmit: function() {}
   }
 };
 </script>

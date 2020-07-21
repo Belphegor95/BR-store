@@ -1,3 +1,4 @@
+<!-- 购物车 -->
 <template>
   <div class="shopping">
     <van-nav-bar class="navBar" :fixed="false" placeholder title="购物车">

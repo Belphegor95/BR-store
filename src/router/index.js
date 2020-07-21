@@ -1,26 +1,5 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-// import Login from '../views/Login.vue'
-// import Home from '../views/Home.vue'
-// import HomePage from '../views/home/HomePage.vue'
-// import Register from '../views/Register.vue'
-// import Password from '../views/Password.vue'
-// import Particulars from '../views/product/Particulars.vue'  //产品详情
-// import Shopping from '../views/shopping/Shopping.vue'  //购物车
-// import Order from '../views/shopping/Order.vue'  //结算订单
-// import Classification from '../views/classify/Classification.vue'  //分类
-
-// import Personage from '../views/my/Personage.vue'  // 我的
-// import Manage from '../views/my/Manage.vue'  // 我的  公共路由
-// import Address from '../views/my/Address.vue'  // 地址列表
-// import AddressRedact from '../views/my/AddressRedact.vue'  // 地址列表
-// import Center from '../views/my/Center.vue'  // 个人中心
-// import Setting from '../views/my/Setting.vue'  // 设置
-// import Information from '../views/my/Information.vue'  // 消息
-
-
-// import OrderForm from '../views/orderForm/OrderForm.vue'  // 订单
-// import Maintain from '../views/home/Maintain.vue'  // 订单
 Vue.use(VueRouter)
 
 const routes = [
