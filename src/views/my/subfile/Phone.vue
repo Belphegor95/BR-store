@@ -1,3 +1,4 @@
+<!-- 换绑手机号 -->
 <template>
   <div class="phone">
     <van-nav-bar

@@ -2,34 +2,37 @@
 <template>
   <div class="orderForm">
     <van-nav-bar left-arrow class="navBar" @click-left="$router.go(-1)" :fixed="false" title="订单" />
-    <ul>
-      <li v-for="item in 5" :key="item">
-        <div class="orderNum">
-          <p>DH-O-20200714-275691</p>
-          <p>待订单审核</p>
-        </div>
-        <div class="imgBox" @click="($router.push('/shopping/order'))">
-          <div>
-            <img src="../../assets/img/product/particulars/chanpin.png" alt />
+    <van-pull-refresh v-model="isRefresh" @refresh="onRefresh">
+      <ul>
+        <li v-for="item in 5" :key="item">
+          <div class="orderNum">
+            <p>DH-O-20200714-275691</p>
+            <p>待订单审核</p>
           </div>
-          <div>
-            <img src="../../assets/img/product/particulars/chanpin.png" alt />
+          <div class="imgBox" @click="($router.push('/shopping/order'))">
+            <div>
+              <img src="../../assets/img/product/particulars/chanpin.png" alt />
+            </div>
+            <div>
+              <img src="../../assets/img/product/particulars/chanpin.png" alt />
+            </div>
+            <div>
+              <img src="../../assets/img/product/particulars/chanpin.png" alt />
+            </div>
+            <div>
+              <img src="../../assets/img/product/particulars/chanpin.png" alt />
+            </div>
           </div>
-          <div>
-            <img src="../../assets/img/product/particulars/chanpin.png" alt />
+          <p>种类:2,数量:22,总计: ￥176.64</p>
+          <div class="btnBox">
+            <van-button class="paybtn" type="default" size="small">立即支付</van-button>
+            <van-button type="default" size="small">再次购买</van-button>
+            <van-button type="default" size="small">修改订单</van-button>
           </div>
-          <div>
-            <img src="../../assets/img/product/particulars/chanpin.png" alt />
-          </div>
-        </div>
-        <p>种类:2,数量:22,总计: ￥176.64</p>
-        <div class="btnBox">
-          <van-button class="paybtn" type="default" size="small">立即支付</van-button>
-          <van-button type="default" size="small">再次购买</van-button>
-          <van-button type="default" size="small">修改订单</van-button>
-        </div>
-      </li>
-    </ul>
+        </li>
+      </ul>
+    </van-pull-refresh>
+
     <!-- <van-tabs v-model="formid">
       <van-tab title="全部">内容 1</van-tab>
       <van-tab title="待付款">内容 2</van-tab>
@@ -42,11 +45,17 @@
 export default {
   data() {
     return {
-      formid: 0
+      formid: 0,
+      isRefresh: false
     };
   },
   mounted() {
     this.formid = this.$route.query.formid;
+  },
+  methods: {
+    onRefresh: function() {
+      this.isRefresh = false;
+    }
   }
 };
 </script>

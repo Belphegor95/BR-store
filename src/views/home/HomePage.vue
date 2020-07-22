@@ -1,3 +1,4 @@
+<!-- 首页 -->
 <template>
   <div class="homePage">
     <!-- 头部 -->
@@ -7,65 +8,71 @@
         <van-icon :name="lingdang" badge="1" />
       </div>
     </div>
-    <div class="content">
-      <div class="bgc"></div>
-      <!-- 轮播 -->
-      <div class="swipeBox">
-        <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
-          <van-swipe-item v-for="(item, index) in picUrls" :key="index">
-            <img :src="item.picUrl" style="width:100%" />
-          </van-swipe-item>
-        </van-swipe>
-      </div>
-      <!-- 商品导航 -->
-      <div>
-        <van-grid>
-          <van-grid-item
-            @click="gridClick(index)"
-            class="navigationBox"
-            v-for="(item,index) in navigations"
-            :key="index"
-          >
-            <img :src="item.img" alt />
-            <p>{{ item.name }}</p>
-          </van-grid-item>
-        </van-grid>
-      </div>
-      <!-- 商品列表 -->
-      <topic name="推荐商品" color="#3ba8fa" />
-      <ul>
-        <li v-for="(item,index) in recommend" :key="index">
-          <div class="goodsList">
-            <img :src="item.plist_img_url[0]" @click="rutparClick(item)" />
-            <p class="goodsName">{{ item.plist_name }}</p>
-            <div
-              class="goodsPrice"
-              v-for="(unitList,index1) in item.price_lv.unitList"
-              :key="index1"
-              v-show="unitList.rate == 1"
+    <!-- 下拉刷新 -->
+    <van-pull-refresh v-model="isRefresh" @refresh="onRefresh">
+      <div class="content">
+        <div class="bgc"></div>
+        <!-- 轮播 -->
+        <div class="swipeBox">
+          <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
+            <van-swipe-item v-for="(item, index) in picUrls" :key="index">
+              <img :src="item.picUrl" style="width:100%" />
+            </van-swipe-item>
+          </van-swipe>
+        </div>
+        <!-- 商品导航 -->
+        <div>
+          <van-grid>
+            <van-grid-item
+              @click="gridClick(index)"
+              class="navigationBox"
+              v-for="(item,index) in navigations"
+              :key="index"
             >
-              <!-- <p class="three">市场价: 90.00￥</p> -->
-              <p v-if="unitList.rate == 1">会员价: ￥{{ `${unitList.orderPrice}/${unitList.unitName}` }}</p>
-            </div>
-            <div
-              class="moneyBox"
-              v-if="item.price_lv.cate.length > 1 || item.price_lv.unitList.length > 1"
-            >
-              <span>{{ item.price_lv.cate.length }}个规格可选</span>
-              <span @click="shoppingclick(item)">
-                <img class="shoppingCart" src="../../assets/img/home/gouwu.png" />
-              </span>
-            </div>
-            <div class="moneyBox" v-else>
-              <span>库存充足</span>
-              <div class="stepperBox">
-                <van-stepper v-model="value1" theme="round" />
+              <img :src="item.img" alt />
+              <p>{{ item.name }}</p>
+            </van-grid-item>
+          </van-grid>
+        </div>
+        <!-- 商品列表 -->
+        <topic name="推荐商品" color="#3ba8fa" />
+        <ul>
+          <li v-for="(item,index) in recommend" :key="index">
+            <div class="goodsList">
+              <img :src="item.plist_img_url[0]" @click="rutparClick(item)" />
+              <p class="goodsName">{{ item.plist_name }}</p>
+              <div
+                class="goodsPrice"
+                v-for="(unitList,index1) in item.price_lv.unitList"
+                :key="index1"
+                v-show="unitList.rate == 1"
+              >
+                <!-- <p class="three">市场价: 90.00￥</p> -->
+                <p
+                  v-if="unitList.rate == 1"
+                >会员价: ￥{{ `${unitList.orderPrice}/${unitList.unitName}` }}</p>
+              </div>
+              <div
+                class="moneyBox"
+                v-if="item.price_lv.cate.length > 1 || item.price_lv.unitList.length > 1"
+              >
+                <span>{{ item.price_lv.cate.length }}个规格可选</span>
+                <span @click="shoppingclick(item)">
+                  <img class="shoppingCart" src="../../assets/img/home/gouwu.png" />
+                </span>
+              </div>
+              <div class="moneyBox" v-else>
+                <span>库存充足</span>
+                <div class="stepperBox">
+                  <van-stepper v-model="value1" theme="round" />
+                </div>
               </div>
             </div>
-          </div>
-        </li>
-      </ul>
-    </div>
+          </li>
+        </ul>
+      </div>
+    </van-pull-refresh>
+
     <search :popUpShow="searchShow" @showClick="searchShow = false" v-if="searchShow" />
     <popUp :popUpShow="popUpShow" :popUpData="popUpData" @showClick="showClick" />
   </div>
@@ -92,6 +99,7 @@ export default {
   },
   data() {
     return {
+      isRefresh: false,
       lingdang: require("../../assets/img/home/lingdang.png"),
       searchShow: false,
       value: "",
@@ -188,7 +196,7 @@ export default {
     },
     rutparClick: function(data) {
       this.$router.push({
-        path: "/product/particulars",
+        path: "/particulars",
         query: data
       });
     },
@@ -200,20 +208,11 @@ export default {
     showClick: function(is) {
       this.popUpShow = is;
     },
-    onSearch: function(val) {
-      Toast(val);
-    },
-    onCancel: function() {
-      Toast("取消");
-    },
-    onClickIcon() {
-      Toast("点击图标");
-    },
-    onClickButton() {
-      Toast("点击按钮");
-    },
-    onSearch: function() {
-      console.info(123);
+    // 下拉刷新
+    onRefresh: function() {
+        this.getswipeImg();
+        this.gethomeRecommend();
+        this.isRefresh = false;
     }
   }
 };

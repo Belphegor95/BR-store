@@ -1,3 +1,4 @@
+<!-- 分类 -->
 <template>
   <div class="classification">
     <!-- 头部 -->
@@ -15,37 +16,44 @@
           <van-dropdown-item v-model="value1" :options="option1" />
           <van-dropdown-item v-model="value2" :options="option2" />
         </van-dropdown-menu>
-        <ul>
-          <li v-for="(item,index) in catePlist" :key="index">
-            <h4>{{ item.plist_name }}</h4>
-            <div class="tagBox" @click="rutClick(item)">
-              <img :src="item.plist_img_url.length !=0? item.plist_img_url[0]: '' " />
-              <div class="tagRight">
-                <p>蓝</p>
-                <p>市场价: 19.8/个</p>
-                <p>商品标签:</p>
-                <p>15.86/个</p>
+        <van-pull-refresh v-model="isRefresh" @refresh="onRefresh">
+          <!-- <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
+            <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
+              <van-cell v-for="item in list" :key="item" :title="item" />
+            </van-list>
+          </van-pull-refresh>-->
+          <ul>
+            <li v-for="(item,index) in catePlist" :key="index">
+              <h4>{{ item.plist_name }}</h4>
+              <div class="tagBox" @click="rutClick(item)">
+                <img :src="item.plist_img_url.length !=0? item.plist_img_url[0]: '' " />
+                <div class="tagRight">
+                  <p>蓝</p>
+                  <p>市场价: 19.8/个</p>
+                  <p>商品标签:</p>
+                  <p>15.86/个</p>
+                </div>
               </div>
-            </div>
-            <!-- 小球动画 -->
-            <div class="stepperBox" @click="addGoods($event)">
-              <van-stepper v-model="value" theme="round" />
-              <div class="ball-wrapper" v-for="(ball, index) of balls" :key="index">
-                <transition
-                  name="drop"
-                  @before-enter="beforeEnter"
-                  @enter="enter"
-                  @after-enter="afterEnter"
-                >
-                  <div class="ball" v-show="ball.show">
-                    <!--这里为了做两个维度的动画，因此需要多包一层，外层做Y轴，内层做X轴动画-->
-                    <div class="inner inner-hook"></div>
-                  </div>
-                </transition>
+              <!-- 小球动画 -->
+              <div class="stepperBox" @click="addGoods($event)">
+                <van-stepper v-model="value" theme="round" />
+                <div class="ball-wrapper" v-for="(ball, index) of balls" :key="index">
+                  <transition
+                    name="drop"
+                    @before-enter="beforeEnter"
+                    @enter="enter"
+                    @after-enter="afterEnter"
+                  >
+                    <div class="ball" v-show="ball.show">
+                      <!--这里为了做两个维度的动画，因此需要多包一层，外层做Y轴，内层做X轴动画-->
+                      <div class="inner inner-hook"></div>
+                    </div>
+                  </transition>
+                </div>
               </div>
-            </div>
-          </li>
-        </ul>
+            </li>
+          </ul>
+        </van-pull-refresh>
       </div>
     </div>
     <search :popUpShow="searchShow" @showClick="searchShow = false" />
@@ -61,8 +69,10 @@ export default {
   },
   data() {
     return {
+      isRefresh: false,
       lingdang: require("../../assets/img/home/lingdang.png"),
       searchShow: false,
+      cate: {},
       value: 0,
       value1: 0,
       value2: "a",
@@ -106,12 +116,14 @@ export default {
   methods: {
     rutClick: function(data) {
       this.$router.push({
-        path: "/product/particulars",
+        path: "/particulars",
         query: data
       });
     },
     // 获取分类商品
     getcatePlist: function(obj) {
+      // console.info(obj)
+      this.cate = obj;
       this.axios
         .post(this.$api.getCatePlist, {
           cateone: obj.one,
@@ -124,6 +136,11 @@ export default {
           }
         })
         .catch(() => {});
+    },
+    // 下拉刷新
+    onRefresh: function() {
+      this.getcatePlist(this.cate);
+      this.isRefresh = false;
     },
     // 购物车动画
     addGoods(e) {
@@ -212,7 +229,9 @@ export default {
 /* 右侧内容 */
 .contentBox {
   flex: auto;
+  display: flex;
   overflow-y: auto;
+  flex-direction: column;
 }
 li {
   display: flex;
@@ -273,6 +292,11 @@ li > h4 {
 }
 .classification .van-dropdown-menu {
   width: auto;
+}
+/* 下拉刷新盒子大小 */
+.classification .van-pull-refresh {
+  flex: auto;
+  height: 1px;
 }
 </style>
 

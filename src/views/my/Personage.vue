@@ -1,3 +1,4 @@
+<!-- 我的 -->
 <template>
   <div class="personage">
     <van-nav-bar class="navBar" fixed placeholder title="我的">
@@ -39,14 +40,22 @@
     </div>
     <van-cell @click="popupClick('address')" is-link>
       <template #title>
-        <img style="width: 0.8rem;vertical-align:middle;margin-right:0.4rem" src="../../assets/img/my/shdz.png" alt="">
-        
+        <img
+          style="width: 0.8rem;vertical-align:middle;margin-right:0.4rem"
+          src="../../assets/img/my/shdz.png"
+          alt
+        />
+
         <span class="custom-title">常用收货地址</span>
       </template>
     </van-cell>
-    <van-cell  value="0371-123456">
+    <van-cell value="0371-123456">
       <template #title>
-        <img style="width: 0.8rem;vertical-align:middle;margin-right:0.4rem" src="../../assets/img/my/kf.png" alt="">
+        <img
+          style="width: 0.8rem;vertical-align:middle;margin-right:0.4rem"
+          src="../../assets/img/my/kf.png"
+          alt
+        />
         <span class="custom-title">客服电话</span>
       </template>
     </van-cell>
@@ -77,7 +86,7 @@ export default {
         },
         {
           img: sh,
-          name: "售后"
+          name: "退货/售后"
         }
       ]
     };
@@ -90,7 +99,11 @@ export default {
       this.$router.push(`/manage/${rutname}`);
     },
     rutClick: function(id) {
-      this.$router.push(`/shopping/orderForm?formid=${id}`);
+      if (id == 4) {
+        this.$router.push("/shopping/aftermarket");
+      } else {
+        this.$router.push(`/shopping/orderForm?formid=${id}`);
+      }
     }
   }
 };

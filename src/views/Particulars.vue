@@ -1,3 +1,4 @@
+<!-- 详情页 -->
 <template>
   <div class="particulars">
     <div class="content">
@@ -21,7 +22,7 @@
         <img
           class="backImg"
           @click="backClick"
-          src="../../assets/img/product/particulars/fanhui.png"
+          src="../assets/img/product/particulars/fanhui.png"
           alt
         />
         <div

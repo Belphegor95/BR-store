@@ -22,5 +22,6 @@ api.getAllAddress = "/api/getAllAddress"  // 获取所有地址
 
 api.search = "/api/search"  // 搜索商品
 
+api.addToShoppingCart = "/api/addToShoppingCart"  // 添加购物车
 
 export { api };

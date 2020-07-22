@@ -47,9 +47,9 @@ const routes = [
     component: () => import('../views/SwitchoverUser.vue')
   },
   {
-    path: '/product/particulars',
+    path: '/particulars',
     name: 'Particulars',
-    component: () => import('../views/product/Particulars.vue')
+    component: () => import('../views/Particulars.vue')
   },
   {
     path: '/shopping/order',
@@ -65,6 +65,11 @@ const routes = [
     path: '/shopping/orderForm',
     name: 'OrderForm',
     component: () => import('../views/shopping/OrderForm.vue'),
+  },
+  {
+    path: '/shopping/aftermarket',
+    name: 'aftermarket',
+    component: () => import('../views/shopping/Aftermarket.vue'),
   },
   {
     path: '/manage',

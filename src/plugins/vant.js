@@ -22,11 +22,7 @@ import { Area } from 'vant';
 import { Popup } from 'vant';
 import { Tab, Tabs } from 'vant';
 import { Toast } from 'vant';
-
-
-
-
-
+import { PullRefresh } from 'vant';
 
 
 
@@ -65,3 +61,4 @@ Vue.use(Popup);
 Vue.use(Tab);
 Vue.use(Tabs);
 Vue.use(Toast);
+Vue.use(PullRefresh);
