@@ -41,7 +41,7 @@ export default {
         .then(data => {
           if (data.code == 200) {
             this.$toast("登录成功");
-            localStorage.clear();
+            localStorage.removeItem('vuex')
             this.$store.commit("show_activeid", 0);
             this.$router.push("/homePage");
           } else {

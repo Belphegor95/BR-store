@@ -11,7 +11,7 @@
       <div @click="shotClick" class="btnbox">
         <van-icon name="arrow-left" />
       </div>
-      <van-search @focus="onfocus" v-model="searchKey" placeholder="请输入搜索关键词" />
+      <van-search @focus="onfocus" :autofocus="true" v-model="searchKey" placeholder="请输入搜索关键词" />
       <div class="searchbtn" @click="searchClick">搜索</div>
     </div>
     <div class="recordbox" v-if="is_search">
@@ -20,7 +20,6 @@
         <span>删除</span>
       </div>
       <div class="recordbtnbox">
-        <!-- <van-button round size="mini" type="default">默认按钮</van-button> -->
         <div @click="btnClick('打印机')">打印机</div>
         <div @click="btnClick('名片')">名片</div>
         <div @click="btnClick('铅笔')">铅笔</div>
@@ -47,7 +46,7 @@
               class="moneyBox"
               v-if="item.price_lv.cate.length > 1 || item.price_lv.unitList.length > 1"
             >
-              <span>{{ item.price_lv.unitList.length }}个规格可选</span>
+              <span>{{ item.price_lv.cate.length }}个规格可选</span>
               <span @click="shoppingclick(item)">
                 <img class="shoppingCart" src="../assets/img/home/gouwu.png" />
               </span>
@@ -62,16 +61,23 @@
         </li>
       </ul>
     </div>
+    <popUp :popUpShow="cartShow" :popUpData="popUpData" @showClick="cartShowClick" />
   </van-popup>
 </template>
 <script>
+import PopUp from "@/components/PopUp.vue";
 export default {
+  components: {
+    PopUp
+  },
   name: "Search",
   props: {
     popUpShow: Boolean
   },
   data() {
     return {
+      cartShow: false,
+      popUpData: {}, //购物车种类信息
       searchKey: "",
       is_search: true,
       value1: 0,
@@ -89,6 +95,9 @@ export default {
       recommend: []
     };
   },
+  mounted() {
+    // console.info(this.$refs)
+  },
   methods: {
     //  关闭
     shotClick: function() {
@@ -102,6 +111,15 @@ export default {
     btnClick: function(name) {
       this.searchKey = name;
       this.searchClick();
+    },
+    // 点击购物车 弹出购物车弹窗
+    shoppingclick: function(data) {
+      this.popUpData = data;
+      this.cartShow = true;
+    },
+    // 关闭购物车弹窗
+    cartShowClick: function(is) {
+      this.cartShow = is;
     },
     // 点击搜索
     searchClick: function() {
@@ -176,16 +194,18 @@ li {
   width: 100%;
   display: flex;
   box-sizing: border-box;
+  padding: 0.3rem 0.3rem 0.3rem 0;
 }
-li:nth-child(odd) {
+/* li:nth-child(odd) {
   padding: 0.6rem 0.3rem 0.6rem 0.6rem;
 }
 li:nth-child(even) {
   padding: 0.6rem 0.6rem 0.6rem 0.3rem;
-}
+} */
 .goodsList {
   border-radius: 1rem 1rem 0 0;
   overflow: hidden;
+  border-bottom: 1px solid #f5f5f5;
 }
 .goodsList > img {
   width: 8rem;
@@ -197,6 +217,7 @@ li:nth-child(even) {
 .goodsContent {
   width: 100%;
   display: flex;
+  justify-content: space-evenly;
   flex-direction: column;
 }
 .goodsPrice {
@@ -217,7 +238,6 @@ li:nth-child(even) {
   /* font-size: 1rem; */
   align-items: center;
   padding: 0.1rem 0.2rem;
-  /* align-self: flex-end; */
   justify-content: space-between;
 }
 .moneyBox i {

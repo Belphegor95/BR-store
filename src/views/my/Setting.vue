@@ -54,7 +54,7 @@ export default {
     },
     quitClick: function() {
       // 退出登录
-      localStorage.clear();
+      localStorage.removeItem('vuex')
       this.$router.push("/login");
     }
   }

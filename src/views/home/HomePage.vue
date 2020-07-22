@@ -51,7 +51,7 @@
               class="moneyBox"
               v-if="item.price_lv.cate.length > 1 || item.price_lv.unitList.length > 1"
             >
-              <span>{{ item.price_lv.unitList.length }}个规格可选</span>
+              <span>{{ item.price_lv.cate.length }}个规格可选</span>
               <span @click="shoppingclick(item)">
                 <img class="shoppingCart" src="../../assets/img/home/gouwu.png" />
               </span>
@@ -66,7 +66,7 @@
         </li>
       </ul>
     </div>
-    <search :popUpShow="searchShow" @showClick="searchShow = false" />
+    <search :popUpShow="searchShow" @showClick="searchShow = false" v-if="searchShow" />
     <popUp :popUpShow="popUpShow" :popUpData="popUpData" @showClick="showClick" />
   </div>
 </template>
@@ -139,7 +139,7 @@ export default {
       picUrls: [], //轮播图
       recommend: [], //推荐商品
       popUpShow: false, //购物车详情弹窗
-      popUpData: {} //购物车详情
+      popUpData: {} //购物车种类信息
     };
   },
   mounted() {
