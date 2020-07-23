@@ -27,6 +27,8 @@ export default {
       this.titlename = "设置";
     } else if (this.$route.path.indexOf("information") != -1) {
       this.titlename = "消息";
+    } else if (this.$route.path.indexOf("logistics") != -1) {
+      this.titlename = "物流信息";
     }
   },
   watch: {
@@ -42,6 +44,8 @@ export default {
           this.titlename = "设置";
         } else if (newValue.path.indexOf("information") != -1) {
           this.titlename = "消息";
+        } else if (newValue.path.indexOf("logistics") != -1) {
+          this.titlename = "物流信息";
         }
       },
       deep: true

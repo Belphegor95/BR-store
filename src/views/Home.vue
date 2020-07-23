@@ -3,7 +3,7 @@
     <!-- 路由 -->
     <router-view></router-view>
     <!-- 底部导航 -->
-    <van-tabbar v-model="activeid" class="tabbarBox" @change="tabbarClick"  :fixed="false">
+    <van-tabbar v-model="activeid" class="tabbarBox" @change="tabbarClick" :fixed="false">
       <van-tabbar-item>
         <img v-if="activeid === 0" src="../assets/img/home/shouye01.png" alt />
         <img v-else src="../assets/img/home/shouye.png" alt />
@@ -14,7 +14,7 @@
         <img v-else src="../assets/img/home/feilei.png" alt />
         分类
       </van-tabbar-item>
-      <van-tabbar-item>
+      <van-tabbar-item :badge="count" >
         <img v-if="activeid === 2" src="../assets/img/home/gouwuche01.png" alt />
         <img v-else src="../assets/img/home/gouwuche.png" alt />
         购物车
@@ -31,7 +31,8 @@
 export default {
   data() {
     return {
-      activeid: 0
+      activeid: 0,
+      count: null,
     };
   },
   mounted() {
@@ -99,5 +100,9 @@ export default {
 }
 .van-tabbar--unfit {
   box-shadow: 0 0 1px rgba(0, 0, 0, 0.1);
+}
+.home .van-info {
+  top: 3px;
+  right: -9px;
 }
 </style>

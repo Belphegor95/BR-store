@@ -97,7 +97,6 @@ export default {
       let num = data.orderPrice;
       let numStr = num + "";
       let decimals = numStr.split(".");
-      console.info(decimals);
       if (decimals.length == 2) {
         return `￥<i style="font-size: 1.3rem;">${parseInt(num)}</i>.${
           decimals[1]

@@ -25,7 +25,7 @@
         </van-grid-item>
       </van-grid>
     </div>
-    <van-cell title="物流信息" is-link />
+    <van-cell title="物流信息" is-link @click="$router.push('/manage/logistics')" />
     <div class="sitelist">
       <div v-for="item in 2" :key="item" class="list" :class="item == 2?'list_active':''">
         <img src="../../assets/img/product/particulars/chanpin.png" alt />

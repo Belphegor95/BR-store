@@ -5,7 +5,8 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     activeid: 1,
-    user: {}
+    user: {},
+    count: 0, // 购物车个数
   },
   mutations: {
     show_activeid(state, payload) {
@@ -13,7 +14,10 @@ export default new Vuex.Store({
     },
     show_user(state, payload) {
       state.user = payload;
-    }
+    },
+    show_count(state, payload) {
+      state.count = payload;
+    },
   },
   actions: {
   },

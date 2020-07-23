@@ -52,27 +52,17 @@
                   v-if="unitList.rate == 1"
                 >会员价: ￥{{ `${unitList.orderPrice}/${unitList.unitName}` }}</p>
               </div>
-              <div
-                class="moneyBox"
-                v-if="item.price_lv.cate.length > 1 || item.price_lv.unitList.length > 1"
-              >
+              <div class="moneyBox">
                 <span>{{ item.price_lv.cate.length }}个规格可选</span>
                 <span @click="shoppingclick(item)">
                   <img class="shoppingCart" src="../../assets/img/home/gouwu.png" />
                 </span>
-              </div>
-              <div class="moneyBox" v-else>
-                <span>库存充足</span>
-                <div class="stepperBox">
-                  <van-stepper v-model="value1" theme="round" />
-                </div>
               </div>
             </div>
           </li>
         </ul>
       </div>
     </van-pull-refresh>
-
     <search :popUpShow="searchShow" @showClick="searchShow = false" v-if="searchShow" />
     <popUp :popUpShow="popUpShow" :popUpData="popUpData" @showClick="showClick" />
   </div>
@@ -177,12 +167,19 @@ export default {
         .then(data => {
           if (data.code == 200) {
             this.recommend = data.data;
+            // for (let i = 0; i < this.recommend.length; i++) {
+            //   let item = this.recommend[i].price_lv;
+            //   for (let j = 0; j < item.cate.length; j++) {
+            //     let itemJ = item.cate[j];
+            //     let rateType = item.unitList[0].priceId;
+            //     itemJ.rateType = rateType;
+            //   }
+            // }
           } else {
             this.$toast(this.ErrCode(data.msg));
           }
         })
         .catch(() => {
-          console.info(500);
           //   this.$toast.fail(this.$api.monmsg);
         });
     },
@@ -202,6 +199,12 @@ export default {
     },
     // 点击购物车 弹出购物车弹窗
     shoppingclick: function(data) {
+      // for (let i = 0; i < data.price_lv.cate.length; i++) {
+      //   let item = data.price_lv.cate[i];
+      //   let rateType = data.price_lv.unitList[0].priceId;
+      //   item.rateType = rateType;
+      //   item.num = 0;
+      // }
       this.popUpData = data;
       this.popUpShow = true;
     },
@@ -210,9 +213,9 @@ export default {
     },
     // 下拉刷新
     onRefresh: function() {
-        this.getswipeImg();
-        this.gethomeRecommend();
-        this.isRefresh = false;
+      this.getswipeImg();
+      this.gethomeRecommend();
+      this.isRefresh = false;
     }
   }
 };
@@ -391,5 +394,10 @@ li:nth-child(even) {
 /* 底部导航选中颜色 */
 .homePage .van-tabbar-item--active {
   color: #feb35c;
+}
+/* 下拉刷新 */
+.homePage .van-pull-refresh__track {
+  display: flex;
+  flex-direction: column;
 }
 </style>

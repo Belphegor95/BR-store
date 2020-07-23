@@ -13,10 +13,17 @@
       <div class="trailBox" v-for="(cate,indexcate) in popUpData.price_lv.cate" :key="indexcate">
         <div class="trail">
           <div class="trailName">
-            <p style="margin-right:0.2rem">{{ cate.cateName }}</p>
+            <p style="margin-right:0.2rem">{{ cate.cateName?cate.cateName:'暂无' }}</p>
           </div>
           <div class="stepperBox">
-            <van-stepper v-model="cate.num" theme="round" />
+            <van-stepper
+              v-model="cate.num"
+              default-value="0"
+              :integer="true"
+              :allow-empty="false"
+              :min="0"
+              theme="round"
+            />
           </div>
         </div>
         <div class="price" v-if="popUpData.price_lv.unitList">
@@ -35,14 +42,13 @@
           <span>库存充足</span>
         </div>
         <ul>
-          <li
-            v-if="popUpData.price_lv && popUpData.price_lv.unitList && popUpData.price_lv.unitList.length > 1"
-          >
+          <li v-if="popUpData.price_lv && popUpData.price_lv.unitList">
             <span>单位</span>
-            <van-radio-group v-model="cate.unitId" direction="horizontal">
+            <van-radio-group v-model="cate.rateType" direction="horizontal">
               <van-radio
+                @click="$forceUpdate()"
                 icon-size="16px"
-                :name="item.rate"
+                :name="item.priceId"
                 v-for="(item,index) in popUpData.price_lv.unitList"
                 :key="index"
               >{{ item.unitName }}</van-radio>
@@ -51,7 +57,7 @@
         </ul>
       </div>
     </div>
-    <van-button class="btnForm" @click="ok" type="default">确定</van-button>
+    <van-button class="btnForm" @click="addShopping" type="default">确定</van-button>
   </van-action-sheet>
 </template>
 <script>
@@ -74,8 +80,31 @@ export default {
     showClick: function() {
       this.$emit("showClick", false);
     },
-    ok() {
-      console.info(this.popUpData);
+    addShopping: function() {
+      let arr = [];
+      for (let i = 0; i < this.popUpData.price_lv.cate.length; i++) {
+        let item = this.popUpData.price_lv.cate[i];
+        let obj = {};
+        obj.plistId = this.popUpData.id;
+        obj.priceId = item.rateType;
+        obj.cateId = item.cateId;
+        obj.buyNum = item.num;
+        arr.push(obj);
+      }
+      this.axios
+        .post(this.$api.addToShoppingCart, {
+          plist: JSON.stringify(arr)
+        })
+        .then(data => {
+          if (data.code == 200) {
+            this.$emit("showClick", false);
+          } else {
+            this.$toast(this.ErrCode(data.msg));
+          }
+        })
+        .catch(() => {
+          //   this.$toast.fail(this.$api.monmsg);
+        });
     }
   }
 };
@@ -98,6 +127,9 @@ export default {
 }
 .content {
   flex: auto;
+}
+.trailBox {
+  margin-bottom: 0.5rem;
 }
 .trail,
 .price {

@@ -67,9 +67,14 @@ const routes = [
     component: () => import('../views/shopping/OrderForm.vue'),
   },
   {
-    path: '/shopping/aftermarket',
+    path: '/shopping/aftermarket', // 退货/售后
     name: 'aftermarket',
     component: () => import('../views/shopping/Aftermarket.vue'),
+  },
+  {
+    path: '/shopping/refund', // 退货/售后 详情
+    name: 'refund',
+    component: () => import('../views/shopping/Refund.vue'),
   },
   {
     path: '/manage',
@@ -95,9 +100,13 @@ const routes = [
       path: '/manage/information',
       component: () => import('../views/my/Information.vue'),
     },
+    {
+      path: '/manage/logistics',  // 物流信息
+      component: () => import('../views/my/Logistics.vue'),
+    },
     ]
   },
-  
+
   {
     path: '/maintain',
     name: 'Maintain',
