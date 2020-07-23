@@ -24,4 +24,6 @@ api.search = "/api/search"  // 搜索商品
 
 api.addToShoppingCart = "/api/addToShoppingCart"  // 添加购物车
 
+api.getShoppingCart = "/api/getShoppingCart"  // 购物车物品个数
+
 export { api };

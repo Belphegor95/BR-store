@@ -85,7 +85,7 @@ export default {
   components: {
     topic,
     PopUp,
-    search
+    search,
   },
   data() {
     return {
@@ -97,47 +97,47 @@ export default {
       option1: [
         { text: "郑州", value: 0 },
         { text: "北京", value: 1 },
-        { text: "上海", value: 2 }
+        { text: "上海", value: 2 },
       ],
       active: 0,
       navigations: [
         {
           img: bangong,
-          name: "办公用品"
+          name: "办公用品",
         },
         {
           img: shuxiegongju,
-          name: "书写工具"
+          name: "书写工具",
         },
         {
           img: bangongyongzhi,
-          name: "办公用纸"
+          name: "办公用纸",
         },
         {
           img: tiyuyongpin,
-          name: "体育用品"
+          name: "体育用品",
         },
         {
           img: xueshengyongpin,
-          name: "学生用品"
+          name: "学生用品",
         },
         {
           img: wenjianguanli,
-          name: "文件管理"
+          name: "文件管理",
         },
         {
           img: zhuomianbangong,
-          name: "桌面办公"
+          name: "桌面办公",
         },
         {
           img: shouhou,
-          name: "售后及维修"
-        }
+          name: "售后及维修",
+        },
       ],
       picUrls: [], //轮播图
       recommend: [], //推荐商品
       popUpShow: false, //购物车详情弹窗
-      popUpData: {} //购物车种类信息
+      popUpData: {}, //购物车种类信息
     };
   },
   mounted() {
@@ -146,10 +146,10 @@ export default {
     this.gethomeRecommend();
   },
   methods: {
-    getswipeImg: function() {
+    getswipeImg: function () {
       this.axios
         .get(this.$api.slideshow)
-        .then(data => {
+        .then((data) => {
           if (data.code == 200) {
             this.picUrls = data.data;
           } else {
@@ -161,20 +161,12 @@ export default {
           //   this.$toast.fail(this.$api.monmsg);
         });
     },
-    gethomeRecommend: function() {
+    gethomeRecommend: function () {
       this.axios
         .get(this.$api.homeRecommend)
-        .then(data => {
+        .then((data) => {
           if (data.code == 200) {
             this.recommend = data.data;
-            // for (let i = 0; i < this.recommend.length; i++) {
-            //   let item = this.recommend[i].price_lv;
-            //   for (let j = 0; j < item.cate.length; j++) {
-            //     let itemJ = item.cate[j];
-            //     let rateType = item.unitList[0].priceId;
-            //     itemJ.rateType = rateType;
-            //   }
-            // }
           } else {
             this.$toast(this.ErrCode(data.msg));
           }
@@ -183,7 +175,7 @@ export default {
           //   this.$toast.fail(this.$api.monmsg);
         });
     },
-    gridClick: function(index) {
+    gridClick: function (index) {
       if (index == 0) {
         console.info(index);
       } else if (index == 7) {
@@ -191,33 +183,34 @@ export default {
         this.$router.push("/maintain");
       }
     },
-    rutparClick: function(data) {
+    rutparClick: function (data) {
       this.$router.push({
         path: "/particulars",
-        query: data
+        query: data,
       });
     },
     // 点击购物车 弹出购物车弹窗
-    shoppingclick: function(data) {
-      // for (let i = 0; i < data.price_lv.cate.length; i++) {
-      //   let item = data.price_lv.cate[i];
-      //   let rateType = data.price_lv.unitList[0].priceId;
-      //   item.rateType = rateType;
-      //   item.num = 0;
-      // }
+    shoppingclick: function (data) {
+      // 设置购买数量 和选择 类型的默认值
+      for (let i = 0; i < data.price_lv.cate.length; i++) {
+        let item = data.price_lv.cate[i];
+        let rateType = data.price_lv.unitList[0].priceId;
+        item.rateType = rateType;
+        item.num = 0;
+      }
       this.popUpData = data;
       this.popUpShow = true;
     },
-    showClick: function(is) {
+    showClick: function (is) {
       this.popUpShow = is;
     },
     // 下拉刷新
-    onRefresh: function() {
+    onRefresh: function () {
       this.getswipeImg();
       this.gethomeRecommend();
       this.isRefresh = false;
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

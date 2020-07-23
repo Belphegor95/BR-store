@@ -28,8 +28,13 @@
           <b>退款成功</b> 退款成功439.00
         </div>
         <div class="btnbox">
-          <van-button round size="small" type="default" @click="$router.push('/shopping/refund')">查看详情</van-button>
-          <van-button round size="small" type="default" >删除记录</van-button>
+          <van-button
+            round
+            size="small"
+            type="default"
+            @click="$router.push('/shopping/refund')"
+          >查看详情</van-button>
+          <van-button round size="small" type="default">删除记录</van-button>
         </div>
       </div>
     </van-pull-refresh>
@@ -40,14 +45,14 @@
 export default {
   data() {
     return {
-      isRefresh: false
+      isRefresh: false,
     };
   },
   methods: {
-    onRefresh: function() {
+    onRefresh: function () {
       this.isRefresh = false;
-    }
-  }
+    },
+  },
 };
 </script>
 

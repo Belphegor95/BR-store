@@ -19,13 +19,13 @@
       ref="checkboxGroup"
       checked-color="#feb35c"
     >
-      <div class="van-card" v-for="item in 3" :key="item">
+      <div class="van-card" v-for="(item,index) in shoppings" :key="index">
         <div class="van-card__header">
           <van-checkbox @click="checkedClural" :name="item"></van-checkbox>
           <a class="van-card__thumb">
             <div class="van-image" style="width: 100%; height: 100%;">
               <img
-                src="https://img.yzcdn.cn/vant/ipad.jpeg"
+                :src="`${$api.baseUrl}/${item.plist_img_url}`"
                 class="van-image__img"
                 style="object-fit: cover;"
               />
@@ -33,7 +33,7 @@
           </a>
           <div class="van-card__content">
             <div class="contentbox">
-              <div class="van-card__title van-multi-ellipsis--l2">5777 得力 120张名片册 （1/12/96）</div>
+              <div class="van-card__title van-multi-ellipsis--l2">{{ item.plist_name }}</div>
               <van-button round size="mini" type="info">
                 <p>{{ fold? '折叠':'收起' }}</p>
                 <van-icon name="arrow-up" />
@@ -57,7 +57,14 @@
               @click="checkedSingle"
             >￥439.00/台</van-checkbox>
           </van-checkbox-group>
-          <van-stepper v-model="value" theme="round" />
+          <van-stepper
+            v-model="value"
+            default-value="0"
+            :integer="true"
+            :allow-empty="false"
+            :min="0"
+            theme="round"
+          />
         </div>
       </div>
     </van-checkbox-group>
@@ -86,27 +93,44 @@ export default {
       checked: false,
       value: 0,
       fold: true,
-      operate: true
+      operate: true,
+      shoppings: [], // 购物车商品
     };
   },
   mounted() {
+    this.getShoppingCart();
     // this.$store.commit("show_activeid", 2);
   },
   methods: {
+    // 获取购物车商品
+    getShoppingCart: function () {
+      this.axios
+        .post(this.$api.getShoppingCart)
+        .then((data) => {
+          if (data.code == 200) {
+            this.shoppings = data.data;
+          } else {
+            this.$toast(this.ErrCode(data.msg));
+          }
+        })
+        .catch(() => {
+          //   this.$toast.fail(this.$api.monmsg);
+        });
+    },
     //   点击结算
-    onSubmit: function() {
+    onSubmit: function () {
       this.$router.push("/shopping/addOrder");
     },
     // 单个
-    checkedSingle: function(a) {
+    checkedSingle: function (a) {
       console.info(a);
       console.info(this.singles);
     },
     // 多个点击
-    checkedClural: function() {
+    checkedClural: function () {
       console.info(this.result);
     },
-    checkedClick: function(is) {
+    checkedClick: function (is) {
       // console.info(this.checked)
       // is
       //   ? this.$refs.checkboxGroup.toggleAll(true)
@@ -116,8 +140,8 @@ export default {
     },
     toggle() {
       this.result.length == 3 ? (this.checked = true) : (this.checked = false);
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>
@@ -145,6 +169,8 @@ export default {
 }
 .contentbox {
   display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 .contentbox button {
   width: 4rem;

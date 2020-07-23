@@ -14,7 +14,7 @@
         <img v-else src="../assets/img/home/feilei.png" alt />
         分类
       </van-tabbar-item>
-      <van-tabbar-item :badge="count" >
+      <van-tabbar-item :badge="count">
         <img v-if="activeid === 2" src="../assets/img/home/gouwuche01.png" alt />
         <img v-else src="../assets/img/home/gouwuche.png" alt />
         购物车
@@ -39,7 +39,7 @@ export default {
     this.activeid = this.$store.state.activeid;
   },
   methods: {
-    tabbarClick: function(id) {
+    tabbarClick: function (id) {
       this.$store.commit("show_activeid", id);
       if (id === 0) {
         this.$router.push("/homePage");
@@ -51,10 +51,10 @@ export default {
         this.$router.push("/personage");
       }
     },
-    onSearch: function(val) {
+    onSearch: function (val) {
       Toast(val);
     },
-    onCancel: function() {
+    onCancel: function () {
       Toast("取消");
     },
     onClickIcon() {
@@ -62,8 +62,8 @@ export default {
     },
     onClickButton() {
       Toast("点击按钮");
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>
@@ -101,7 +101,7 @@ export default {
 .van-tabbar--unfit {
   box-shadow: 0 0 1px rgba(0, 0, 0, 0.1);
 }
-.home .van-info {
+.home .tabbarBox .van-info {
   top: 3px;
   right: -9px;
 }

@@ -2,30 +2,30 @@
 <template>
   <div class="logistics">
     <p>申请快递754131864196891</p>
-    <van-steps direction="vertical" :active="0">
-      <van-step>
-        <h3>【城市】物流状态1</h3>
-        <p>2016-07-12 12:40</p>
-      </van-step>
-      <van-step>
-        <h3>【城市】物流状态2</h3>
-        <p>2016-07-11 10:00</p>
-      </van-step>
-      <van-step>
-        <h3>快件已发货</h3>
-        <p>2016-07-10 09:30</p>
-      </van-step>
-    </van-steps>
+    <steps style="background-color: #fff;" />
   </div>
 </template>
 
 <script>
+import steps from "../../components/Steps.vue";
 export default {
+  components: {
+    steps,
+  },
   data() {
     return {};
-  }
+  },
 };
 </script>
 
 <style scoped>
+.logistics {
+  height: 100%;
+  background-color: #f5f5f5;
+}
+.logistics > p {
+  padding: 0.5rem;
+  border-bottom: 1px solid #f5f5f5;
+  background-color: #fff;
+}
 </style>
