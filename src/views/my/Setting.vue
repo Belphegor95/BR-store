@@ -9,7 +9,6 @@
       <van-cell title="关于开心兔" is-link />
       <van-cell title="检测更新" value="1.02" />
     </div>
-    <div class="btnBox" @click="switchoverClick">切换用户</div>
     <div class="btnBox" @click="quitClick">退出登录</div>
     <van-popup v-model="popupShow" position="right" :style="{ height: '100%',width: '100%' }">
       <phone v-if="tarbarType == 0" />
@@ -23,12 +22,12 @@ import password from "./subfile/Password_";
 export default {
   components: {
     phone,
-    password
+    password,
   },
   data() {
     return {
       popupShow: false,
-      tarbarType: 0
+      tarbarType: 0,
     };
   },
   watch: {
@@ -41,23 +40,37 @@ export default {
         }
         this.popupShow = false;
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
   methods: {
-    tarPush: function(type) {
+    tarPush: function (type) {
       this.$router.push(`/manage/setting?tarbar=${type}`);
     },
-    switchoverClick: function() {
-      // 切换用户
-      this.$router.push("/switchoverUser");
-    },
-    quitClick: function() {
+    quitClick: function () {
       // 退出登录
-      localStorage.removeItem('vuex')
-      this.$router.push("/login");
-    }
-  }
+      this.$dialog
+        .confirm({
+          message: "确定退出吗?",
+        })
+        .then(() => {
+          this.axios
+            .post(this.$api.logout)
+            .then((data) => {
+              if (data.code == 200) {
+                localStorage.removeItem("vuex");
+                this.$router.push("/login");
+              } else {
+                this.$toast(this.ErrCode(data.msg));
+              }
+            })
+            .catch(() => {
+              //   this.$toast.fail(this.$api.monmsg);
+            });
+        })
+        .catch(() => {});
+    },
+  },
 };
 </script>
 <style scoped>

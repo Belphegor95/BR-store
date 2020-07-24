@@ -4,7 +4,7 @@
     <!-- 头部 -->
     <div class="head">
       <van-search disabled @click="searchShow= true" placeholder="请输入搜索关键词" />
-      <div class="icoBox">
+      <div class="icoBox" @click="$router.push('/manage/information')">
         <van-icon :name="lingdang" badge="1" />
       </div>
     </div>
@@ -65,7 +65,7 @@ import search from "@/components/Search.vue";
 export default {
   components: {
     sidebar,
-    search
+    search,
   },
   data() {
     return {
@@ -79,34 +79,34 @@ export default {
       option1: [
         { text: "全部商品", value: 0 },
         { text: "新款商品", value: 1 },
-        { text: "活动商品", value: 2 }
+        { text: "活动商品", value: 2 },
       ],
       option2: [
         { text: "默认排序", value: "a" },
         { text: "好评排序", value: "b" },
-        { text: "销量排序", value: "c" }
+        { text: "销量排序", value: "c" },
       ],
       addShow: false,
       balls: [
         // 这里定义了多个ball,是因为可能同时有多个小球在动画中（快速点击多次或者多个商品）
         {
-          show: false
+          show: false,
         },
         {
-          show: false
+          show: false,
         },
         {
-          show: false
+          show: false,
         },
         {
-          show: false
+          show: false,
         },
         {
-          show: false
-        }
+          show: false,
+        },
       ],
       dropBalls: [], // 在动画中的小球集合
-      catePlist: [] // 分类商品列表
+      catePlist: [], // 分类商品列表
     };
   },
   mounted() {
@@ -114,22 +114,22 @@ export default {
     // this.getcate();
   },
   methods: {
-    rutClick: function(data) {
+    rutClick: function (data) {
       this.$router.push({
         path: "/particulars",
-        query: data
+        query: data,
       });
     },
     // 获取分类商品
-    getcatePlist: function(obj) {
+    getcatePlist: function (obj) {
       // console.info(obj)
       this.cate = obj;
       this.axios
         .post(this.$api.getCatePlist, {
           cateone: obj.one,
-          catetwo: obj.two
+          catetwo: obj.two,
         })
-        .then(data => {
+        .then((data) => {
           if (data.code == 200) {
             this.catePlist = data.data;
           } else {
@@ -138,7 +138,7 @@ export default {
         .catch(() => {});
     },
     // 下拉刷新
-    onRefresh: function() {
+    onRefresh: function () {
       this.getcatePlist(this.cate);
       this.isRefresh = false;
     },
@@ -147,7 +147,7 @@ export default {
       // 利用事件冒泡  获取 组件的+号点击event对象
       if (e.path[0].classList[0] != "van-stepper__plus") return; //判断你是否是+号
       let el = e.target;
-      this.balls.forEach(v => {
+      this.balls.forEach((v) => {
         if (!v.show) {
           v.show = true; // 当切换元素的display:block/none时，会触发vue的动画
           v.el = el; // 将触发点击事件的“+”号保定道小球对象上，方便获取动画初始时的位置
@@ -196,8 +196,8 @@ export default {
         ball.show = false;
         el.style.display = "none"; // 并且将其设为不可见
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

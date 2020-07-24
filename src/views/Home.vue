@@ -35,7 +35,13 @@ export default {
       count: null,
     };
   },
+  watch: {
+    "$store.state.count": function (value) {
+      this.count = value;
+    },
+  },
   mounted() {
+    this.getShoppingCartPlistCount();
     this.activeid = this.$store.state.activeid;
   },
   methods: {
@@ -50,6 +56,22 @@ export default {
       } else if (id === 3) {
         this.$router.push("/personage");
       }
+    },
+    // 获取购物车里商品数量
+    getShoppingCartPlistCount: function () {
+      this.axios
+        .post(this.$api.getShoppingCartPlistCount)
+        .then((data) => {
+          if (data.code == 200) {
+            if (data.data.count) {
+              this.count = data.data.count;
+            }
+            this.$store.commit("show_count", data.data.count);
+          } else {
+            this.$toast(this.ErrCode(data.msg));
+          }
+        })
+        .catch(() => {});
     },
     onSearch: function (val) {
       Toast(val);

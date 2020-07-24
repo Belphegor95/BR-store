@@ -33,14 +33,14 @@ export default {
     return {
       cateOne: 0,
       cateTwo: -1,
-      cateList: []
+      cateList: [],
     };
   },
   mounted() {
     this.getcate();
   },
   methods: {
-    sidebarClick: function(item) {
+    sidebarClick: function (item) {
       this.cateOne = item.id;
       item.twolist ? (this.cateTwo = item.twolist[0].id) : (this.cateTwo = -1);
       let obj = {};
@@ -48,17 +48,17 @@ export default {
       obj.two = this.cateTwo;
       this.$emit("cateid", obj);
     },
-    sidebarTwoClick: function(item) {
+    sidebarTwoClick: function (item) {
       this.cateTwo = item.id;
       let obj = {};
       obj.one = this.cateOne;
       obj.two = this.cateTwo;
       this.$emit("cateid", obj);
     },
-    getcate: function() {
+    getcate: function () {
       this.axios
         .get(this.$api.cate)
-        .then(data => {
+        .then((data) => {
           if (data.code == 200) {
             let data_ = data.data;
             for (let i = 0; i < data_.cateOneList.length; i++) {
@@ -76,8 +76,8 @@ export default {
           }
         })
         .catch(() => {});
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

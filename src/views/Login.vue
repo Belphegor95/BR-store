@@ -42,8 +42,8 @@ export default {
           if (data.code == 200) {
             this.$toast("登录成功");
             localStorage.removeItem('vuex')
-            this.$store.commit("show_activeid", 0);
-            this.$router.push("/homePage");
+            // this.$store.commit("show_activeid", 0);
+            this.$router.push("/switchoverUser");
           } else {
             this.$toast(this.ErrCode(data.msg));
           }

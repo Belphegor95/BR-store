@@ -23,7 +23,7 @@ import { Popup } from 'vant';
 import { Tab, Tabs } from 'vant';
 import { Toast } from 'vant';
 import { PullRefresh } from 'vant';
-
+import { Dialog } from 'vant'
 import { Step, Steps } from 'vant';
 
 
@@ -62,7 +62,9 @@ Vue.use(Area);
 Vue.use(Popup);
 Vue.use(Tab);
 Vue.use(Tabs);
-Vue.use(Toast);
 Vue.use(PullRefresh);
 Vue.use(Step);
 Vue.use(Steps);
+
+Vue.use(Toast);
+Vue.use(Dialog);

@@ -113,11 +113,6 @@ const routes = [
     component: () => import('../views/home/Maintain.vue'),
   },
   {
-    path: '/ball',
-    name: 'ball',
-    component: () => import('../views/ball.vue'),
-  },
-  {
     path: '/comment',
     name: 'Comment',
     component: () => import('../views/Comment.vue'),

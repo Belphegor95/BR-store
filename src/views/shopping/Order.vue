@@ -92,6 +92,7 @@
               <span>颜色分类:s427</span>
               <span>￥439.00/台</span>
             </div>
+            <div>x1</div>
           </div>
         </div>
       </div>
@@ -113,10 +114,6 @@
           <van-radio :name="0" @click="radioClick(0)">不开发票</van-radio>
           <van-radio :name="1" @click="radioClick(1)">电子发票</van-radio>
         </van-radio-group>
-        <!-- <div class="btnbox">
-          <div>取消</div>
-          <div>确定</div>
-        </div>-->
       </div>
     </van-popup>
   </div>
@@ -125,40 +122,42 @@
 import address_ from "../my/Address";
 export default {
   components: {
-    address_
+    address_,
   },
   data() {
     return {
       popupid: 0,
       popupShow: false,
       message: "",
-      radio: 0
+      radio: 0,
     };
   },
   methods: {
-    onSubmit: function() {},
+    onSubmit: function () {
+      this.$emit;
+    },
     // 打开弹出层
-    popupClick: function(index) {
+    popupClick: function (index) {
       this.popupid = index;
       this.$router.push(`/shopping/order?popupid=${index}`);
       this.popupShow = true;
     },
     // 弹出层点击返回
-    popupShut: function() {
+    popupShut: function () {
       this.$router.go(-1);
       this.popupShow = false;
     },
     // 地址选择
-    addressClick: function(data) {
+    addressClick: function (data) {
       this.$router.go(-1);
       this.popupShow = false;
     },
     // 选择发票信息
-    radioClick: function(index) {
+    radioClick: function (index) {
       this.$router.go(-1);
       this.popupShow = false;
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

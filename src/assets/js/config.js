@@ -24,6 +24,14 @@ api.search = "/api/search"  // 搜索商品
 
 api.addToShoppingCart = "/api/addToShoppingCart"  // 添加购物车
 
-api.getShoppingCart = "/api/getShoppingCart"  // 购物车物品个数
+api.getShoppingCart = "/api/getShoppingCart"  // 购物车商品
+
+api.getShoppingCartPlistCount = "/api/getShoppingCartPlistCount"  // 购物车物品个数
+
+api.editShoppingCarCount = "/api/editShoppingCarCount"  // 修改购物车商品的数量
+
+api.delSelectShoppingCart = "/api/delSelectShoppingCart"  // 删除购物车商品
+
+api.logout = "/api/logout"  // 退出登录
 
 export { api };

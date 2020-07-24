@@ -65,22 +65,22 @@ export default {
   name: "popUp",
   props: {
     popUpShow: Boolean,
-    popUpData: Object
+    popUpData: Object,
   },
   data() {
     return {
       rate: 1,
-      value: ""
+      value: "",
     };
   },
   mounted() {
     // if (this.popUpData.price_lv) this.popUpData.price_lv = JSON.parse(popUpData.price_lv)
   },
   methods: {
-    showClick: function() {
+    showClick: function () {
       this.$emit("showClick", false);
     },
-    addShopping: function() {
+    addShopping: function () {
       let arr = [];
       for (let i = 0; i < this.popUpData.price_lv.cate.length; i++) {
         let item = this.popUpData.price_lv.cate[i];
@@ -89,15 +89,19 @@ export default {
         obj.priceId = item.rateType;
         obj.cateId = item.cateId;
         obj.buyNum = item.num;
-        arr.push(obj);
+        if (item.num != 0) {
+          arr.push(obj);
+        }
       }
+      if (arr.length == 0) return;
       this.axios
         .post(this.$api.addToShoppingCart, {
-          plist: JSON.stringify(arr)
+          plist: JSON.stringify(arr),
         })
-        .then(data => {
+        .then((data) => {
           if (data.code == 200) {
             this.$emit("showClick", false);
+            this.$store.commit("show_count", data.data.count);
           } else {
             this.$toast(this.ErrCode(data.msg));
           }
@@ -105,8 +109,8 @@ export default {
         .catch(() => {
           //   this.$toast.fail(this.$api.monmsg);
         });
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

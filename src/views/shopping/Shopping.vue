@@ -3,78 +3,76 @@
   <div class="shopping">
     <van-nav-bar class="navBar" :fixed="false" placeholder title="购物车">
       <template #right>
-        <span @click="fold = !fold">{{ fold? '折叠':'收起' }}</span>
+        <span @click="foldClick">{{ fold? '收起':'折叠' }}</span>
         <span @click="operate = !operate">{{ operate? '编辑':'完成' }}</span>
       </template>
     </van-nav-bar>
     <div>
       <div class="shortofBox">
-        <p>满50包邮</p>
-        <p>还差11包邮</p>
+        <p>满{{ freeSend }}包邮</p>
+        <p v-if="freeSend - (totalPrice/100) > 0">还差{{ freeSend - (totalPrice/100) }}包邮</p>
+        <p v-else>包邮</p>
       </div>
     </div>
     <van-checkbox-group
       class="checkboxBox"
-      v-model="result"
+      v-model="goodss"
       ref="checkboxGroup"
       checked-color="#feb35c"
     >
       <div class="van-card" v-for="(item,index) in shoppings" :key="index">
         <div class="van-card__header">
-          <van-checkbox @click="checkedClural" :name="item"></van-checkbox>
+          <van-checkbox @click="checkedClural(item)" :name="item.plistId"></van-checkbox>
           <a class="van-card__thumb">
             <div class="van-image" style="width: 100%; height: 100%;">
-              <img
-                :src="`${$api.baseUrl}/${item.plist_img_url}`"
-                class="van-image__img"
-                style="object-fit: cover;"
-              />
+              <img :src="item.picUrl" class="van-image__img" style="object-fit: cover;" />
             </div>
           </a>
           <div class="van-card__content">
             <div class="contentbox">
-              <div class="van-card__title van-multi-ellipsis--l2">{{ item.plist_name }}</div>
-              <van-button round size="mini" type="info">
-                <p>{{ fold? '折叠':'收起' }}</p>
+              <div class="van-card__title van-multi-ellipsis--l2">{{ item.plistName }}</div>
+              <van-button round @click="isfoldClick(item)" size="mini" type="info">
+                <p>{{ item.isfold? '收起':'折叠' }}</p>
                 <van-icon name="arrow-up" />
               </van-button>
             </div>
             <div class="van-card__bottom">
-              <div class="van-card__num">x2</div>
+              <div class="van-card__num">x{{ item.unit | totalNum }}</div>
             </div>
           </div>
         </div>
-        <div class="van-card_content" v-if="!fold">
-          <van-checkbox-group
-            class="checkboxBox"
-            v-model="singles"
-            ref="checkboxGroup"
-            checked-color="#feb35c"
+        <van-checkbox-group ref="checkboxGroup_" v-model="singles" checked-color="#feb35c">
+          <div
+            class="van-card_content"
+            v-show="item.isfold"
+            v-for="(itemJ,indexJ) in item.unit"
+            :key="indexJ"
           >
             <van-checkbox
               checked-color="#feb35c"
-              :name="item + '-'"
-              @click="checkedSingle"
-            >￥439.00/台</van-checkbox>
-          </van-checkbox-group>
-          <van-stepper
-            v-model="value"
-            default-value="0"
-            :integer="true"
-            :allow-empty="false"
-            :min="0"
-            theme="round"
-          />
-        </div>
+              :name="`${item.plistId}_${itemJ.cateId}_${itemJ.priceId}`"
+              @click="checkedSingle(item)"
+            >{{ itemJ.priceName }}</van-checkbox>
+            <van-stepper
+              v-model="itemJ.buyNum"
+              :integer="true"
+              :allow-empty="false"
+              :min="1"
+              theme="round"
+              @change="stepperClick(itemJ.buyNum,itemJ)"
+            />
+          </div>
+        </van-checkbox-group>
       </div>
     </van-checkbox-group>
-    <van-submit-bar v-if="operate" :price="0" button-text="结算" @submit="onSubmit">
+    <van-submit-bar v-if="operate" :price="totalPrice" button-text="结算" @submit="onSubmit">
       <van-checkbox checked-color="#feb35c" @click="checkedClick" v-model="checked">全选</van-checkbox>
     </van-submit-bar>
     <div v-else class="submitBar">
       <van-checkbox checked-color="#feb35c" @click="checkedClick" v-model="checked">全选</van-checkbox>
-      <p>种类3数量24</p>
+      <p>{{ `种类${shoppings.length}数量${totalNum}` }}</p>
       <button
+        @click="delClick"
         class="van-button van-button--danger van-button--normal van-button--round van-submit-bar__button van-submit-bar__button--danger"
       >
         <div class="van-button__content">
@@ -88,14 +86,24 @@
 export default {
   data() {
     return {
-      result: [],
-      singles: [],
-      checked: false,
-      value: 0,
-      fold: true,
-      operate: true,
+      goodss: [], //选中的商品
+      singles: [], //选中的商品规格
+      checked: false, // 全选状态
+      fold: false, // 展开折叠状态
+      operate: true, // 编辑状态
+      totalPrice: 0, // 总价格
+      totalNum: 0, // 总数量
       shoppings: [], // 购物车商品
+      freeSend: 0, // 多少包邮
     };
+  },
+  watch: {
+    // 监听所有商品都被选中 全选状态打开
+    goodss: function (arr) {
+      arr.length == this.shoppings.length
+        ? (this.checked = true)
+        : (this.checked = false);
+    },
   },
   mounted() {
     this.getShoppingCart();
@@ -109,6 +117,9 @@ export default {
         .then((data) => {
           if (data.code == 200) {
             this.shoppings = data.data;
+            this.freeSend = data.freeSend;
+            this.$store.commit("show_count", data.data.length);
+            this.calctotalPrice(this.shoppings);
           } else {
             this.$toast(this.ErrCode(data.msg));
           }
@@ -117,29 +128,211 @@ export default {
           //   this.$toast.fail(this.$api.monmsg);
         });
     },
+    // 修改购物车商品数量
+    shoppingCarCount: function (item) {
+      this.axios
+        .post(this.$api.editShoppingCarCount, {
+          plistId: item.plistId,
+          priceId: item.priceId,
+          cateId: item.cateId,
+          buyNum: item.buyNum,
+        })
+        .then((data) => {
+          if (data.code == 200) {
+            // console.info(data);
+          } else {
+            this.$toast(this.ErrCode(data.msg));
+          }
+        })
+        .catch(() => {
+          //   this.$toast.fail(this.$api.monmsg);
+        });
+    },
+    // 删除商品
+    delShopping: function (arr) {
+      this.axios
+        .post(this.$api.delSelectShoppingCart, {
+          plistIds: JSON.stringify(arr),
+        })
+        .then((data) => {
+          if (data.code == 200) {
+            this.getShoppingCart();
+          } else {
+            this.$toast(this.ErrCode(data.msg));
+          }
+        })
+        .catch(() => {
+          //   this.$toast.fail(this.$api.monmsg);
+        });
+    },
+    // 点击删除
+    delClick: function () {
+      let arr = [];
+      for (let i = 0; i < this.singles.length; i++) {
+        let item = this.singles[i].split("_");
+        let obj = {
+          plistId: Number(item[0]),
+          unit: [],
+        };
+        let obj_ = {
+          cateId: Number(item[1]),
+          priceId: Number(item[2]),
+        };
+        obj.unit.push(obj_);
+        if (arr.length > 0) {
+          for (let j = 0; j < arr.length; j++) {
+            if (obj.plistId == arr[j].plistId) {
+              arr[j].unit.push(obj_);
+              break;
+            } else {
+              arr.push(obj);
+              break;
+            }
+          }
+        } else {
+          arr.push(obj);
+        }
+      }
+      this.$dialog
+        .confirm({
+          message: "确认删除吗?",
+        })
+        .then(() => {
+          this.delShopping(arr);
+        })
+        .catch(() => {});
+    },
     //   点击结算
     onSubmit: function () {
       this.$router.push("/shopping/addOrder");
     },
-    // 单个
-    checkedSingle: function (a) {
-      console.info(a);
-      console.info(this.singles);
+    // 单个种类
+    checkedSingle: function (item) {
+      let arr = this.singles.filter((id) => {
+        return id.indexOf(item.plistId + "_") > -1;
+      });
+      if (arr.length == item.unit.length) {
+        // 如果全部添加  就把父级也添加选中
+        this.goodss.push(item.plistId);
+      } else {
+        // 不是全选  取消父级选中
+        this.goodss = this.goodss.filter((id) => {
+          return id != item.plistId;
+        });
+      }
     },
-    // 多个点击
-    checkedClural: function () {
-      console.info(this.result);
+    // 单个商品
+    checkedClural: function (item) {
+      // 判断是否是添加
+      if (this.goodss.indexOf(item.plistId) > -1) {
+        // 把未添加的 添加进选中
+        for (let i = 0; i < item.unit.length; i++) {
+          let itemI = item.unit[i];
+          if (
+            this.singles.indexOf(
+              `${item.plistId}_${itemI.cateId}_${itemI.priceId}`
+            ) > -1
+          ) {
+          } else {
+            this.singles.push(
+              `${item.plistId}_${itemI.cateId}_${itemI.priceId}`
+            );
+          }
+        }
+      } else {
+        // 删除 把已选中是 选中列表中删除
+        for (let i = 0; i < item.unit.length; i++) {
+          let itemI = item.unit[i];
+          let index = this.singles.indexOf(
+            `${item.plistId}_${itemI.cateId}_${itemI.priceId}`
+          );
+          if (index > -1) {
+            this.singles.splice(index, 1);
+          } else {
+            this.singles.push(
+              `${item.plistId}_${itemI.cateId}_${itemI.priceId}`
+            );
+          }
+        }
+      }
     },
+    // 全选
     checkedClick: function (is) {
-      // console.info(this.checked)
-      // is
-      //   ? this.$refs.checkboxGroup.toggleAll(true)
-      //   : this.result.length == 0
-      //   ? this.$refs.checkboxGroup.toggleAll()
-      //   : "";
+      if (this.checked) {
+        this.$refs.checkboxGroup.toggleAll(true);
+        this.for_checked(true);
+      } else {
+        this.$refs.checkboxGroup.toggleAll();
+        this.for_checked(false);
+      }
     },
-    toggle() {
-      this.result.length == 3 ? (this.checked = true) : (this.checked = false);
+    // 单个商品种类全选
+    for_checked: function (is) {
+      this.singles = [];
+      if (is) {
+        for (let i = 0; i < this.shoppings.length; i++) {
+          let itemI = this.shoppings[i];
+          for (let j = 0; j < itemI.unit.length; j++) {
+            let itemJ = itemI.unit[j];
+            this.singles.push(
+              `${itemI.plistId}_${itemJ.cateId}_${itemJ.priceId}`
+            );
+          }
+        }
+      }
+    },
+    // 商品个数改变
+    stepperClick: function (value, item) {
+      if (typeof value == "number") {
+        this.shoppingCarCount(item);
+        this.calctotalPrice(this.shoppings);
+      }
+    },
+
+    // 计算总价格
+    calctotalPrice: function (data) {
+      this.totalPrice = 0;
+      this.totalNum = 0;
+      for (let i = 0; i < data.length; i++) {
+        for (let j = 0; j < data[i].unit.length; j++) {
+          let item = data[i].unit[j];
+          // 因为返回值是小数 所以成 100
+          let num = item.buyNum * item.orderPrice * 100;
+          // 总数量
+          this.totalNum = this.totalNum + item.buyNum;
+          // 总价格
+          this.totalPrice = this.totalPrice + num;
+        }
+      }
+    },
+    // 点击折叠收起
+    foldClick: function () {
+      for (let i = 0; i < this.shoppings.length; i++) {
+        let item = this.shoppings[i];
+        this.$set(item, "isfold", !this.fold);
+      }
+      this.fold = !this.fold;
+    },
+    // 单条点击折叠收起
+    isfoldClick: function (data) {
+      if (data.isfold) {
+        this.$set(data, "isfold", false);
+      } else {
+        this.$set(data, "isfold", true);
+      }
+    },
+  },
+  filters: {
+    // 单个商品总个数
+    totalNum: function (arr) {
+      let num = 0;
+      for (let i = 0; i < arr.length; i++) {
+        let item = arr[i].buyNum;
+        if (typeof item == "number") {
+          num = num + item;
+        }
+      }
+      return num;
     },
   },
 };
@@ -177,11 +370,17 @@ export default {
 }
 .van-card_content {
   display: flex;
-  margin-top: 0.5rem;
-  margin-left: 0.5rem;
+  padding: 0.3rem 1.5rem;
+  /* margin-top: 0.5rem;
+  margin-left: 0.5rem; */
+  align-items: center;
+  background-color: #fafafa;
   justify-content: space-between;
+  border-top: 1px solid #f5f5f5;
 }
-
+.van-card__header {
+  padding: 8px 16px;
+}
 /* 删除操作栏 */
 .submitBar {
   height: 50px;
@@ -206,6 +405,7 @@ export default {
 .shopping .van-card {
   margin-bottom: 8px;
   margin-top: 0;
+  padding: 0;
 }
 /* 头部 按钮样式 */
 .shopping .van-nav-bar__right span {
