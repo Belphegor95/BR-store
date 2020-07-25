@@ -32,6 +32,10 @@ api.editShoppingCarCount = "/api/editShoppingCarCount"  // 修改购物车商品
 
 api.delSelectShoppingCart = "/api/delSelectShoppingCart"  // 删除购物车商品
 
+api.downOrder = "/api/downOrder"  // 购物车下单
+
+api.submitOrder = "/api/submitOrder"  // 提交订单
+
 api.logout = "/api/logout"  // 退出登录
 
 export { api };

@@ -2,43 +2,45 @@
 <template>
   <div class="orderForm">
     <van-nav-bar left-arrow class="navBar" @click-left="$router.go(-1)" :fixed="false" title="订单" />
-    <van-pull-refresh v-model="isRefresh" @refresh="onRefresh">
-      <ul>
-        <li v-for="item in 5" :key="item">
-          <div class="orderNum">
-            <p>DH-O-20200714-275691</p>
-            <p>待订单审核</p>
-          </div>
-          <div class="imgBox" @click="($router.push('/shopping/order'))">
-            <div>
-              <img src="../../assets/img/product/particulars/chanpin.png" alt />
-            </div>
-            <div>
-              <img src="../../assets/img/product/particulars/chanpin.png" alt />
-            </div>
-            <div>
-              <img src="../../assets/img/product/particulars/chanpin.png" alt />
-            </div>
-            <div>
-              <img src="../../assets/img/product/particulars/chanpin.png" alt />
-            </div>
-          </div>
-          <p>种类:2,数量:22,总计: ￥176.64</p>
-          <div class="btnBox">
-            <van-button class="paybtn" type="default" size="small">立即支付</van-button>
-            <van-button type="default" size="small">再次购买</van-button>
-            <van-button type="default" size="small">修改订单</van-button>
-          </div>
-        </li>
-      </ul>
-    </van-pull-refresh>
 
-    <!-- <van-tabs v-model="formid">
-      <van-tab title="全部">内容 1</van-tab>
+    <van-tabs v-model="formid">
+      <van-tab title="全部">
+        <van-pull-refresh v-model="isRefresh" @refresh="onRefresh">
+          <ul>
+            <li v-for="item in 5" :key="item">
+              <div class="orderNum">
+                <p>DH-O-20200714-275691</p>
+                <p>待订单审核</p>
+              </div>
+              <div class="imgBox" @click="($router.push('/shopping/order'))">
+                <div>
+                  <img src="../../assets/img/product/particulars/chanpin.png" alt />
+                </div>
+                <div>
+                  <img src="../../assets/img/product/particulars/chanpin.png" alt />
+                </div>
+                <div>
+                  <img src="../../assets/img/product/particulars/chanpin.png" alt />
+                </div>
+                <div>
+                  <img src="../../assets/img/product/particulars/chanpin.png" alt />
+                </div>
+              </div>
+              <p>种类:2,数量:22,总计: ￥176.64</p>
+              <div class="btnBox">
+                <van-button class="paybtn" type="default" size="small">立即支付</van-button>
+                <van-button type="default" size="small">再次购买</van-button>
+                <van-button type="default" size="small">修改订单</van-button>
+              </div>
+            </li>
+          </ul>
+        </van-pull-refresh>
+      </van-tab>
       <van-tab title="待付款">内容 2</van-tab>
       <van-tab title="待评价">内容 3</van-tab>
       <van-tab title="已完成">内容 4</van-tab>
-    </van-tabs>-->
+      <van-tab title="已取消">内容 4</van-tab>
+    </van-tabs>
   </div>
 </template>
 <script>
@@ -46,17 +48,18 @@ export default {
   data() {
     return {
       formid: 0,
-      isRefresh: false
+      isRefresh: false,
     };
   },
   mounted() {
-    this.formid = this.$route.query.formid;
+    // console.info(this.$route.query.formid)
+    this.formid = Number(this.$route.query.formid);
   },
   methods: {
-    onRefresh: function() {
+    onRefresh: function () {
       this.isRefresh = false;
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>
@@ -85,6 +88,7 @@ ul::-webkit-scrollbar {
 }
 li {
   background: #fff;
+  margin-top: 0.1rem;
   margin-bottom: 1rem;
 }
 /* 最后一个li */
@@ -133,14 +137,15 @@ li > p {
 }
 /* 设置高度占满 */
 .orderForm .van-tabs {
-  height: calc(100% - 46px);
+  height: 100%;
   display: flex;
   flex-direction: column;
 }
 .orderForm .van-tabs__content {
   height: 1px;
   flex: auto;
+  overflow-y: auto;
   background-color: #f5f5f5;
-  padding: 0.8rem 1rem;
+  /* padding: 0.8rem 1rem; */
 }
 </style>

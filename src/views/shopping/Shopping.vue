@@ -9,9 +9,9 @@
     </van-nav-bar>
     <div>
       <div class="shortofBox">
-        <p>满{{ freeSend }}包邮</p>
-        <p v-if="freeSend - (totalPrice/100) > 0">还差{{ freeSend - (totalPrice/100) }}包邮</p>
-        <p v-else>包邮</p>
+        <p>满{{ freeSend }}起送</p>
+        <p v-if="freeSend - (totalPrice/100) > 0">还差{{ freeSend - (totalPrice/100) }}起送</p>
+        <p v-else>起送</p>
       </div>
     </div>
     <van-checkbox-group
@@ -65,14 +65,14 @@
         </van-checkbox-group>
       </div>
     </van-checkbox-group>
-    <van-submit-bar v-if="operate" :price="totalPrice" button-text="结算" @submit="onSubmit">
-      <van-checkbox checked-color="#feb35c" @click="checkedClick" v-model="checked">全选</van-checkbox>
+    <van-submit-bar v-if="operate" :price="totalPrice" button-text="结算" @submit="goods(true)">
+      <van-checkbox checked-color="#feb35c" @click="checkedClick(checked)" v-model="checked">全选</van-checkbox>
     </van-submit-bar>
     <div v-else class="submitBar">
-      <van-checkbox checked-color="#feb35c" @click="checkedClick" v-model="checked">全选</van-checkbox>
+      <van-checkbox checked-color="#feb35c" @click="checkedClick(checked)" v-model="checked">全选</van-checkbox>
       <p>{{ `种类${shoppings.length}数量${totalNum}` }}</p>
       <button
-        @click="delClick"
+        @click="goods(false)"
         class="van-button van-button--danger van-button--normal van-button--round van-submit-bar__button van-submit-bar__button--danger"
       >
         <div class="van-button__content">
@@ -107,7 +107,6 @@ export default {
   },
   mounted() {
     this.getShoppingCart();
-    // this.$store.commit("show_activeid", 2);
   },
   methods: {
     // 获取购物车商品
@@ -120,6 +119,10 @@ export default {
             this.freeSend = data.freeSend;
             this.$store.commit("show_count", data.data.length);
             this.calctotalPrice(this.shoppings);
+            // 选中全部
+            this.$nextTick(() => {
+              this.checkedClick(true);
+            });
           } else {
             this.$toast(this.ErrCode(data.msg));
           }
@@ -150,13 +153,45 @@ export default {
     },
     // 删除商品
     delShopping: function (arr) {
+      this.$dialog
+        .confirm({
+          message: "确认删除吗?",
+        })
+        .then(() => {
+          this.axios
+            .post(this.$api.delSelectShoppingCart, {
+              plistIds: JSON.stringify(arr),
+            })
+            .then((data) => {
+              if (data.code == 200) {
+                this.getShoppingCart();
+              } else {
+                this.$toast(this.ErrCode(data.msg));
+              }
+            })
+            .catch(() => {
+              //   this.$toast.fail(this.$api.monmsg);
+            });
+        })
+        .catch(() => {});
+    },
+    // 下单
+    downOrder: function (arr) {
       this.axios
-        .post(this.$api.delSelectShoppingCart, {
+        .post(this.$api.downOrder, {
           plistIds: JSON.stringify(arr),
         })
         .then((data) => {
           if (data.code == 200) {
-            this.getShoppingCart();
+            // 刷新丢失数据  先转json
+            data.data.address = JSON.stringify(data.data.address);
+            data.data.plistDetail = JSON.stringify(data.data.plistDetail);
+            data.data.picUrl = JSON.stringify(data.data.picUrl);
+            data.data.addressId = JSON.stringify(arr);
+            this.$router.push({
+              path: "/shopping/addOrder",
+              query: data.data,
+            });
           } else {
             this.$toast(this.ErrCode(data.msg));
           }
@@ -165,8 +200,7 @@ export default {
           //   this.$toast.fail(this.$api.monmsg);
         });
     },
-    // 点击删除
-    delClick: function () {
+    goods: function (is) {
       let arr = [];
       for (let i = 0; i < this.singles.length; i++) {
         let item = this.singles[i].split("_");
@@ -193,19 +227,15 @@ export default {
           arr.push(obj);
         }
       }
-      this.$dialog
-        .confirm({
-          message: "确认删除吗?",
-        })
-        .then(() => {
-          this.delShopping(arr);
-        })
-        .catch(() => {});
+      if (arr.length == 0) return;
+      if (is) {
+        this.downOrder(arr);
+      } else {
+        this.delShopping(arr);
+      }
     },
     //   点击结算
-    onSubmit: function () {
-      this.$router.push("/shopping/addOrder");
-    },
+    onSubmit: function () {},
     // 单个种类
     checkedSingle: function (item) {
       let arr = this.singles.filter((id) => {
@@ -258,12 +288,14 @@ export default {
     },
     // 全选
     checkedClick: function (is) {
-      if (this.checked) {
+      if (is) {
+        this.checked = is;
         this.$refs.checkboxGroup.toggleAll(true);
-        this.for_checked(true);
+        this.for_checked(is);
       } else {
+        this.checked = is;
         this.$refs.checkboxGroup.toggleAll();
-        this.for_checked(false);
+        this.for_checked(is);
       }
     },
     // 单个商品种类全选
@@ -446,5 +478,15 @@ export default {
   padding: 0.1rem 0.2rem;
   border-radius: 1rem;
   background-color: #f4f4f4;
+}
+/* 底部右侧内边距取消 */
+.shopping .van-submit-bar__bar {
+  padding-right: 0;
+}
+/* 底部按钮样式 */
+.shopping .van-submit-bar .van-submit-bar__button {
+  height: 100%;
+  border-radius: 0;
+  background: #e75858 !important;
 }
 </style>

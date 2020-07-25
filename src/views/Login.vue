@@ -16,16 +16,20 @@ import title_ from "@/components/Title.vue";
 export default {
   name: "login",
   components: {
-    title_
+    title_,
   },
   data() {
     return {
       phoneNum: "",
-      pwd: ""
+      pwd: "",
+      uppath: "",
     };
   },
+  mounted() {
+    // console.info(this.$route.query);
+  },
   methods: {
-    loginClick: function() {
+    loginClick: function () {
       if (!/^1[3456789]\d{9}$/.test(this.phoneNum)) {
         this.$toast("手机号输入有误");
         return;
@@ -36,21 +40,34 @@ export default {
       this.axios
         .post(this.$api.login, {
           phoneNum: this.phoneNum,
-          pwd: this.pwd
+          pwd: this.pwd,
         })
-        .then(data => {
+        .then((data) => {
           if (data.code == 200) {
             this.$toast("登录成功");
-            localStorage.removeItem('vuex')
+            localStorage.removeItem("vuex");
             // this.$store.commit("show_activeid", 0);
-            this.$router.push("/switchoverUser");
+            // if (this.uppath) {
+            // }
+            // if(data.data.type) {
+            //   this.$router.push("/switchoverUser");
+            // } else {
+            //   this.$router.push("/");
+            // }
           } else {
             this.$toast(this.ErrCode(data.msg));
           }
         })
         .catch(() => {});
-    }
-  }
+    },
+  },
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      //  这里的vm指的就是vue实例，可以用来当做this使用
+      vm.uppath = from.path
+      console.info(vm.uppath)
+    });
+  },
 };
 </script>
 

@@ -2,7 +2,7 @@
 <template>
   <div class="address">
     <div class="siteBox">
-      <div class="site" v-for="(item,index) in address" :key="index">
+      <div class="site" v-for="(item,index) in address_" :key="index">
         <p @click="addressClick(item)">{{ item.linkman }} {{ item.phone }}</p>
         <p @click="addressClick(item)">{{ item.address | site }}{{ item.address_detail }}</p>
         <div class="operationBox">
@@ -23,34 +23,41 @@
 </template>
 <script>
 export default {
+  props: {
+    address: String,
+  },
   data() {
     return {
-      address: [],
-      default_: 0
+      address_: [],
+      default_: 0,
     };
   },
   mounted() {
-    this.getAllAddress();
+    if (this.address) {
+      this.address_ = JSON.parse(this.address);
+      this.getaddress();
+    } else {
+      this.getAllAddress();
+    }
   },
   methods: {
-    rut: function(data) {
-      // console.info(data.address)
+    rut: function (data) {
       if (data.address) {
         this.$router.push({
           path: "/manage/addressRedact",
-          query: data
+          query: data,
         });
       } else {
         this.$router.push("/manage/addressRedact");
       }
     },
     // 获取用户所有地址
-    getAllAddress: function() {
+    getAllAddress: function () {
       this.axios
         .post(this.$api.getAllAddress)
-        .then(data => {
+        .then((data) => {
           if (data.code == 200) {
-            this.address = data.data;
+            this.address_ = data.data;
             for (let i = 0; i < this.address.length; i++) {
               let item = this.address[i];
               // 默认地址展示
@@ -62,17 +69,27 @@ export default {
         })
         .catch(() => {});
     },
+    // 处理传过来的数据
+    getaddress: function () {
+      for (let i = 0; i < this.address_.length; i++) {
+        let item = this.address_[i];
+        // 默认地址展示
+        if (item.address_default == "1") {
+          this.default_ = i;
+        }
+      }
+    },
     // 选择地址时候
-    addressClick: function(data) {
+    addressClick: function (data) {
       this.$emit("address", data);
-    }
+    },
   },
   filters: {
-    site: function(value) {
+    site: function (value) {
       // 替换地址 /
       return value.replace(/\//g, "");
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

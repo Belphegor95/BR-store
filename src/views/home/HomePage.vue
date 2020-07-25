@@ -157,7 +157,6 @@ export default {
           }
         })
         .catch(() => {
-          console.info(500);
           //   this.$toast.fail(this.$api.monmsg);
         });
     },

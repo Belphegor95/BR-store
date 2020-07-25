@@ -11,10 +11,11 @@
     <div class="content">
       <!-- 地址 -->
       <div class="siteBox" @click="popupClick(0)">
-        <p>张三 123456789</p>
+        <p>{{ site.linkman }} {{ site.phone }}</p>
         <div class="site">
           <p>
-            <span>默认</span>浙江省杭州市西湖区文三路 138 号东方通信大厦 7 楼 501 室
+            <span v-if="site.address_default">默认</span>
+            {{ site.address }}
           </p>
           <van-icon class="van-cell__right-icon" name="arrow" />
         </div>
@@ -23,10 +24,14 @@
       <div class="inventoryBox">
         <div>
           <p>商品清单</p>
-          <p style="font-weight: 400;font-size: 0.8rem">种类:1,数量:4</p>
+          <p
+            style="font-weight: 400;font-size: 0.8rem"
+          >种类:{{ orderdata.cateCount }},数量:{{ orderdata.plistCount }}</p>
         </div>
         <div @click="popupClick(1)">
-          <img src="../../assets/img/product/particulars/chanpin.png" alt />
+          <div>
+            <img v-for="(item,index) in JSON.parse(orderdata.picUrl)" :key="index" :src="item" alt />
+          </div>
           <van-icon class="van-cell__right-icon" name="arrow" />
         </div>
       </div>
@@ -35,7 +40,7 @@
         <p>付款金额</p>
         <div>
           <p>订单金额</p>
-          <p>￥9.60</p>
+          <p>￥{{ orderdata.totalMoney }}</p>
         </div>
       </div>
       <!-- 配送方式 -->
@@ -45,12 +50,30 @@
         <van-cell title="发票信息" is-link value="不开发票" @click="popupClick(3)" />
       </div>
     </div>
-    <van-submit-bar label="应付金额：" :price="960" button-text="提交订单" @submit="onSubmit" />
-    <!-- <div class="btnBox">
-      <div>催办</div>
-      <div>订单作废</div>
-      <div>再次购买</div>
-    </div>-->
+
+    <van-submit-bar
+      class="noSubmit"
+      v-if="orderdata.needMoney !=0"
+      :price="orderdata.totalMoney * 100"
+      label="应付金额："
+      button-text="提交订单"
+      @submit="onSubmit"
+      :loading="btnload"
+    >
+      <template #tip>
+        <i class="van-icon van-icon-info-o van-submit-bar__tip-icon"></i>
+        还差{{ orderdata.needMoney }}起送
+      </template>
+    </van-submit-bar>
+    <van-submit-bar
+      v-else
+      :loading="btnload"
+      class="yesSubmit"
+      label="应付金额："
+      :price="orderdata.totalMoney * 100"
+      button-text="提交订单"
+      @submit="onSubmit"
+    />
     <van-popup v-model="popupShow" class="popup">
       <van-nav-bar
         left-arrow
@@ -60,25 +83,25 @@
         :title="popupid == 0? '地址选择':popupid == 1? '订单详情':popupid == 2? '备注信息':'发票信息' "
       />
       <!-- 地址选择 -->
-      <address_ @address="addressClick" v-if="popupid == 0" />
+      <address_ @address="addressClick" :address="orderdata.address" v-if="popupid == 0" />
       <!-- 订单详情 -->
       <div v-else-if="popupid == 1" class="productbox">
-        <div v-for="(item,index) in 4" :key="index" class="product">
-          <img src="../../assets/img/product/particulars/chanpin.png" alt />
+        <div v-for="(item,index) in JSON.parse(orderdata.plistDetail)" :key="index" class="product">
+          <img :src="item.picUrl" alt />
           <div>
-            <p>产品名称产品名称产品名称产品名称产品名称产品名称</p>
+            <p>{{ item.plistName }}</p>
             <div class="productSize">
-              <span>颜色分类:s427</span>
-              <span>￥439.00/台</span>
+              <span>颜色分类:{{ item.cateName? item.cateName: '暂无' }}</span>
+              <span>{{ item.priceName }}</span>
             </div>
-            <div>x1</div>
+            <div class="productNum">x{{ item.buyNum }}</div>
           </div>
         </div>
       </div>
       <!-- 备注信息 -->
       <div v-else-if="popupid == 2" class="remarksbox">
         <van-field
-          v-model="message"
+          v-model="notes"
           rows="4"
           autosize
           type="textarea"
@@ -89,7 +112,7 @@
       </div>
       <!-- 发票信息 -->
       <div v-else class="invoicebox">
-        <van-radio-group v-model="radio" class="groupbox">
+        <van-radio-group v-model="billState" class="groupbox">
           <van-radio :name="0" @click="radioClick(0)">不开发票</van-radio>
           <van-radio :name="1" @click="radioClick(1)">电子发票</van-radio>
         </van-radio-group>
@@ -105,18 +128,67 @@ export default {
   },
   data() {
     return {
+      orderdata: this.$route.query, // 订单数据
+      site: {}, // 默认地址
       popupShow: false,
       popupid: 0,
-      message: "",
-      radio: 0,
+      notes: "",
+      billState: 0,
+      btnload: false,
     };
   },
+  mounted() {
+    this.getsite();
+    if (this.orderdata.popupid) {
+      this.popupShow = true;
+      this.popupid = this.orderdata.popupid;
+    }
+  },
   methods: {
-    onSubmit: function () {},
+    // 获取默认地址
+    getsite: function () {
+      if (this.orderdata.address == undefined) return;
+      let address = JSON.parse(this.orderdata.address);
+      for (let i = 0; i < address.length; i++) {
+        if (address[i].address_default == 1) {
+          this.site = address[i];
+          return;
+        }
+      }
+    },
+    // 提交订单
+    onSubmit: function () {
+      this.btnload = true;
+      this.axios
+        .post(this.$api.submitOrder, {
+          addressId: this.site.id,
+          plistIds: this.orderdata.addressId,
+          sendType: 0,
+          notes: this.notes,
+          billState: this.billState,
+        })
+        .then((data) => {
+          if (data.code == 200) {
+            this.btnload = false;
+            console.info(data);
+          } else {
+            this.btnload = false;
+            this.$toast(this.ErrCode(data.msg));
+          }
+        })
+        .catch(() => {
+          this.btnload = false;
+          //   this.$toast.fail(this.$api.monmsg);
+        });
+    },
     // 打开弹出层
     popupClick: function (index) {
       this.popupid = index;
-      this.$router.push(`/shopping/addOrder?popupid=${index}`);
+      this.$router.push({
+        path: `/shopping/addOrder?popupid=${index}`,
+        query: this.$route.query,
+      });
+      // this.$router.push();
       this.popupShow = true;
     },
     // 弹出层点击返回
@@ -127,6 +199,7 @@ export default {
     // 地址选择
     addressClick: function (data) {
       this.$router.go(-1);
+      this.site = data;
       this.popupShow = false;
     },
   },
@@ -141,8 +214,11 @@ export default {
 }
 .content {
   flex: auto;
+  display: flex;
   overflow-y: auto;
+  flex-direction: column;
 }
+
 .siteBox,
 .inventoryBox {
   margin-bottom: 1rem;
@@ -158,6 +234,8 @@ export default {
   font-weight: 700;
 }
 .site {
+  display: flex;
+  justify-content: space-between;
   margin: 0.5rem 0;
   color: #bbbbbb;
   display: flex;
@@ -187,8 +265,14 @@ export default {
 .inventoryBox > div:nth-child(2) {
   align-items: center;
 }
+.inventoryBox > div:nth-child(2) > div {
+  display: flex;
+  width: 100%;
+  overflow-y: auto;
+}
 .inventoryBox img {
   width: 5rem;
+  margin-right: 0.5rem;
 }
 /* 付款 */
 .paymentBox {
@@ -278,6 +362,7 @@ export default {
 }
 .product > div {
   display: flex;
+  width: 100%;
   /* height: 5rem; */
   flex-direction: column;
   justify-content: space-between;
@@ -285,7 +370,8 @@ export default {
 .productSize {
   margin-top: 0.5rem;
   display: flex;
-  justify-content: space-between;
+  align-items: center;
+  /* justify-content: space-between; */
 }
 .productSize span:nth-child(1) {
   font-size: 0.8rem;
@@ -294,6 +380,11 @@ export default {
 .productSize span:nth-child(2) {
   /* font-size: 0.8rem; */
   color: #ff341d;
+}
+.productNum {
+  text-align: right;
+  font-size: 0.8rem;
+  color: #999;
 }
 /* 发票 */
 .invoicebox {
@@ -306,6 +397,42 @@ export default {
   padding: 0.8rem;
   background-color: #fff;
   border-bottom: 1px solid #f5f5f5;
+}
+/* 底部气泡 */
+.poptipArrow {
+  background-color: #e75858;
+  position: absolute;
+  will-change: top, left;
+  top: -2.8rem;
+  left: 17rem;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+}
+.ivu-poptip-arrow {
+  left: 57%;
+  margin-left: -7px;
+}
+.ivu-poptip-arrow {
+  bottom: -8px;
+  border-width: 7px 7px 0;
+  border-top-color: hsla(0, 0%, 85%, 0.5);
+}
+.ivu-poptip-arrow,
+.ivu-poptip-arrow:after {
+  display: block;
+  width: 0;
+  height: 0;
+  position: absolute;
+  border-color: transparent;
+  border-style: solid;
+}
+.ivu-poptip-arrow:after {
+  content: " ";
+  bottom: 1px;
+  margin-left: -7px;
+  border-bottom-width: 0;
+  border-top-width: 7px;
+  border-top-color: #e75858;
 }
 </style>
 <style>
@@ -322,5 +449,28 @@ export default {
   background-color: #f9f9f9;
   padding: 0.2rem;
   border-radius: 0.2rem;
+}
+.addOrder .van-submit-bar {
+  position: relative;
+}
+.addOrder .van-submit-bar__tip {
+  padding: 0.2rem 0.5rem;
+  display: flex;
+  align-items: center;
+}
+/* 底部右侧内边距取消 */
+.addOrder .van-submit-bar__bar {
+  padding-right: 0;
+}
+/* 底部按钮样式 */
+.addOrder .van-submit-bar__button {
+  height: 100%;
+  border-radius: 0;
+}
+.noSubmit .van-submit-bar__button {
+  background: #bebebe !important;
+}
+.yesSubmit .van-submit-bar__button {
+  background: #e75858 !important;
 }
 </style>

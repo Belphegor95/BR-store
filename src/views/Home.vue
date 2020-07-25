@@ -37,7 +37,11 @@ export default {
   },
   watch: {
     "$store.state.count": function (value) {
-      this.count = value;
+      if (value != 0) {
+        this.count = value;
+      } else {
+        this.count = null;
+      }
     },
   },
   mounted() {
