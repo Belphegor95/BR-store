@@ -22,7 +22,7 @@
     >
       <div class="van-card" v-for="(item,index) in shoppings" :key="index">
         <div class="van-card__header">
-          <van-checkbox @click="checkedClural(item)" :name="item.plistId"></van-checkbox>
+          <van-checkbox @click="checkedClural(item,index,indexJ)" :name="item.plistId"></van-checkbox>
           <a class="van-card__thumb">
             <div class="van-image" style="width: 100%; height: 100%;">
               <img :src="item.picUrl" class="van-image__img" style="object-fit: cover;" />
@@ -50,8 +50,8 @@
           >
             <van-checkbox
               checked-color="#feb35c"
-              :name="`${item.plistId}_${itemJ.cateId}_${itemJ.priceId}`"
-              @click="checkedSingle(item)"
+              :name="`${item.plistId}_${itemJ.cateId}_${itemJ.priceId}_${index}/${indexJ}`"
+              @click="checkedSingle(item,index,indexJ)"
             >{{ itemJ.priceName }}</van-checkbox>
             <van-stepper
               v-model="itemJ.buyNum"
@@ -106,6 +106,7 @@ export default {
     },
   },
   mounted() {
+    this.$store.commit("show_activeid", 2);
     this.getShoppingCart();
   },
   methods: {
@@ -117,11 +118,16 @@ export default {
           if (data.code == 200) {
             this.shoppings = data.data;
             this.freeSend = data.freeSend;
-            this.$store.commit("show_count", data.data.length);
-            this.calctotalPrice(this.shoppings);
+            let num = 0
+            for (let i = 0;i < data.data.length;i++) {
+              let item = data.data[i].unit;
+              num = num + item.length
+            }
+            this.$store.commit("show_count", num);
             // 选中全部
             this.$nextTick(() => {
               this.checkedClick(true);
+              this.calctotalPrice();
             });
           } else {
             this.$toast(this.ErrCode(data.msg));
@@ -142,7 +148,8 @@ export default {
         })
         .then((data) => {
           if (data.code == 200) {
-            // console.info(data);
+            // 重新计算价格
+            this.calctotalPrice();
           } else {
             this.$toast(this.ErrCode(data.msg));
           }
@@ -236,8 +243,44 @@ export default {
     },
     //   点击结算
     onSubmit: function () {},
+    // 单个商品
+    checkedClural: function (item, index_I, index_J) {
+      // 判断是否是添加
+      if (this.goodss.indexOf(item.plistId) > -1) {
+        // 把未添加的 添加进选中
+        for (let i = 0; i < item.unit.length; i++) {
+          let itemI = item.unit[i];
+          if (
+            this.singles.indexOf(
+              `${item.plistId}_${itemI.cateId}_${itemI.priceId}_${index_I}/${index_J}`
+            ) > -1
+          ) {
+          } else {
+            this.singles.push(
+              `${item.plistId}_${itemI.cateId}_${itemI.priceId}_${index_I}/${index_J}`
+            );
+          }
+        }
+      } else {
+        // 删除 把已选中是 选中列表中删除
+        for (let i = 0; i < item.unit.length; i++) {
+          let itemI = item.unit[i];
+          let index = this.singles.indexOf(
+            `${item.plistId}_${itemI.cateId}_${itemI.priceId}_${index_I}/${index_J}`
+          );
+          if (index > -1) {
+            this.singles.splice(index, 1);
+          } else {
+            this.singles.push(
+              `${item.plistId}_${itemI.cateId}_${itemI.priceId}_${index_I}/${index_J}`
+            );
+          }
+        }
+      }
+      this.calctotalPrice();
+    },
     // 单个种类
-    checkedSingle: function (item) {
+    checkedSingle: function (item, index, indexJ) {
       let arr = this.singles.filter((id) => {
         return id.indexOf(item.plistId + "_") > -1;
       });
@@ -250,41 +293,7 @@ export default {
           return id != item.plistId;
         });
       }
-    },
-    // 单个商品
-    checkedClural: function (item) {
-      // 判断是否是添加
-      if (this.goodss.indexOf(item.plistId) > -1) {
-        // 把未添加的 添加进选中
-        for (let i = 0; i < item.unit.length; i++) {
-          let itemI = item.unit[i];
-          if (
-            this.singles.indexOf(
-              `${item.plistId}_${itemI.cateId}_${itemI.priceId}`
-            ) > -1
-          ) {
-          } else {
-            this.singles.push(
-              `${item.plistId}_${itemI.cateId}_${itemI.priceId}`
-            );
-          }
-        }
-      } else {
-        // 删除 把已选中是 选中列表中删除
-        for (let i = 0; i < item.unit.length; i++) {
-          let itemI = item.unit[i];
-          let index = this.singles.indexOf(
-            `${item.plistId}_${itemI.cateId}_${itemI.priceId}`
-          );
-          if (index > -1) {
-            this.singles.splice(index, 1);
-          } else {
-            this.singles.push(
-              `${item.plistId}_${itemI.cateId}_${itemI.priceId}`
-            );
-          }
-        }
-      }
+      this.calctotalPrice();
     },
     // 全选
     checkedClick: function (is) {
@@ -297,6 +306,7 @@ export default {
         this.$refs.checkboxGroup.toggleAll();
         this.for_checked(is);
       }
+      this.calctotalPrice();
     },
     // 单个商品种类全选
     for_checked: function (is) {
@@ -307,7 +317,7 @@ export default {
           for (let j = 0; j < itemI.unit.length; j++) {
             let itemJ = itemI.unit[j];
             this.singles.push(
-              `${itemI.plistId}_${itemJ.cateId}_${itemJ.priceId}`
+              `${itemI.plistId}_${itemJ.cateId}_${itemJ.priceId}_${i}/${j}`
             );
           }
         }
@@ -317,25 +327,35 @@ export default {
     stepperClick: function (value, item) {
       if (typeof value == "number") {
         this.shoppingCarCount(item);
-        this.calctotalPrice(this.shoppings);
       }
     },
 
     // 计算总价格
-    calctotalPrice: function (data) {
-      this.totalPrice = 0;
+    calctotalPrice: function () {
+      let data = this.shoppings;
       this.totalNum = 0;
-      for (let i = 0; i < data.length; i++) {
-        for (let j = 0; j < data[i].unit.length; j++) {
-          let item = data[i].unit[j];
-          // 因为返回值是小数 所以成 100
-          let num = item.buyNum * item.orderPrice * 100;
-          // 总数量
-          this.totalNum = this.totalNum + item.buyNum;
-          // 总价格
-          this.totalPrice = this.totalPrice + num;
-        }
+      this.totalPrice = 0;
+      for (let i = 0; i < this.singles.length; i++) {
+        let item = this.singles[i].split("_");
+        let indexes = item[3].split("/");
+        let item_ = this.shoppings[indexes[0]].unit[indexes[1]];
+        let num = item_.buyNum * item_.orderPrice * 100;
+        // 总数量
+        this.totalNum = this.totalNum + item_.buyNum;
+        // 总价格
+        this.totalPrice = this.totalPrice + num;
       }
+      // for (let i = 0; i < data.length; i++) {
+      //   for (let j = 0; j < data[i].unit.length; j++) {
+      //     let item = data[i].unit[j];
+      //     // 因为返回值是小数 所以成 100
+      //     let num = item.buyNum * item.orderPrice * 100;
+      //     // 总数量
+      //     this.totalNum = this.totalNum + item.buyNum;
+      //     // 总价格
+      //     this.totalPrice = this.totalPrice + num;
+      //   }
+      // }
     },
     // 点击折叠收起
     foldClick: function () {

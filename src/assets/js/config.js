@@ -36,6 +36,10 @@ api.downOrder = "/api/downOrder"  // 购物车下单
 
 api.submitOrder = "/api/submitOrder"  // 提交订单
 
+api.getOrderList = "/api/getOrderList"  // 获取订单
+
+api.getTicket = "/api/getTicket"  // 获取优惠券
+
 api.logout = "/api/logout"  // 退出登录
 
 export { api };

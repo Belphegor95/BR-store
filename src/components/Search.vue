@@ -17,12 +17,12 @@
     <div class="recordbox" v-if="is_search">
       <div class="recordHead">
         <span>历史搜索</span>
-        <span>删除</span>
+        <span @click="delbrowsings">删除</span>
       </div>
       <div class="recordbtnbox">
-        <div @click="btnClick('打印机')">打印机</div>
-        <div @click="btnClick('名片')">名片</div>
-        <div @click="btnClick('铅笔')">铅笔</div>
+        <div v-for="(item,index) in browsings" :key="index" @click="btnClick(item)">{{ item }}</div>
+        <!-- <div @click="btnClick('名片')">名片</div>
+        <div @click="btnClick('铅笔')">铅笔</div>-->
       </div>
     </div>
     <div v-else>
@@ -68,11 +68,11 @@
 import PopUp from "@/components/PopUp.vue";
 export default {
   components: {
-    PopUp
+    PopUp,
   },
   name: "Search",
   props: {
-    popUpShow: Boolean
+    popUpShow: Boolean,
   },
   data() {
     return {
@@ -85,50 +85,55 @@ export default {
       option1: [
         { text: "全部商品", value: 0 },
         { text: "新款商品", value: 1 },
-        { text: "活动商品", value: 2 }
+        { text: "活动商品", value: 2 },
       ],
       option2: [
         { text: "默认排序", value: "a" },
         { text: "好评排序", value: "b" },
-        { text: "销量排序", value: "c" }
+        { text: "销量排序", value: "c" },
       ],
-      recommend: []
+      recommend: [], // 商品列表
+      browsings: [], // 搜索历史记录
     };
   },
   mounted() {
-    // console.info(this.$refs)
+    let arr = localStorage.getItem("browsings");
+    if (arr) {
+      this.browsings = JSON.parse(arr);
+    }
   },
   methods: {
     //  关闭
-    shotClick: function() {
+    shotClick: function () {
       this.$emit("showClick", false);
     },
     // 点击搜索 切换到 历史搜索
-    onfocus: function() {
+    onfocus: function () {
       this.is_search = true;
     },
     // 点击搜索历史的按钮
-    btnClick: function(name) {
+    btnClick: function (name) {
       this.searchKey = name;
       this.searchClick();
     },
     // 点击购物车 弹出购物车弹窗
-    shoppingclick: function(data) {
+    shoppingclick: function (data) {
       this.popUpData = data;
       this.cartShow = true;
     },
     // 关闭购物车弹窗
-    cartShowClick: function(is) {
+    cartShowClick: function (is) {
       this.cartShow = is;
     },
     // 点击搜索
-    searchClick: function() {
+    searchClick: function () {
       if (!this.searchKey) return;
+      this.isbrowsing();
       this.axios
         .post(this.$api.search, {
-          searchKey: this.searchKey
+          searchKey: this.searchKey.trim(),
         })
-        .then(data => {
+        .then((data) => {
           if (data.code == 200) {
             this.recommend = data.data;
             this.is_search = false;
@@ -137,8 +142,21 @@ export default {
           }
         })
         .catch(() => {});
-    }
-  }
+    },
+    // 删除历史记录
+    delbrowsings: function () {
+      this.browsings = [];
+      localStorage.removeItem("browsings");
+      this.$toast("清除成功!");
+    },
+    // 浏览记录是否存在
+    isbrowsing: function () {
+      if (this.browsings.indexOf(this.searchKey.trim()) == -1) {
+        this.browsings.push(this.searchKey.trim());
+        localStorage.setItem("browsings", JSON.stringify(this.browsings));
+      }
+    },
+  },
 };
 </script>
 <style scoped>

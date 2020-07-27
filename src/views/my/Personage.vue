@@ -8,8 +8,10 @@
       </template>
     </van-nav-bar>
     <div class="userImg">
-      <img @click="popupClick('center')" src="../../assets/img/my/tx.png" />
-      <p @click="popupClick('center')">昵称</p>
+      <!-- <img @click="popupClick('center')" src="../../assets/img/my/tx.png" />
+      <p @click="popupClick('center')">昵称</p> -->
+      <img src="../../assets/img/my/tx.png" />
+      <p>昵称</p>
     </div>
     <van-cell title="我的订单" @click="rutClick(0)" is-link />
     <div>
@@ -38,6 +40,17 @@
         </div>
       </div>
     </div>
+    <van-cell @click="popupClick('coupon')" is-link>
+      <template #title>
+        <!-- <img
+          style="width: 0.8rem;vertical-align:middle;margin-right:0.4rem"
+          src="../../assets/img/my/shdz.png"
+          alt
+        /> -->
+        <van-icon style="margin-right: 0.4rem;" name="coupon-o" />
+        <span class="custom-title">优惠券</span>
+      </template>
+    </van-cell>
     <van-cell @click="popupClick('address')" is-link>
       <template #title>
         <img
@@ -45,7 +58,6 @@
           src="../../assets/img/my/shdz.png"
           alt
         />
-
         <span class="custom-title">常用收货地址</span>
       </template>
     </van-cell>
@@ -74,38 +86,44 @@ export default {
       navigations: [
         {
           img: daifuk,
-          name: "待付款"
+          name: "待付款",
         },
         {
           img: dpl,
-          name: "待收货"
+          name: "待收货",
         },
         {
           img: dsk,
-          name: "待评论"
+          name: "意见建议",
         },
-        {
-          img: sh,
-          name: "退货/售后"
-        }
-      ]
+        // {
+        //   img: dsk,
+        //   name: "待评论"
+        // },
+        // {
+        //   img: sh,
+        //   name: "退货/售后"
+        // }
+      ],
     };
   },
   mounted() {
     // this.$store.commit("show_activeid", 3);
   },
   methods: {
-    popupClick: function(rutname, id) {
+    popupClick: function (rutname, id) {
       this.$router.push(`/manage/${rutname}`);
     },
-    rutClick: function(id) {
+    rutClick: function (id) {
       if (id == 4) {
         this.$router.push("/shopping/aftermarket");
+      } else if (id == 3) {
+        this.$router.push("/personage/idea");
       } else {
         this.$router.push(`/shopping/orderForm?formid=${id}`);
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

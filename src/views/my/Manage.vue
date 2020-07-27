@@ -29,6 +29,8 @@ export default {
       this.titlename = "消息";
     } else if (this.$route.path.indexOf("logistics") != -1) {
       this.titlename = "物流信息";
+    } else if (this.$route.path.indexOf("coupon") != -1) {
+      this.titlename = "优惠券";
     }
   },
   watch: {
@@ -46,6 +48,8 @@ export default {
           this.titlename = "消息";
         } else if (newValue.path.indexOf("logistics") != -1) {
           this.titlename = "物流信息";
+        } else if (newValue.path.indexOf("coupon") != -1) {
+          this.titlename = "优惠券";
         }
       },
       deep: true

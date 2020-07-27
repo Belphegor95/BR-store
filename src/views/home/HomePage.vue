@@ -183,6 +183,9 @@ export default {
       }
     },
     rutparClick: function (data) {
+      data.plist_detail_img_url = JSON.stringify(data.plist_detail_img_url);
+      data.plist_img_url = JSON.stringify(data.plist_img_url);
+      data.price_lv = JSON.stringify(data.price_lv);
       this.$router.push({
         path: "/particulars",
         query: data,

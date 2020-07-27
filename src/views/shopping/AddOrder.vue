@@ -42,6 +42,11 @@
           <p>订单金额</p>
           <p>￥{{ orderdata.totalMoney }}</p>
         </div>
+        <div>
+          <p>优惠券</p>
+          <p>￥请选择</p>
+        </div>
+        <!-- <van-cell style="font-size: 1rem;padding: 0.3rem 1rem;" title="优惠券" is-link value="请选择" @click="popupClick(2)" /> -->
       </div>
       <!-- 配送方式 -->
       <div class="distributionBox">

@@ -64,7 +64,7 @@
     </div>
     <van-goods-action>
       <van-goods-action-icon icon="chat-o" text="客服" @click="onClickIcon" />
-      <van-goods-action-icon icon="cart-o" text="购物车" @click="onClickIcon" />
+      <van-goods-action-icon icon="cart-o" text="购物车" to="/shopping" />
       <van-goods-action-icon v-if="false" icon="star-o" text="已收藏" />
       <van-goods-action-icon v-else icon="star" text="已收藏" color="#feb35c" />
       <van-goods-action-button type="warning" text="加入购物车" @click="popClick" />
@@ -78,20 +78,28 @@ import popUp from "@/components/PopUp.vue";
 export default {
   components: {
     topic,
-    popUp
+    popUp,
   },
   data() {
     return {
       current: 0,
       popUpShow: false,
-      particularsData: this.$route.query
+      particularsData: {},
     };
   },
   mounted() {
-    // this.particularsData.price_lv = JSON.parse(this.particularsData.price_lv);
+    // 避免刷新 数据丢失
+    this.particularsData = this.$route.query;
+    this.particularsData.plist_detail_img_url = JSON.parse(
+      this.particularsData.plist_detail_img_url
+    );
+    this.particularsData.plist_img_url = JSON.parse(
+      this.particularsData.plist_img_url
+    );
+    this.particularsData.price_lv = JSON.parse(this.particularsData.price_lv);
   },
   methods: {
-    integer: function(data) {
+    integer: function (data) {
       // 整数和小数
       if (!data.orderPrice) return;
       let num = data.orderPrice;
@@ -107,22 +115,29 @@ export default {
         }`;
       }
     },
-    backClick: function() {
+    backClick: function () {
       this.$router.go(-1);
     },
-    popClick: function() {
+    popClick: function () {
+      // 设置购买数量 和选择 类型的默认值
+      for (let i = 0; i < this.particularsData.price_lv.cate.length; i++) {
+        let item = this.particularsData.price_lv.cate[i];
+        let rateType = this.particularsData.price_lv.unitList[0].priceId;
+        item.rateType = rateType;
+        item.num = 0;
+      }
       this.popUpShow = true;
     },
     onClickIcon() {
       Toast("点击图标");
     },
-    showClick: function(is) {
+    showClick: function (is) {
       this.popUpShow = is;
     },
-    onChange: function(index) {
+    onChange: function (index) {
       this.current = index;
-    }
-  }
+    },
+  },
   // filters: {
   //   integer: function(value) {
   //     return `<i>${parseInt(value)}</i>.${value.toFixed(2)}`;
@@ -238,3 +253,8 @@ h4 {
   width: 100%;
 }
 </style>
+<style>
+.particulars .van-goods-action {
+  position: relative;
+}
+</style>>

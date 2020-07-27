@@ -2,31 +2,19 @@
 <template>
   <div class="orderForm">
     <van-nav-bar left-arrow class="navBar" @click-left="$router.go(-1)" :fixed="false" title="订单" />
-
-    <van-tabs v-model="formid">
-      <van-tab title="全部">
+    <van-tabs v-model="formid" animated @click="getOrderList">
+      <van-tab v-for="(title,titleindex) in titleList" :key="titleindex" :title="title">
         <van-pull-refresh v-model="isRefresh" @refresh="onRefresh">
           <ul>
-            <li v-for="item in 5" :key="item">
+            <li v-for="(item,index) in orderList" :key="index">
               <div class="orderNum">
-                <p>DH-O-20200714-275691</p>
-                <p>待订单审核</p>
+                <p>{{ item.tradeNo }}</p>
+                <p>订单{{ titleList[item.type] }}</p>
               </div>
-              <div class="imgBox" @click="($router.push('/shopping/order'))">
-                <div>
-                  <img src="../../assets/img/product/particulars/chanpin.png" alt />
-                </div>
-                <div>
-                  <img src="../../assets/img/product/particulars/chanpin.png" alt />
-                </div>
-                <div>
-                  <img src="../../assets/img/product/particulars/chanpin.png" alt />
-                </div>
-                <div>
-                  <img src="../../assets/img/product/particulars/chanpin.png" alt />
-                </div>
+              <div class="imgBox" @click="orderClick(item)">
+                <img v-for="(img,indeximg) in item.picurl" :key="indeximg" :src="img" alt />
               </div>
-              <p>种类:2,数量:22,总计: ￥176.64</p>
+              <p>种类:{{ item.cateCount }},数量:{{ item.plistCount }},总计: ￥{{ item.money }}</p>
               <div class="btnBox">
                 <van-button class="paybtn" type="default" size="small">立即支付</van-button>
                 <van-button type="default" size="small">再次购买</van-button>
@@ -36,10 +24,6 @@
           </ul>
         </van-pull-refresh>
       </van-tab>
-      <van-tab title="待付款">内容 2</van-tab>
-      <van-tab title="待评价">内容 3</van-tab>
-      <van-tab title="已完成">内容 4</van-tab>
-      <van-tab title="已取消">内容 4</van-tab>
     </van-tabs>
   </div>
 </template>
@@ -49,15 +33,43 @@ export default {
     return {
       formid: 0,
       isRefresh: false,
+      titleList: ["全部", "待付款", "待收货", "已完成", "已取消"],
+      orderList: [],
     };
   },
   mounted() {
-    // console.info(this.$route.query.formid)
     this.formid = Number(this.$route.query.formid);
+    this.getOrderList();
   },
   methods: {
     onRefresh: function () {
       this.isRefresh = false;
+    },
+    getOrderList: function () {
+      this.axios
+        .post(this.$api.getOrderList, {
+          type: this.formid,
+        })
+        .then((data) => {
+          if (data.code == 200) {
+            // console.info(data);
+            this.orderList = data.data;
+          } else {
+            this.$toast(this.ErrCode(data.msg));
+          }
+        })
+        .catch(() => {
+          //   this.$toast.fail(this.$api.monmsg);
+        });
+    },
+    orderClick: function (item) {
+      console.info(item);
+      Object.values(item).some((value) => {
+        if (typeof value == "object" || typeof value == "array") {
+          console.info(index);
+        }
+      });
+      // this.$router.push('/shopping/order')
     },
   },
 };
@@ -73,12 +85,9 @@ export default {
   display: flex;
   padding: 1rem;
 }
-.imgBox div {
-  flex: 1;
+.imgBox img {
+  width: 25%;
   padding: 0.2rem;
-}
-.imgBox div img {
-  width: 100%;
 }
 ul {
   overflow-y: auto;
@@ -146,6 +155,5 @@ li > p {
   flex: auto;
   overflow-y: auto;
   background-color: #f5f5f5;
-  /* padding: 0.8rem 1rem; */
 }
 </style>

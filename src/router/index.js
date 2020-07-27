@@ -76,6 +76,11 @@ const routes = [
     name: 'refund',
     component: () => import('../views/shopping/Refund.vue'),
   },
+  { 
+    path: '/personage/idea', // 我的  意见建议
+    name: 'idea',
+    component: () => import('../views/my/Idea.vue'),
+  },
   {
     path: '/manage',
     name: 'manage',
@@ -103,6 +108,10 @@ const routes = [
     {
       path: '/manage/logistics',  // 物流信息
       component: () => import('../views/my/Logistics.vue'),
+    },
+    {
+      path: '/manage/coupon',  // 优惠券
+      component: () => import('../views/my/Coupon.vue'),
     },
     ]
   },
