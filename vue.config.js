@@ -34,3 +34,4 @@ module.exports = {
     //=>多余1核cpu时：启动并行压缩
     parallel: require('os').cpus().length > 1
 }
+// 39.97.249.76

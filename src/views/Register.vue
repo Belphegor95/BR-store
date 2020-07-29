@@ -112,6 +112,7 @@ export default {
             this.$toast("验证码已发送");
             this.setloadingNum();
           } else {
+            this.$toast(this.ErrCode(data.msg));
           }
         })
         .catch(() => {});

@@ -43,6 +43,9 @@ export default {
         this.count = null;
       }
     },
+    "$store.state.activeid": function (value) {
+      this.activeid = value
+    },
   },
   mounted() {
     this.getShoppingCartPlistCount();

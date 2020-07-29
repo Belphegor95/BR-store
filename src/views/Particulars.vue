@@ -31,7 +31,7 @@
       </div>
       <!-- 商品价格 -->
       <div class="attributeBox">
-        <div class="priceBox" v-if="particularsData.price_lv.unitList">
+        <div class="priceBox" v-if="particularsData.price_lv">
           <div v-for="(item,index) in particularsData.price_lv.unitList" :key="index">
             <p v-html="integer(item)">
               <!-- {{ `￥${item.orderPrice}/${item.unitName}` }} -->

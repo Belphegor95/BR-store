@@ -76,7 +76,7 @@ const routes = [
     name: 'refund',
     component: () => import('../views/shopping/Refund.vue'),
   },
-  { 
+  {
     path: '/personage/idea', // 我的  意见建议
     name: 'idea',
     component: () => import('../views/my/Idea.vue'),
@@ -106,8 +106,12 @@ const routes = [
       component: () => import('../views/my/Information.vue'),
     },
     {
-      path: '/manage/logistics',  // 物流信息
-      component: () => import('../views/my/Logistics.vue'),
+      path: '/manage/logisticsMsg',  // 物流信息
+      component: () => import('../views/my/LogisticsMsg.vue'),
+    },
+    {
+      path: '/manage/logisticsList',  // 物流信息
+      component: () => import('../views/my/LogisticsList.vue'),
     },
     {
       path: '/manage/coupon',  // 优惠券
@@ -122,6 +126,11 @@ const routes = [
     component: () => import('../views/home/Maintain.vue'),
   },
   {
+    path: '/maintainRecord',
+    name: 'maintainRecord',
+    component: () => import('../views/home/MaintainRecord.vue'),
+  },
+  {
     path: '/comment',
     name: 'Comment',
     component: () => import('../views/Comment.vue'),
@@ -129,7 +138,7 @@ const routes = [
 ]
 
 const router = new VueRouter({
-  mode: 'history',
+  mode: 'hash',
   base: process.env.BASE_URL,
   routes
 })

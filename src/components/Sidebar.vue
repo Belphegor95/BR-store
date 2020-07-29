@@ -29,6 +29,9 @@
 </template>
 <script>
 export default {
+  props: {
+    cate: Object,
+  },
   data() {
     return {
       cateOne: 0,
@@ -38,6 +41,7 @@ export default {
   },
   mounted() {
     this.getcate();
+    // console.info(Object.keys(this.cate).length)
   },
   methods: {
     sidebarClick: function (item) {
@@ -53,6 +57,15 @@ export default {
       let obj = {};
       obj.one = this.cateOne;
       obj.two = this.cateTwo;
+      this.$emit("cateid", obj);
+    },
+    // 转跳过来的时候打开已选中位置
+    sidebarOn: function (obj_) {
+      this.cateOne = obj_.cate_one;
+      this.cateTwo = obj_.cate_two;
+      let obj = {};
+      obj.one = obj_.cate_one;
+      obj.two = obj_.cate_two;
       this.$emit("cateid", obj);
     },
     getcate: function () {
@@ -71,8 +84,11 @@ export default {
             }
             this.cateList = data_;
             // 默认打开第一个
-            this.sidebarClick(this.cateList.cateOneList[0]);
+            Object.keys(this.cate).length == 0
+              ? this.sidebarClick(this.cateList.cateOneList[0])
+              : this.sidebarOn(this.cate);
           } else {
+            this.$toast(this.ErrCode(data.msg));
           }
         })
         .catch(() => {});

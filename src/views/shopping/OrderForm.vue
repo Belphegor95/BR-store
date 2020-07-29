@@ -2,11 +2,12 @@
 <template>
   <div class="orderForm">
     <van-nav-bar left-arrow class="navBar" @click-left="$router.go(-1)" :fixed="false" title="订单" />
-    <van-tabs v-model="formid" animated @click="getOrderList">
+    <van-tabs animated v-model="formid" @click="getOrderList">
       <van-tab v-for="(title,titleindex) in titleList" :key="titleindex" :title="title">
+        <!-- <van-tab title="全部"> -->
         <van-pull-refresh v-model="isRefresh" @refresh="onRefresh">
           <ul>
-            <li v-for="(item,index) in orderList" :key="index">
+            <li v-for="(item,index) in orderList" :key="item.tradeNo">
               <div class="orderNum">
                 <p>{{ item.tradeNo }}</p>
                 <p>订单{{ titleList[item.type] }}</p>
@@ -24,6 +25,25 @@
           </ul>
         </van-pull-refresh>
       </van-tab>
+      <!-- <van-tab title="待付款">
+          <ul>
+            <li v-for="(item,index) in orderList" :key="index">
+              <div class="orderNum">
+                <p>{{ item.tradeNo }}</p>
+                <p>订单{{ titleList[item.type] }}</p>
+              </div>
+              <div class="imgBox" @click="orderClick(item)">
+                <img v-for="(img,indeximg) in item.picurl" :key="indeximg" :src="img" alt />
+              </div>
+              <p>种类:{{ item.cateCount }},数量:{{ item.plistCount }},总计: ￥{{ item.money }}</p>
+              <div class="btnBox">
+                <van-button class="paybtn" type="default" size="small">立即支付</van-button>
+                <van-button type="default" size="small">再次购买</van-button>
+                <van-button type="default" size="small">修改订单</van-button>
+              </div>
+            </li>
+          </ul>
+      </van-tab>-->
     </van-tabs>
   </div>
 </template>
@@ -155,5 +175,10 @@ li > p {
   flex: auto;
   overflow-y: auto;
   background-color: #f5f5f5;
+}
+/* 设置高度  下拉刷新问题 */
+.orderForm .van-tab__pane {
+  height: 100%;
+  overflow-y: auto;
 }
 </style>

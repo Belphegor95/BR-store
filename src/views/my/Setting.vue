@@ -10,7 +10,12 @@
       <van-cell title="检测更新" value="1.02" />
     </div>
     <div class="btnBox" @click="quitClick">退出登录</div>
-    <van-popup v-model="popupShow" position="right" :style="{ height: '100%',width: '100%' }">
+    <van-popup
+      :overlay="false"
+      v-model="popupShow"
+      position="right"
+      :style="{ height: height,width: '100%' }"
+    >
       <phone v-if="tarbarType == 0" />
       <password v-else-if="tarbarType == 1" />
     </van-popup>
@@ -28,6 +33,7 @@ export default {
     return {
       popupShow: false,
       tarbarType: 0,
+      height: 0,
     };
   },
   watch: {
@@ -43,12 +49,18 @@ export default {
       deep: true,
     },
   },
+  mounted() {
+    // 弹窗动画有小数导致字模糊
+    this.height = window.innerHeight;
+    this.height % 2 != 0 ? this.height-- : "";
+    this.height = this.height + "px";
+  },
   methods: {
     tarPush: function (type) {
       this.$router.push(`/manage/setting?tarbar=${type}`);
     },
+    // 退出登录
     quitClick: function () {
-      // 退出登录
       this.$dialog
         .confirm({
           message: "确定退出吗?",

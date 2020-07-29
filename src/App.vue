@@ -21,6 +21,11 @@ ul,
 li {
   list-style: none;
 }
+button {
+  border: 0;
+  background-color: transparent;
+  outline: none;
+}
 html,
 body,
 #app {
@@ -88,12 +93,21 @@ body,
 }
 /* 首页-分类  顶部 */
 .van-search {
-  flex: auto!important;
+  flex: auto !important;
 }
 .van-search__content {
-  border-radius: 5rem!important;
+  border-radius: 5rem !important;
 }
 .van-search {
-  background-color: transparent!important;
+  background-color: transparent !important;
+}
+/* 头部标签栏右侧字体颜色 */
+.van-nav-bar__right .van-nav-bar__text {
+  color: #fff;
+}
+/* 下拉刷新 */
+.van-pull-refresh {
+  overflow: auto !important;
+  height: 100%;
 }
 </style>

@@ -8,9 +8,9 @@
         <van-icon :name="lingdang" badge="1" />
       </div>
     </div>
-    <!-- 下拉刷新 -->
-    <van-pull-refresh v-model="isRefresh" @refresh="onRefresh">
-      <div class="content">
+    <div class="content">
+      <!-- 下拉刷新 -->
+      <van-pull-refresh v-model="isRefresh" @refresh="onRefresh">
         <div class="bgc"></div>
         <!-- 轮播 -->
         <div class="swipeBox">
@@ -24,13 +24,17 @@
         <div>
           <van-grid>
             <van-grid-item
-              @click="gridClick(index)"
+              @click="gridClick(index,item)"
               class="navigationBox"
               v-for="(item,index) in navigations"
               :key="index"
             >
-              <img :src="item.img" alt />
+              <img :src="item.img_url" alt />
               <p>{{ item.name }}</p>
+            </van-grid-item>
+            <van-grid-item @click="gridClick( -1)" class="navigationBox">
+              <img src="../../assets/img/home/shouhou.png" alt />
+              <p>售后及维修</p>
             </van-grid-item>
           </van-grid>
         </div>
@@ -61,22 +65,13 @@
             </div>
           </li>
         </ul>
-      </div>
-    </van-pull-refresh>
+      </van-pull-refresh>
+    </div>
     <search :popUpShow="searchShow" @showClick="searchShow = false" v-if="searchShow" />
     <popUp :popUpShow="popUpShow" :popUpData="popUpData" @showClick="showClick" />
   </div>
 </template>
 <script>
-import bangong from "../../assets/img/home/bangong.png";
-import shuxiegongju from "../../assets/img/home/shuxiegongju.png";
-import bangongyongzhi from "../../assets/img/home/bangongyongzhi.png";
-import tiyuyongpin from "../../assets/img/home/tiyuyongpin.png";
-import xueshengyongpin from "../../assets/img/home/xueshengyongpin.png";
-import wenjianguanli from "../../assets/img/home/wenjianguanli.png";
-import zhuomianbangong from "../../assets/img/home/zhuomianbangong.png";
-import shouhou from "../../assets/img/home/shouhou.png";
-
 // 组件
 import topic from "@/components/Topic.vue";
 import PopUp from "@/components/PopUp.vue";
@@ -100,40 +95,7 @@ export default {
         { text: "上海", value: 2 },
       ],
       active: 0,
-      navigations: [
-        {
-          img: bangong,
-          name: "办公用品",
-        },
-        {
-          img: shuxiegongju,
-          name: "书写工具",
-        },
-        {
-          img: bangongyongzhi,
-          name: "办公用纸",
-        },
-        {
-          img: tiyuyongpin,
-          name: "体育用品",
-        },
-        {
-          img: xueshengyongpin,
-          name: "学生用品",
-        },
-        {
-          img: wenjianguanli,
-          name: "文件管理",
-        },
-        {
-          img: zhuomianbangong,
-          name: "桌面办公",
-        },
-        {
-          img: shouhou,
-          name: "售后及维修",
-        },
-      ],
+      navigations: [],
       picUrls: [], //轮播图
       recommend: [], //推荐商品
       popUpShow: false, //购物车详情弹窗
@@ -144,6 +106,7 @@ export default {
     this.$store.commit("show_activeid", 0);
     this.getswipeImg();
     this.gethomeRecommend();
+    this.getHomeCate();
   },
   methods: {
     getswipeImg: function () {
@@ -153,7 +116,7 @@ export default {
           if (data.code == 200) {
             this.picUrls = data.data;
           } else {
-            // this.$toast(data.msg);
+            this.$toast(this.ErrCode(data.msg));
           }
         })
         .catch(() => {
@@ -174,12 +137,30 @@ export default {
           //   this.$toast.fail(this.$api.monmsg);
         });
     },
-    gridClick: function (index) {
-      if (index == 0) {
-        console.info(index);
-      } else if (index == 7) {
-        // console.info(index);
-        this.$router.push("/maintain");
+    // 首页分类入口
+    getHomeCate: function () {
+      this.axios
+        .post(this.$api.getHomeCate)
+        .then((data) => {
+          if (data.code == 200) {
+            this.navigations = data.data;
+          } else {
+            this.$toast(this.ErrCode(data.msg));
+          }
+        })
+        .catch(() => {
+          //   this.$toast.fail(this.$api.monmsg);
+        });
+    },
+    gridClick: function (index, item) {
+      if (index != -1) {
+        this.$store.commit("show_activeid", 1);
+        this.$router.push({
+          path: "/classification",
+          query: item
+        });
+      } else {
+        this.$router.push("/maintainRecord");
       }
     },
     rutparClick: function (data) {

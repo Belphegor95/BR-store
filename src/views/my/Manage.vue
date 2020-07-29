@@ -15,7 +15,7 @@
 export default {
   data() {
     return {
-      titlename: "收货地址"
+      titlename: "收货地址",
     };
   },
   created() {
@@ -27,8 +27,10 @@ export default {
       this.titlename = "设置";
     } else if (this.$route.path.indexOf("information") != -1) {
       this.titlename = "消息";
-    } else if (this.$route.path.indexOf("logistics") != -1) {
+    } else if (this.$route.path.indexOf("logisticsMsg") != -1) {
       this.titlename = "物流信息";
+    } else if (this.$route.path.indexOf("logisticsList") != -1) {
+      this.titlename = "全部物流信息";
     } else if (this.$route.path.indexOf("coupon") != -1) {
       this.titlename = "优惠券";
     }
@@ -46,19 +48,22 @@ export default {
           this.titlename = "设置";
         } else if (newValue.path.indexOf("information") != -1) {
           this.titlename = "消息";
-        } else if (newValue.path.indexOf("logistics") != -1) {
+        } else if (newValue.path.indexOf("logisticsMsg") != -1) {
           this.titlename = "物流信息";
+        } else if (newValue.path.indexOf("logisticsList") != -1) {
+          this.titlename = "全部物流信息";
         } else if (newValue.path.indexOf("coupon") != -1) {
           this.titlename = "优惠券";
         }
       },
-      deep: true
-    }
-  }
+      deep: true,
+    },
+  },
 };
 </script>
 <style scoped>
 .manage {
+  width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;

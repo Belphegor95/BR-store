@@ -5,6 +5,7 @@
       left-arrow
       class="navBar"
       @click-left="$router.go(-1)"
+      @click-right="submitSuggest"
       fixed
       placeholder
       title="意见建议"
@@ -28,6 +29,23 @@ export default {
     return {
       notes: "",
     };
+  },
+  methods: {
+    submitSuggest: function () {
+      this.axios
+        .post(this.$api.submitSuggest, {
+          content: this.notes,
+        })
+        .then((data) => {
+          if (data.code == 200) {
+            this.$toast("发表成功!");
+            this.$router.go(-1);
+          } else {
+            this.$toast(this.ErrCode(data.msg));
+          }
+        })
+        .catch(() => {});
+    },
   },
 };
 </script>

@@ -2,19 +2,19 @@
 <template>
   <div class="address">
     <div class="siteBox">
-      <div class="site" v-for="(item,index) in address_" :key="index">
-        <p @click="addressClick(item)">{{ item.linkman }} {{ item.phone }}</p>
-        <p @click="addressClick(item)">{{ item.address | site }}{{ item.address_detail }}</p>
-        <div class="operationBox">
-          <van-radio-group v-model="default_">
-            <van-radio :name="index">默认地址</van-radio>
-          </van-radio-group>
-          <div>
-            <van-button type="default" size="small" @click="rut(item)">编辑</van-button>
-            <van-button type="default" size="small">删除</van-button>
+      <van-radio-group style="height: 100%" v-model="default_">
+        <div class="site" v-for="(item,index) in address_" :key="index">
+          <p @click="addressClick(item)">{{ item.linkman }} {{ item.phone }}</p>
+          <p @click="addressClick(item)">{{ item.address | site }}{{ item.address_detail }}</p>
+          <div class="operationBox">
+            <van-radio :name="index" @click="editAddress(item,index)">默认地址</van-radio>
+            <div>
+              <van-button type="default" size="small" @click="rut(item)">编辑</van-button>
+              <van-button type="default" size="small" @click="deladdress(item)">删除</van-button>
+            </div>
           </div>
         </div>
-      </div>
+      </van-radio-group>
     </div>
     <div class="btnBox">
       <van-button class="btnForm" type="default" @click="rut">新增地址</van-button>
@@ -58,14 +58,56 @@ export default {
         .then((data) => {
           if (data.code == 200) {
             this.address_ = data.data;
-            for (let i = 0; i < this.address.length; i++) {
-              let item = this.address[i];
+            for (let i = 0; i < this.address_.length; i++) {
+              let item = this.address_[i];
               // 默认地址展示
-              if (item.address_default == "1") {
+              if (item.address_default == 1) {
                 this.default_ = i;
               }
             }
           }
+        })
+        .catch(() => {});
+    },
+    editAddress: function (item, index) {
+      this.axios
+        .post(this.$api.editAddress, {
+          addressId: item.id,
+          phone: item.phone,
+          linkman: item.linkman,
+          address: item.address,
+          address_detail: item.address_detail,
+          address_default: 1, //1 设置为默认地址
+        })
+        .then((data) => {
+          if (data.code == 200) {
+            this.default_ = index;
+          } else {
+            this.$toast(this.ErrCode(data.msg));
+          }
+        })
+        .catch(() => {});
+    },
+    // 删除地址
+    deladdress: function (item) {
+      this.$dialog
+        .confirm({
+          message: "确定退出吗?",
+        })
+        .then(() => {
+          this.axios
+            .post(this.$api.delAddress, {
+              addressId: item.id,
+            })
+            .then((data) => {
+              if (data.code == 200) {
+                this.$toast("删除成功!");
+                this.getAllAddress();
+              } else {
+                this.$toast(this.ErrCode(data.msg));
+              }
+            })
+            .catch(() => {});
         })
         .catch(() => {});
     },

@@ -10,7 +10,7 @@
     </div>
     <!-- <van-nav-bar class="navBar" title="分类" :fixed="false" :placeholder="true" /> -->
     <div class="nav">
-      <sidebar @cateid="getcatePlist" />
+      <sidebar :cate="cate_" @cateid="getcatePlist" />
       <div class="contentBox">
         <van-dropdown-menu>
           <van-dropdown-item v-model="value1" :options="option1" />
@@ -34,9 +34,13 @@
                   <p>15.86/个</p>
                 </div>
               </div>
-              <!-- 小球动画 -->
+
               <div class="stepperBox" @click="addGoods($event)">
-                <van-stepper v-model="value" theme="round" />
+                <span @click="shoppingclick(item)">
+                  <img class="shoppingCart" src="../../assets/img/home/gouwu.png" />
+                </span>
+                <!-- 小球动画 -->
+                <!-- <van-stepper v-model="value" theme="round" /> -->
                 <div class="ball-wrapper" v-for="(ball, index) of balls" :key="index">
                   <transition
                     name="drop"
@@ -57,22 +61,28 @@
       </div>
     </div>
     <search :popUpShow="searchShow" @showClick="searchShow = false" />
+    <popUp :popUpShow="popUpShow" :popUpData="popUpData" @showClick="showClick" />
   </div>
 </template>
 <script>
 import sidebar from "@/components/Sidebar.vue";
 import search from "@/components/Search.vue";
+import PopUp from "@/components/PopUp.vue";
 export default {
   components: {
     sidebar,
     search,
+    PopUp,
   },
   data() {
     return {
       isRefresh: false,
       lingdang: require("../../assets/img/home/lingdang.png"),
       searchShow: false,
+      popUpShow: false,
+      popUpData: {},
       cate: {},
+      cate_: {},
       value: 0,
       value1: 0,
       value2: "a",
@@ -111,7 +121,9 @@ export default {
   },
   mounted() {
     // this.$store.commit("show_activeid", 1);
+    // console.info(this.$route.query);
     // this.getcate();
+    this.cate_ = this.$route.query
   },
   methods: {
     rutClick: function (data) {
@@ -122,7 +134,6 @@ export default {
     },
     // 获取分类商品
     getcatePlist: function (obj) {
-      // console.info(obj)
       this.cate = obj;
       this.axios
         .post(this.$api.getCatePlist, {
@@ -155,6 +166,21 @@ export default {
           return;
         }
       });
+    },
+    // 点击购物车 弹出购物车弹窗
+    shoppingclick: function (data) {
+      // 设置购买数量 和选择 类型的默认值
+      for (let i = 0; i < data.price_lv.cate.length; i++) {
+        let item = data.price_lv.cate[i];
+        let rateType = data.price_lv.unitList[0].priceId;
+        item.rateType = rateType;
+        item.num = 0;
+      }
+      this.popUpData = data;
+      this.popUpShow = true;
+    },
+    showClick: function (is) {
+      this.popUpShow = is;
     },
     beforeEnter(el) {
       let count = this.balls.length;
@@ -233,6 +259,9 @@ export default {
   overflow-y: auto;
   flex-direction: column;
 }
+ul {
+  height: 100%;
+}
 li {
   display: flex;
   flex-direction: column;
@@ -247,6 +276,7 @@ li > h4 {
 }
 .tagBox > img {
   width: 5rem;
+  height: 5rem;
   margin-right: 0.7rem;
 }
 .tagRight {
@@ -282,6 +312,9 @@ li > h4 {
   transition: all 0.3s;
   /* transform: rotate(0deg);
   -webkit-transform: rotate(0deg); */
+}
+.shoppingCart {
+  height: 2rem;
 }
 </style>
 

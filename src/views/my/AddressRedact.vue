@@ -18,7 +18,7 @@ export default {
       areaList: {
         province_list: cityData.province_list,
         city_list: cityData.city_list,
-        county_list: cityData.county_list
+        county_list: cityData.county_list,
       },
       addressInfo: {
         //收货人信息初始值
@@ -29,8 +29,8 @@ export default {
         country: "", //区县
         areaCode: "", //地址code：ID
         addressDetail: "", //详细地址
-        isDefault: false //是否选择默认
-      }
+        isDefault: false, //是否选择默认
+      },
     };
   },
   mounted() {
@@ -57,19 +57,19 @@ export default {
           phone: data.tel,
           address: `${data.province}/${data.city}/${data.county}`,
           address_detail: data.addressDetail,
-          address_default: data.isDefault ? 1 : 0
+          address_default: data.isDefault ? 1 : 0,
         })
-        .then(data => {
+        .then((data) => {
           if (data.code == 200) {
-            this.$router.push("/manage/address");
+            this.$router.go(-1);
             this.$toast("地址保存成功!");
           } else {
             this.$toast(this.ErrCode(data.msg));
           }
         })
         .catch(() => {});
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>
