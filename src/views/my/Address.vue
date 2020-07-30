@@ -3,7 +3,12 @@
   <div class="address">
     <div class="siteBox">
       <van-radio-group style="height: 100%" v-model="default_">
-        <div class="site" v-for="(item,index) in address_" :key="index">
+        <div
+          class="site"
+          :class="default_== index?'pitchon':''"
+          v-for="(item,index) in address_"
+          :key="index"
+        >
           <p @click="addressClick(item)">{{ item.linkman }} {{ item.phone }}</p>
           <p @click="addressClick(item)">{{ item.address | site }}{{ item.address_detail }}</p>
           <div class="operationBox">
@@ -33,12 +38,13 @@ export default {
     };
   },
   mounted() {
-    if (this.address) {
-      this.address_ = JSON.parse(this.address);
-      this.getaddress();
-    } else {
-      this.getAllAddress();
-    }
+    // if (this.address) {
+    //   this.address_ = JSON.parse(this.address);
+    //   this.getaddress();
+    // } else {
+    //   this.getAllAddress();
+    // }
+    this.getAllAddress();
   },
   methods: {
     rut: function (data) {
@@ -62,7 +68,12 @@ export default {
               let item = this.address_[i];
               // 默认地址展示
               if (item.address_default == 1) {
-                this.default_ = i;
+                // this.default_ = i;
+                // 排序 把默认地址第一个
+                let obj = item;
+                this.address_.splice(i, 1);
+                this.address_.unshift(obj);
+                break;
               }
             }
           }
@@ -117,7 +128,10 @@ export default {
         let item = this.address_[i];
         // 默认地址展示
         if (item.address_default == "1") {
-          this.default_ = i;
+          // this.default_ = i;
+          let obj = item;
+          this.address_.splice(i, 1);
+          this.address_.unshift(obj);
         }
       }
     },
@@ -147,6 +161,7 @@ export default {
   overflow-y: auto;
 }
 .site {
+  border: 1px dashed #fff;
   padding-top: 1rem;
   background: #fff;
   margin-bottom: 1rem;
@@ -169,6 +184,10 @@ export default {
 }
 .btnBox {
   padding: 0.5rem 1rem;
+}
+.pitchon {
+  border: 1px dashed #999!important;
+  /* background-color: #123; */
 }
 </style>
 

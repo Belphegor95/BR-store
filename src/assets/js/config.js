@@ -8,6 +8,8 @@ api.regist = "/api/regist"  // 注册 1
 
 api.login = "/api/login"  // 登录 1
 
+api.selectAcc = "/api/selectAcc"  // 登录角色
+
 api.slideshow = "/api/slideshow"  // 轮播图 1
 
 api.homeRecommend = "/api/homeRecommend"  // 推荐商品 1

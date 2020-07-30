@@ -2,18 +2,18 @@
 <template>
   <div class="orderForm">
     <van-nav-bar left-arrow class="navBar" @click-left="$router.go(-1)" :fixed="false" title="订单" />
-    <van-tabs animated v-model="formid" @click="getOrderList">
+    <van-tabs animated lazy-render  v-model="formid" @click="getOrderList">
       <van-tab v-for="(title,titleindex) in titleList" :key="titleindex" :title="title">
-        <!-- <van-tab title="全部"> -->
-        <van-pull-refresh v-model="isRefresh" @refresh="onRefresh">
-          <ul>
-            <li v-for="(item,index) in orderList" :key="item.tradeNo">
+        <van-pull-refresh v-model="isRefresh" @refresh="onRefresh" :key="titleindex + 10">
+          <!-- <van-empty v-if="orderList.length == 0" description="暂无数据" /> -->
+          <ul :key="titleindex + 100">
+            <li v-for="item in orderList" :key="item.tradeNo">
               <div class="orderNum">
                 <p>{{ item.tradeNo }}</p>
                 <p>订单{{ titleList[item.type] }}</p>
               </div>
               <div class="imgBox" @click="orderClick(item)">
-                <img v-for="(img,indeximg) in item.picurl" :key="indeximg" :src="img" alt />
+                <img v-for="(img,indeximg) in item.picurl" :key="indeximg" :src="img" />
               </div>
               <p>种类:{{ item.cateCount }},数量:{{ item.plistCount }},总计: ￥{{ item.money }}</p>
               <div class="btnBox">
@@ -25,46 +25,53 @@
           </ul>
         </van-pull-refresh>
       </van-tab>
-      <!-- <van-tab title="待付款">
-          <ul>
-            <li v-for="(item,index) in orderList" :key="index">
-              <div class="orderNum">
-                <p>{{ item.tradeNo }}</p>
-                <p>订单{{ titleList[item.type] }}</p>
-              </div>
-              <div class="imgBox" @click="orderClick(item)">
-                <img v-for="(img,indeximg) in item.picurl" :key="indeximg" :src="img" alt />
-              </div>
-              <p>种类:{{ item.cateCount }},数量:{{ item.plistCount }},总计: ￥{{ item.money }}</p>
-              <div class="btnBox">
-                <van-button class="paybtn" type="default" size="small">立即支付</van-button>
-                <van-button type="default" size="small">再次购买</van-button>
-                <van-button type="default" size="small">修改订单</van-button>
-              </div>
-            </li>
-          </ul>
-      </van-tab>-->
     </van-tabs>
+    <!-- 弹出框 -->
+    <van-popup
+      v-model="popupShow"
+      :overlay="false"
+      position="right"
+      :style="{ height: height,width: '100%' }"
+      class="popup"
+    >
+      <addOrderForm :order="order" @popuClick="popuClick" />
+    </van-popup>
   </div>
 </template>
 <script>
+import addOrderForm from "@/components/AddOrderForm.vue";
 export default {
+  components: {
+    addOrderForm,
+  },
   data() {
     return {
       formid: 0,
       isRefresh: false,
       titleList: ["全部", "待付款", "待收货", "已完成", "已取消"],
       orderList: [],
+      order: {}, // 提交订单后订单属性
+      popupShow: false,
+      height: 0,
     };
   },
   mounted() {
+    this.height = window.innerHeight;
+    this.height % 2 != 0 ? this.height-- : "";
+    this.height = this.height + "px";
     this.formid = Number(this.$route.query.formid);
     this.getOrderList();
+    if (!this.$route.query.order) return
+    let order = JSON.parse(this.$route.query.order);
+    this.order = order ? order : {};
+    if (Object.keys(this.order).length != 0) this.popupShow = true;
   },
   methods: {
     onRefresh: function () {
+      this.getOrderList();
       this.isRefresh = false;
     },
+    // 获取列表
     getOrderList: function () {
       this.axios
         .post(this.$api.getOrderList, {
@@ -82,14 +89,19 @@ export default {
           //   this.$toast.fail(this.$api.monmsg);
         });
     },
+    // 跳转详情
     orderClick: function (item) {
-      console.info(item);
-      Object.values(item).some((value) => {
-        if (typeof value == "object" || typeof value == "array") {
-          console.info(index);
-        }
-      });
-      // this.$router.push('/shopping/order')
+      // console.info(item);
+      // Object.values(item).some((value) => {
+      //   if (typeof value == "object" || typeof value == "array") {
+      //     console.info(index);
+      //   }
+      // });
+      this.$router.push("/shopping/order");
+    },
+    // 弹窗关闭
+    popuClick: function (is) {
+      this.popupShow = is;
     },
   },
 };

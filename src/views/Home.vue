@@ -5,23 +5,23 @@
     <!-- 底部导航 -->
     <van-tabbar v-model="activeid" class="tabbarBox" @change="tabbarClick" :fixed="false">
       <van-tabbar-item>
-        <img v-if="activeid === 0" src="../assets/img/home/shouye01.png" alt />
-        <img v-else src="../assets/img/home/shouye.png" alt />
+        <img v-if="activeid === 0" src="../assets/img/home/shouye01.png"  />
+        <img v-else src="../assets/img/home/shouye.png"  />
         首页
       </van-tabbar-item>
       <van-tabbar-item>
-        <img v-if="activeid === 1" src="../assets/img/home/feilei01.png" alt />
-        <img v-else src="../assets/img/home/feilei.png" alt />
+        <img v-if="activeid === 1" src="../assets/img/home/feilei01.png"  />
+        <img v-else src="../assets/img/home/feilei.png"  />
         分类
       </van-tabbar-item>
       <van-tabbar-item :badge="count">
-        <img v-if="activeid === 2" src="../assets/img/home/gouwuche01.png" alt />
-        <img v-else src="../assets/img/home/gouwuche.png" alt />
+        <img v-if="activeid === 2" src="../assets/img/home/gouwuche01.png"  />
+        <img v-else src="../assets/img/home/gouwuche.png"  />
         购物车
       </van-tabbar-item>
       <van-tabbar-item>
-        <img v-if="activeid === 3" src="../assets/img/home/wode01.png" alt />
-        <img v-else src="../assets/img/home/wode.png" alt />
+        <img v-if="activeid === 3" src="../assets/img/home/wode01.png"  />
+        <img v-else src="../assets/img/home/wode.png"  />
         我的
       </van-tabbar-item>
     </van-tabbar>

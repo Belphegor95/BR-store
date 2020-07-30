@@ -17,7 +17,7 @@
     <ul>
       <li v-for="(item,index) in 8" :key="index">
         <div class="msg">
-          <img src="../../assets/img/product/particulars/chanpin.png" alt />
+          <img src="../../assets/img/product/particulars/chanpin.png"  />
           <div class="msgbox">
             <p>单号: 123456789</p>
             <p>下单时间: 2020-7-29 09:47</p>

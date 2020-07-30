@@ -9,9 +9,9 @@
     </van-nav-bar>
     <div class="userImg">
       <!-- <img @click="popupClick('center')" src="../../assets/img/my/tx.png" />
-      <p @click="popupClick('center')">昵称</p> -->
+      <p @click="popupClick('center')">昵称</p>-->
       <img src="../../assets/img/my/tx.png" />
-      <p>昵称</p>
+      <p>{{ $store.state.user.companyName ? $store.state.user.companyName: '暂无' }}</p>
     </div>
     <van-cell title="我的订单" @click="rutClick(0)" is-link />
     <div>
@@ -22,15 +22,15 @@
           :key="index"
           @click="rutClick(index + 1)"
         >
-          <img :src="item.img" alt />
+          <img :src="item.img"  />
           <p>{{ item.name }}</p>
         </van-grid-item>
       </van-grid>
     </div>
-    <van-cell title="物流信息" is-link @click="$router.push('/manage/logisticsList')" />
+    <van-cell title="物流信息" is-link @click="rutlogisticsList" />
     <div class="sitelist">
       <div v-for="item in 2" :key="item" class="list" :class="item == 2?'list_active':''">
-        <img src="../../assets/img/product/particulars/chanpin.png" alt />
+        <img src="../../assets/img/product/particulars/chanpin.png"  />
         <div class="site">
           <p>
             <span>未发货</span>
@@ -42,11 +42,6 @@
     </div>
     <van-cell @click="popupClick('coupon')" is-link>
       <template #title>
-        <!-- <img
-          style="width: 0.8rem;vertical-align:middle;margin-right:0.4rem"
-          src="../../assets/img/my/shdz.png"
-          alt
-        /> -->
         <van-icon style="margin-right: 0.4rem;" name="coupon-o" />
         <span class="custom-title">优惠券</span>
       </template>
@@ -56,7 +51,6 @@
         <img
           style="width: 0.8rem;vertical-align:middle;margin-right:0.4rem"
           src="../../assets/img/my/shdz.png"
-          alt
         />
         <span class="custom-title">常用收货地址</span>
       </template>
@@ -66,7 +60,6 @@
         <img
           style="width: 0.8rem;vertical-align:middle;margin-right:0.4rem"
           src="../../assets/img/my/kf.png"
-          alt
         />
         <span class="custom-title">客服电话</span>
       </template>
@@ -108,13 +101,41 @@ export default {
     };
   },
   mounted() {
-    // this.$store.commit("show_activeid", 3);
+    this.$store.commit("show_activeid", 3);
   },
   methods: {
     popupClick: function (rutname, id) {
-      this.$router.push(`/manage/${rutname}`);
+      if (this.$store.state.user.companyName) {
+        this.$router.push(`/manage/${rutname}`);
+      } else {
+        this.$router.push({
+          path: "/login",
+          query: this.$router.currentRoute.fullPath,
+        });
+        this.$toast("未登录或登录信息失效！");
+      }
+    },
+    // 物流信息跳转
+    rutlogisticsList: function () {
+      if (this.$store.state.user.companyName) {
+        this.$router.push("/manage/logisticsList");
+      } else {
+        this.$router.push({
+          path: "/login",
+          query: this.$router.currentRoute.fullPath,
+        });
+        this.$toast("未登录或登录信息失效！");
+      }
     },
     rutClick: function (id) {
+      if (!this.$store.state.user.companyName) {
+        this.$router.push({
+          path: "/login",
+          query: this.$router.currentRoute.fullPath,
+        });
+        this.$toast("未登录或登录信息失效！");
+        return;
+      }
       if (id == 4) {
         this.$router.push("/shopping/aftermarket");
       } else if (id == 3) {

@@ -152,7 +152,7 @@ export default {
     // 浏览记录是否存在
     isbrowsing: function () {
       if (this.browsings.indexOf(this.searchKey.trim()) == -1) {
-        this.browsings.push(this.searchKey.trim());
+        this.browsings.unshift(this.searchKey.trim());
         localStorage.setItem("browsings", JSON.stringify(this.browsings));
       }
     },

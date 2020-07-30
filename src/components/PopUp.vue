@@ -6,7 +6,7 @@
     :close-on-click-overlay="false"
   >
     <div class="headBox">
-      <img :src="popUpData.plist_img_url?popUpData.plist_img_url[0]: '' " alt />
+      <img :src="popUpData.plist_img_url?popUpData.plist_img_url[0]: '' "  />
       <h4>{{ popUpData.plist_name }}</h4>
     </div>
     <div class="content" v-if="popUpData.price_lv">

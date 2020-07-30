@@ -10,12 +10,12 @@
     />
     <div class="content">
       <div class="siteBox">
-        <img src="../../assets/img/home/dw.png" alt />
+        <img src="../../assets/img/home/dw.png"  />
         <div>
           <p>张三 1863680607</p>
           <p>河南郑州市中原区梧桐路高新区科学大道广告产业园2号楼8166</p>
         </div>
-        <img src="../../assets/img/home/jsb.png" alt />
+        <img src="../../assets/img/home/jsb.png"  />
       </div>
       <div class="natureBox">
         <p>待修物品名称</p>
@@ -23,7 +23,7 @@
       </div>
       <div class="natureBox">
         <p>设备型号</p>
-        <img src="../../assets/img/home/xiangji.png" alt />
+        <img src="../../assets/img/home/xiangji.png"  />
       </div>
       <div class="describeBox">
         <p>故障描述</p>
@@ -39,7 +39,7 @@
       <van-cell title="上传图片" is-link value="0张图片" />
       <van-cell value="11:00" is-link class="visitBox">
         <template #title>
-          <img src="../../assets/img/home/sm.png" alt />
+          <img src="../../assets/img/home/sm.png"  />
           <span class="custom-title">上门时间</span>
         </template>
       </van-cell>

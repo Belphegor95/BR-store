@@ -6,7 +6,7 @@
       @click-left="$router.go(-1)"
       :fixed="false"
     />
-    <!-- <img @click="($router.go(-1))" src="../assets/img/home/fanhui.png" alt /> -->
+    <!-- <img @click="($router.go(-1))" src="../assets/img/home/fanhui.png"  /> -->
   </div>
 </template>
 <script>

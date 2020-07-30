@@ -47,7 +47,7 @@
       <div>
         <topic name="退款信息" color="#feb03d" style="background-color: #fff;" />
         <div class="productbox">
-          <img src="../../assets/img/home/cp.png" alt />
+          <img src="../../assets/img/home/cp.png"  />
           <div>
             <p>名字名字名字名字名字名字名字名字名字名字名字名字</p>
             <p>颜色分类:s427</p>

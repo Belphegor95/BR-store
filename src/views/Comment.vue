@@ -19,15 +19,15 @@
       </div>
       <ul class="commentlist">
         <li>
-          <img src="../assets/img/tx.png" alt />
+          <img src="../assets/img/tx.png"  />
           <div class="informationbox">
             <p>用户名字132456</p>
             <p>2020-7-17 11:52 366666蓝色</p>
             <p>东西到了很好,配送很快,宝贝和图片一样</p>
             <div class="imgbox">
-              <img src="../assets/img/pl.png" alt />
-              <img src="../assets/img/pl.png" alt />
-              <img src="../assets/img/pl.png" alt />
+              <img src="../assets/img/pl.png"  />
+              <img src="../assets/img/pl.png"  />
+              <img src="../assets/img/pl.png"  />
             </div>
             <div>
               <p>

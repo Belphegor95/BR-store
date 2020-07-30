@@ -10,7 +10,7 @@
     <div>
       <div class="shortofBox">
         <p>满{{ freeSend }}起送</p>
-        <p v-if="freeSend - (totalPrice/100) > 0">还差{{ freeSend - (totalPrice/100) }}起送</p>
+        <p v-if="freeSend - (totalPrice/100) > 0">还差{{ (freeSend - (totalPrice/100)).toFixed(2) }}起送</p>
         <p v-else>起送</p>
       </div>
     </div>
@@ -22,7 +22,7 @@
     >
       <div class="van-card" v-for="(item,index) in shoppings" :key="index">
         <div class="van-card__header">
-          <van-checkbox @click="checkedClural(item,index,indexJ)" :name="item.plistId"></van-checkbox>
+          <van-checkbox @click="checkedClural(item,index)" :name="item.plistId"></van-checkbox>
           <a class="van-card__thumb">
             <div class="van-image" style="width: 100%; height: 100%;">
               <img :src="item.picUrl" class="van-image__img" style="object-fit: cover;" />
@@ -33,7 +33,8 @@
               <div class="van-card__title van-multi-ellipsis--l2">{{ item.plistName }}</div>
               <van-button round @click="isfoldClick(item)" size="mini" type="info">
                 <p>{{ item.isfold? '收起':'折叠' }}</p>
-                <van-icon name="arrow-up" />
+                <van-icon v-if="!item.isfold" name="arrow-up" />
+                <van-icon v-else name="arrow-down" />
               </van-button>
             </div>
             <div class="van-card__bottom">
@@ -118,10 +119,10 @@ export default {
           if (data.code == 200) {
             this.shoppings = data.data;
             this.freeSend = data.freeSend;
-            let num = 0
-            for (let i = 0;i < data.data.length;i++) {
+            let num = 0;
+            for (let i = 0; i < data.data.length; i++) {
               let item = data.data[i].unit;
-              num = num + item.length
+              num = num + item.length;
             }
             this.$store.commit("show_count", num);
             // 选中全部
@@ -244,7 +245,8 @@ export default {
     //   点击结算
     onSubmit: function () {},
     // 单个商品
-    checkedClural: function (item, index_I, index_J) {
+    checkedClural: function (item, index_I) {
+      // console.info(123)
       // 判断是否是添加
       if (this.goodss.indexOf(item.plistId) > -1) {
         // 把未添加的 添加进选中
@@ -252,12 +254,12 @@ export default {
           let itemI = item.unit[i];
           if (
             this.singles.indexOf(
-              `${item.plistId}_${itemI.cateId}_${itemI.priceId}_${index_I}/${index_J}`
+              `${item.plistId}_${itemI.cateId}_${itemI.priceId}_${index_I}/${i}`
             ) > -1
           ) {
           } else {
             this.singles.push(
-              `${item.plistId}_${itemI.cateId}_${itemI.priceId}_${index_I}/${index_J}`
+              `${item.plistId}_${itemI.cateId}_${itemI.priceId}_${index_I}/${i}`
             );
           }
         }
@@ -266,13 +268,13 @@ export default {
         for (let i = 0; i < item.unit.length; i++) {
           let itemI = item.unit[i];
           let index = this.singles.indexOf(
-            `${item.plistId}_${itemI.cateId}_${itemI.priceId}_${index_I}/${index_J}`
+            `${item.plistId}_${itemI.cateId}_${itemI.priceId}_${index_I}/${i}`
           );
           if (index > -1) {
             this.singles.splice(index, 1);
           } else {
             this.singles.push(
-              `${item.plistId}_${itemI.cateId}_${itemI.priceId}_${index_I}/${index_J}`
+              `${item.plistId}_${itemI.cateId}_${itemI.priceId}_${index_I}/${i}`
             );
           }
         }

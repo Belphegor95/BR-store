@@ -30,7 +30,7 @@
         </div>
         <div @click="popupClick(1)">
           <div>
-            <img v-for="(item,index) in JSON.parse(orderdata.picUrl)" :key="index" :src="item" alt />
+            <img v-for="(item,index) in JSON.parse(orderdata.picUrl)" :key="index" :src="item" />
           </div>
           <van-icon class="van-cell__right-icon" name="arrow" />
         </div>
@@ -51,8 +51,8 @@
       <!-- 配送方式 -->
       <div class="distributionBox">
         <van-cell title="配送方式" value="免费配送" />
-        <van-cell title="备注信息" is-link value="请输入" @click="popupClick(2)" />
-        <van-cell title="发票信息" is-link value="不开发票" @click="popupClick(3)" />
+        <van-cell title="备注信息" is-link :value="notes?notes: '请输入'" @click="popupClick(2)" />
+        <van-cell title="发票信息" is-link :value="billState?'电子发票':'不开发票'" @click="popupClick(3)" />
       </div>
     </div>
 
@@ -67,7 +67,7 @@
     >
       <template #tip>
         <i class="van-icon van-icon-info-o van-submit-bar__tip-icon"></i>
-        还差{{ orderdata.needMoney }}起送
+        还差{{ orderdata.needMoney.toFixed(2) }}起送
       </template>
     </van-submit-bar>
     <van-submit-bar
@@ -79,7 +79,14 @@
       button-text="提交订单"
       @submit="onSubmit"
     />
-    <van-popup v-model="popupShow" class="popup">
+    <!-- 弹出框 -->
+    <van-popup
+      v-model="popupShow"
+      :overlay="false"
+      position="right"
+      :style="{ height: height }"
+      class="popup"
+    >
       <van-nav-bar
         left-arrow
         class="navBar"
@@ -92,7 +99,7 @@
       <!-- 订单详情 -->
       <div v-else-if="popupid == 1" class="productbox">
         <div v-for="(item,index) in JSON.parse(orderdata.plistDetail)" :key="index" class="product">
-          <img :src="item.picUrl" alt />
+          <img :src="item.picUrl" />
           <div>
             <p>{{ item.plistName }}</p>
             <div class="productSize">
@@ -140,9 +147,13 @@ export default {
       notes: "",
       billState: 0,
       btnload: false,
+      height: 0,
     };
   },
   mounted() {
+    this.height = window.innerHeight;
+    this.height % 2 != 0 ? this.height-- : "";
+    this.height = this.height + "px";
     this.getsite();
     if (this.orderdata.popupid) {
       this.popupShow = true;
@@ -163,6 +174,10 @@ export default {
     },
     // 提交订单
     onSubmit: function () {
+      if (Object.keys(this.site).length == 0) {
+        this.$toast("请添加地址!");
+        return;
+      }
       this.btnload = true;
       this.axios
         .post(this.$api.submitOrder, {
@@ -175,7 +190,14 @@ export default {
         .then((data) => {
           if (data.code == 200) {
             this.btnload = false;
-            console.info(data);
+            // this.$router.push("/shopping/orderForm?formid=1");
+            this.$router.push({
+              path: "/shopping/orderForm",
+              query: {
+                formid: 1,
+                order: JSON.stringify(data.data),
+              },
+            });
           } else {
             this.btnload = false;
             this.$toast(this.ErrCode(data.msg));
@@ -341,12 +363,12 @@ export default {
 /* 弹出层 */
 .popup {
   width: 100%;
-  height: 100%;
+  /* height: 100%; */
   display: flex;
   flex-direction: column;
-  top: 0;
+  /* top: 0;
   left: 0;
-  transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0); */
 }
 /* 订单详情 */
 .productbox {

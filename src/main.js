@@ -20,8 +20,9 @@ axios.interceptors.response.use(
     if (response.data) {
       // 没登录 跳转登录页面
       if (response.data.msg && response.data.msg == 112) {
-        router.replace({
-          path: '/login'
+        router.push({
+          path: '/login',
+          query: router.currentRoute.fullPath
         })
       }
       return response.data;
@@ -33,8 +34,8 @@ axios.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-axios.defaults.baseURL = api.baseUrl;
-// axios.defaults.baseURL = "/api";
+// axios.defaults.baseURL = api.baseUrl;
+axios.defaults.baseURL = "/api";
 // 允许携带cookie
 axios.defaults.withCredentials = true;
 function ErrCode(code) {

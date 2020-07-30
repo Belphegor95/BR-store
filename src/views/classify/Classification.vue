@@ -22,7 +22,8 @@
               <van-cell v-for="item in list" :key="item" :title="item" />
             </van-list>
           </van-pull-refresh>-->
-          <ul>
+          <van-empty v-if="catePlist.length == 0" description="暂无数据" />
+          <ul v-else>
             <li v-for="(item,index) in catePlist" :key="index">
               <h4>{{ item.plist_name }}</h4>
               <div class="tagBox" @click="rutClick(item)">
@@ -120,9 +121,7 @@ export default {
     };
   },
   mounted() {
-    // this.$store.commit("show_activeid", 1);
-    // console.info(this.$route.query);
-    // this.getcate();
+    this.$store.commit("show_activeid", 1);
     this.cate_ = this.$route.query
   },
   methods: {
@@ -310,8 +309,6 @@ li > h4 {
   overflow: hidden;
   background: red;
   transition: all 0.3s;
-  /* transform: rotate(0deg);
-  -webkit-transform: rotate(0deg); */
 }
 .shoppingCart {
   height: 2rem;
@@ -330,6 +327,11 @@ li > h4 {
 .classification .van-pull-refresh {
   flex: auto;
   height: 1px;
+}
+/* 下拉弹窗位置 */
+.classification .van-dropdown-item--down {
+  top: 3rem!important;
+  z-index: 12;
 }
 </style>
 

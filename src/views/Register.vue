@@ -17,7 +17,7 @@
         >
           <template #button>
             <van-button size="small" class="btn" v-if="!isloading" @click="getYzm">获取验证码</van-button>
-            <p class="btnload" v-else>{{ btnload }}</p>
+            <p class="btnloadClass" v-else>{{ btnload }} s</p>
           </template>
         </van-field>
         <van-field v-model="yzm" type="digit" maxlength="6" label="验证码" placeholder="请输入验证码" />
@@ -52,7 +52,7 @@ export default {
   components: {
     title_,
     topic,
-    head_
+    head_,
   },
   data() {
     return {
@@ -65,11 +65,11 @@ export default {
       linkman: 0, // 联系人
       address: 0, // 地址
       address_detail: 0, // 详细地址
-      popupShow: false
+      popupShow: false,
     };
   },
   methods: {
-    saveUser: function() {
+    saveUser: function () {
       if (!/^1[3456789]\d{9}$/.test(this.phoneNum)) {
         this.$toast("手机号输入有误");
         return;
@@ -84,9 +84,9 @@ export default {
         .post(this.$api.regist, {
           phoneNum: this.phoneNum,
           yzm: this.yzm,
-          pwd: this.pwd
+          pwd: this.pwd,
         })
-        .then(data => {
+        .then((data) => {
           if (data.code == 200) {
             this.popupShow = true;
             this.$store.commit("show_user", data.data);
@@ -96,7 +96,7 @@ export default {
         })
         .catch(() => {});
     },
-    getYzm: function() {
+    getYzm: function () {
       // var patrn = /^[+]{0,1}(\d){1,3}[ ]?([-]?((\d)|[ ]){1,12})+$/;
       if (!/^1[3456789]\d{9}$/.test(this.phoneNum)) {
         this.$toast("手机号输入有误");
@@ -104,9 +104,9 @@ export default {
       }
       this.axios
         .post(this.$api.getYzm, {
-          phoneNum: this.phoneNum
+          phoneNum: this.phoneNum,
         })
-        .then(data => {
+        .then((data) => {
           if (data.result == "OK") {
             this.isloading = true;
             this.$toast("验证码已发送");
@@ -117,21 +117,21 @@ export default {
         })
         .catch(() => {});
     },
-    saveregist: function() {
+    saveregist: function () {
       this.axios
         .post(this.$api.regist, {
           phoneNum: 0, // 手机/用户
           pwd: 0, // 密码
-          yzm: 0 // 验证码
+          yzm: 0, // 验证码
         })
-        .then(data => {
+        .then((data) => {
           if (data.code) {
           } else {
           }
         })
         .catch(() => {});
     },
-    setloadingNum: function() {
+    setloadingNum: function () {
       // 倒计时
       if (this.isloading && this.btnload != -1) {
         setTimeout(() => {
@@ -142,8 +142,8 @@ export default {
         this.btnload = 60;
         this.isloading = false;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>
@@ -164,9 +164,6 @@ export default {
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-}
-.btn {
-  border: 0px solid #ebedf0 !important;
 }
 .btn span {
   background: linear-gradient(to right, #ffd8a4, #fcaa8d);
@@ -194,13 +191,7 @@ export default {
   color: transparent;
   font-size: 1.2rem;
 }
-/* 计时按钮 */
-.btnload {
-  height: 32px;
-  line-height: 32px;
-  color: #000;
-  font-size: 1rem;
-}
+
 </style>
 <style >
 /* 每个输入框的高 */

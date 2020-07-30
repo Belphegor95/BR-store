@@ -29,18 +29,19 @@
               v-for="(item,index) in navigations"
               :key="index"
             >
-              <img :src="item.img_url" alt />
+              <img :src="item.img_url"  />
               <p>{{ item.name }}</p>
             </van-grid-item>
             <van-grid-item @click="gridClick( -1)" class="navigationBox">
-              <img src="../../assets/img/home/shouhou.png" alt />
+              <img src="../../assets/img/home/shouhou.png"  />
               <p>售后及维修</p>
             </van-grid-item>
           </van-grid>
         </div>
         <!-- 商品列表 -->
         <topic name="推荐商品" color="#3ba8fa" />
-        <ul>
+        <van-empty v-if="recommend.length == 0" description="暂无数据" />
+        <ul v-else>
           <li v-for="(item,index) in recommend" :key="index">
             <div class="goodsList">
               <img :src="item.plist_img_url[0]" @click="rutparClick(item)" />
@@ -154,7 +155,6 @@ export default {
     },
     gridClick: function (index, item) {
       if (index != -1) {
-        this.$store.commit("show_activeid", 1);
         this.$router.push({
           path: "/classification",
           query: item

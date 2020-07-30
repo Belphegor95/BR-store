@@ -1,5 +1,6 @@
 <template>
   <div class="login">
+    <head_ />
     <title_ titleId="0" />
     <div class="formBox">
       <van-field v-model="phoneNum" maxlength="11" placeholder="请输入手机号/用户名" />
@@ -12,11 +13,12 @@
 
 <script>
 import title_ from "@/components/Title.vue";
-
+import head_ from "@/components/Head.vue";
 export default {
   name: "login",
   components: {
     title_,
+    head_,
   },
   data() {
     return {
@@ -26,7 +28,9 @@ export default {
     };
   },
   mounted() {
-    // console.info(this.$route.query);
+    // console.info(this.$router)
+    // let url = decodeURIComponent(this.$route.query)
+    // console.info(Object.keys(this.$route.query).length);
   },
   methods: {
     loginClick: function () {
@@ -46,14 +50,17 @@ export default {
           if (data.code == 200) {
             this.$toast("登录成功");
             localStorage.removeItem("vuex");
-            // this.$store.commit("show_activeid", 0);
-            // if (this.uppath) {
-            // }
-            // if(data.data.type) {
-            //   this.$router.push("/switchoverUser");
-            // } else {
-            //   this.$router.push("/");
-            // }
+            this.$store.commit("show_user", data.data);
+            if (data.data.type) {
+              this.$router.push({
+                path: "/switchoverUser",
+                query: this.$route.query,
+              });
+            } else {
+              Object.keys(this.$route.query).length == 0
+                ? this.$router.push("/")
+                : this.$router.go(-1);
+            }
           } else {
             this.$toast(this.ErrCode(data.msg));
           }
@@ -64,19 +71,19 @@ export default {
   beforeRouteEnter(to, from, next) {
     next((vm) => {
       //  这里的vm指的就是vue实例，可以用来当做this使用
-      vm.uppath = from.path
-      console.info(vm.uppath)
+      vm.uppath = from.path;
+      // console.info(vm.uppath)
     });
   },
 };
 </script>
 
 <style scoped>
-.login {
-  padding: 3rem 1rem;
+.Title {
+  padding: 0 1rem;
 }
 .formBox {
-  padding: 3rem 1rem;
+  padding: 3rem 2rem;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;

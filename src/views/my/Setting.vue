@@ -1,14 +1,18 @@
 <template>
   <div class="setting">
     <div>
-      <van-cell title="用户名" value="无动于衷" />
-      <van-cell title="绑定手机" @click="tarPush(0)" is-link value="18639025358" />
-      <van-cell title="登录密码" @click="tarPush(1)" is-link value="abc123456" />
+      <van-cell
+        title="用户名"
+        :value="$store.state.user.companyName ? $store.state.user.companyName: '暂无'"
+      />
+      <van-cell title="绑定手机" @click="tarPush(0)" is-link value="186****5358" />
+      <van-cell title="登录密码" @click="tarPush(1)" is-link value="******" />
     </div>
     <div>
       <van-cell title="关于开心兔" is-link />
-      <van-cell title="检测更新" value="1.02" />
+      <van-cell title="当前版本" value="1.02" />
     </div>
+    <!-- <div class="btnBox" @click="quitClick">切换账号</div> -->
     <div class="btnBox" @click="quitClick">退出登录</div>
     <van-popup
       :overlay="false"
@@ -54,6 +58,8 @@ export default {
     this.height = window.innerHeight;
     this.height % 2 != 0 ? this.height-- : "";
     this.height = this.height + "px";
+    // 如果没登录让他跳转到首页
+    if (!this.$store.state.user.companyName) this.$router.push("/");
   },
   methods: {
     tarPush: function (type) {
@@ -70,6 +76,8 @@ export default {
             .post(this.$api.logout)
             .then((data) => {
               if (data.code == 200) {
+                this.$store.commit("show_user", {});
+                this.$store.commit("show_activeid", 0);
                 localStorage.removeItem("vuex");
                 this.$router.push("/login");
               } else {

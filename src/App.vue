@@ -49,6 +49,15 @@ body,
   border-radius: 0.3rem !important;
   background-image: linear-gradient(to right, #ffd8a4, #fcaa8d);
 }
+/* 计时按钮 */
+.btnloadClass {
+  padding: 0 8px;
+  height: 30px;
+  line-height: 30px;
+  color: #000;
+  font-size: 12px;
+  border: 1px solid #ebedf0;
+}
 /* 头部 */
 .navBar,
 .van-nav-bar--fixed {

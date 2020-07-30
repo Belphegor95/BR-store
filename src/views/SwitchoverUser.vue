@@ -5,11 +5,11 @@
     <div class="contentbox">
       <h3>请选择要登录的ID</h3>
       <ul>
-        <li v-for="(item,index) in 8" :key="index" @click="on">
-          <img src="../assets/img/tx.png" alt />
+        <li v-for="(item,index) in users" :key="index" @click="on(item)">
+          <img src="../assets/img/tx.png" />
           <div class="userName">
-            <p>开心兔商城用户:95279527</p>
-            <p>昵称:小三</p>
+            <p>开心兔商城用户:{{ item.id }}</p>
+            <p>昵称:{{ item.company_name }}</p>
           </div>
         </li>
       </ul>
@@ -23,12 +23,34 @@ export default {
     head_,
   },
   data() {
-    return {};
+    return {
+      users: [],
+    };
+  },
+  mounted() {
+    this.$store.state.user.loginData
+      ? (this.users = this.$store.state.user.loginData)
+      : (this.users = []);
   },
   methods: {
-    on: function () {
-      this.$store.commit("show_activeid", 0);
-      this.$router.push("/homePage");
+    on: function (item) {
+      this.axios
+        .post(this.$api.selectAcc, {
+          accOrderId: item.id,
+        })
+        .then((data) => {
+          if (data.code == 200) {
+            this.$store.commit("show_user", data.data);
+            Object.keys(this.$route.query).length == 0
+              ? this.$router.push("/")
+              : this.$router.go(-2);
+          } else {
+            this.$toast(this.ErrCode(data.msg));
+          }
+        })
+        .catch(() => {
+          //   this.$toast.fail(this.$api.monmsg);
+        });
     },
   },
 };

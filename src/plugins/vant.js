@@ -25,8 +25,8 @@ import { Toast } from 'vant';
 import { PullRefresh } from 'vant';
 import { Dialog } from 'vant'
 import { Step, Steps } from 'vant';
-
-
+import { Empty } from 'vant';
+import { Lazyload } from 'vant';
 
 
 import 'vant/lib/index.css'
@@ -65,6 +65,10 @@ Vue.use(Tabs);
 Vue.use(PullRefresh);
 Vue.use(Step);
 Vue.use(Steps);
+Vue.use(Empty);
 
+// Vue.use(Lazyload, {
+//     lazyComponent: true,
+// });
 Vue.use(Toast);
 Vue.use(Dialog);

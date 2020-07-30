@@ -12,10 +12,10 @@
       <div class="recordbox" v-for="(item,index) in 4" :key="index">
         <div class="statusbox">
           <span>退款</span>
-          <img src="../../assets/img/order/t.png" alt />
+          <img src="../../assets/img/order/t.png"  />
         </div>
         <div class="productbox">
-          <img src="../../assets/img/home/cp.png" alt />
+          <img src="../../assets/img/home/cp.png"  />
           <div>
             <div class="productname">
               <p>名字名字名字名字名字名字名字名字名字名字名字名字</p>

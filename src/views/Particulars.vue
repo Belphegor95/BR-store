@@ -16,29 +16,16 @@
           <template #indicator>
             <div
               class="custom-indicator"
-            >{{ current + 1 }}/{{ particularsData.plist_img_url.length }}</div>
+            >{{ current + 1 }}/{{ particularsData.plist_img_url?particularsData.plist_img_url.length: 0 }}</div>
           </template>
         </van-swipe>
-        <img
-          class="backImg"
-          @click="backClick"
-          src="../assets/img/product/particulars/fanhui.png"
-          alt
-        />
-        <div
-          class="swipeindex"
-        >1/{{ particularsData.plist_img_url ? particularsData.plist_img_url.length: "0" }}</div>
+        <img class="backImg" @click="backClick" src="../assets/img/product/particulars/fanhui.png" />
       </div>
       <!-- 商品价格 -->
       <div class="attributeBox">
         <div class="priceBox" v-if="particularsData.price_lv">
           <div v-for="(item,index) in particularsData.price_lv.unitList" :key="index">
-            <p v-html="integer(item)">
-              <!-- {{ `￥${item.orderPrice}/${item.unitName}` }} -->
-              <!-- ￥{{ item.orderPrice | integer }}/{{ item.unitName }} -->
-              <!-- ￥
-              <i>27</i> .9/-->
-            </p>
+            <p v-html="integer(item)"></p>
           </div>
         </div>
         <h4>{{ particularsData.plist_name }}</h4>
@@ -49,17 +36,14 @@
           <p>规格</p>
           <p>颜色: 蓝色</p>
         </div>
-        <div @click="popClick">...</div>
+        <div @click="popClick">
+          <van-icon name="ellipsis" />
+        </div>
       </div>
       <!-- 商品详情页 -->
       <div class="presentationBox" v-if="particularsData.plist_detail_img_url">
         <topic name="商品介绍" color="#3ba8fa" />
-        <img
-          v-for="(item,index) in particularsData.plist_detail_img_url"
-          :key="index"
-          :src="item"
-          alt
-        />
+        <img v-for="(item,index) in particularsData.plist_detail_img_url" :key="index" :src="item" />
       </div>
     </div>
     <van-goods-action>
@@ -175,17 +159,6 @@ export default {
   position: fixed;
   top: 0.5rem;
   left: 0.5rem;
-}
-/* 轮播下标 */
-.swipeindex {
-  position: absolute;
-  right: 1rem;
-  bottom: 2rem;
-  /* width: 2rem;
-  height: 1rem; */
-  /* z-index: 99;
-  color: red; */
-  background-color: #eee;
 }
 .custom-indicator {
   position: absolute;

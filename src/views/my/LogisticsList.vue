@@ -3,7 +3,7 @@
   <ul class="logisticsList">
     <li v-for="(item,index) in 8" :key="index" @click="$router.push('/manage/logisticsMsg')">
       <div>
-        <img src="../../assets/img/product/particulars/chanpin.png" alt />
+        <img src="../../assets/img/product/particulars/chanpin.png"  />
         <div class="logisticsbox">
           <p>
             订单编号:12345679

@@ -33,7 +33,7 @@
           <p style="font-weight: 400;font-size: 0.8rem">种类:1,数量:4</p>
         </div>
         <div @click="popupClick(1)">
-          <img src="../../assets/img/product/particulars/chanpin.png" alt />
+          <img src="../../assets/img/product/particulars/chanpin.png"  />
           <van-icon class="van-cell__right-icon" name="arrow" />
         </div>
       </div>
@@ -85,7 +85,7 @@
       <!-- 订单详情 -->
       <div v-else-if="popupid == 1" class="productbox">
         <div v-for="(item,index) in 4" :key="index" class="product">
-          <img src="../../assets/img/product/particulars/chanpin.png" alt />
+          <img src="../../assets/img/product/particulars/chanpin.png"  />
           <div>
             <p>产品名称产品名称产品名称产品名称产品名称产品名称</p>
             <div class="productSize">

@@ -3,7 +3,7 @@
     <van-cell title="头像" is-link class="cellImg" @click="show= true">
       <!-- 使用 right-icon 插槽来自定义右侧图标 -->
       <template #right-icon>
-        <img src="../../assets/img/my/defaultavatar_personal.png" alt />
+        <img src="../../assets/img/my/defaultavatar_personal.png"  />
         <van-icon class="van-cell__right-icon" name="arrow" />
       </template>
     </van-cell>
