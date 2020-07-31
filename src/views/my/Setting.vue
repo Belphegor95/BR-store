@@ -5,8 +5,10 @@
         title="用户名"
         :value="$store.state.user.companyName ? $store.state.user.companyName: '暂无'"
       />
-      <van-cell title="绑定手机" @click="tarPush(0)" is-link value="186****5358" />
-      <van-cell title="登录密码" @click="tarPush(1)" is-link value="******" />
+      <!-- <van-cell title="换绑手机" @click="tarPush(0)" is-link value="186****5358" /> -->
+      <van-cell title="换绑手机" @click="tarPush(0)" is-link />
+      <!-- <van-cell title="登录密码" @click="tarPush(1)" is-link value="******" /> -->
+      <van-cell title="修改密码" @click="tarPush(1)" is-link />
     </div>
     <div>
       <van-cell title="关于开心兔" is-link />

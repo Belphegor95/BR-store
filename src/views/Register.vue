@@ -4,10 +4,10 @@
     <div class="registerBox">
       <title_ titleId="1" />
       <div class="phoneBox">
-        <p>
+        <!-- <p>
           欢迎加入开心兔商城,注册后,即可了解产品订货价格,可直接下单订货采购;支持货到付款,支持微信,信用卡,...
           <i>点击查看更多</i>
-        </p>
+        </p> -->
         <van-field
           v-model="phoneNum"
           type="tel"

@@ -2,24 +2,24 @@
 <template>
   <div class="orderForm">
     <van-nav-bar left-arrow class="navBar" @click-left="$router.go(-1)" :fixed="false" title="订单" />
-    <van-tabs animated lazy-render  v-model="formid" @click="getOrderList">
+    <van-tabs animated lazy-render v-model="formid" @click="getOrderList">
       <van-tab v-for="(title,titleindex) in titleList" :key="titleindex" :title="title">
-        <van-pull-refresh v-model="isRefresh" @refresh="onRefresh" :key="titleindex + 10">
-          <!-- <van-empty v-if="orderList.length == 0" description="暂无数据" /> -->
-          <ul :key="titleindex + 100">
+        <van-pull-refresh v-model="isRefresh" @refresh="onRefresh">
+          <van-empty v-if="orderList.length == 0" description="暂无数据" />
+          <ul v-else>
             <li v-for="item in orderList" :key="item.tradeNo">
               <div class="orderNum">
                 <p>{{ item.tradeNo }}</p>
                 <p>订单{{ titleList[item.type] }}</p>
               </div>
-              <div class="imgBox" @click="orderClick(item)">
+              <div class="imgBox" @click="orderClick(item,false)">
                 <img v-for="(img,indeximg) in item.picurl" :key="indeximg" :src="img" />
               </div>
               <p>种类:{{ item.cateCount }},数量:{{ item.plistCount }},总计: ￥{{ item.money }}</p>
               <div class="btnBox">
                 <van-button class="paybtn" type="default" size="small">立即支付</van-button>
                 <van-button type="default" size="small">再次购买</van-button>
-                <van-button type="default" size="small">修改订单</van-button>
+                <van-button type="default" size="small" @click="orderClick(item,true)">修改订单</van-button>
               </div>
             </li>
           </ul>
@@ -61,7 +61,7 @@ export default {
     this.height = this.height + "px";
     this.formid = Number(this.$route.query.formid);
     this.getOrderList();
-    if (!this.$route.query.order) return
+    if (!this.$route.query.order) return;
     let order = JSON.parse(this.$route.query.order);
     this.order = order ? order : {};
     if (Object.keys(this.order).length != 0) this.popupShow = true;
@@ -73,6 +73,7 @@ export default {
     },
     // 获取列表
     getOrderList: function () {
+      this.orderList = [];
       this.axios
         .post(this.$api.getOrderList, {
           type: this.formid,
@@ -90,18 +91,28 @@ export default {
         });
     },
     // 跳转详情
-    orderClick: function (item) {
-      // console.info(item);
-      // Object.values(item).some((value) => {
-      //   if (typeof value == "object" || typeof value == "array") {
-      //     console.info(index);
-      //   }
-      // });
-      this.$router.push("/shopping/order");
+    orderClick: function (item, is) {
+      this.$router.push({
+        path: "/shopping/order",
+        query: {
+          data: JSON.stringify(this.JSON_data(item)),
+          is: is,
+        },
+      });
     },
     // 弹窗关闭
     popuClick: function (is) {
       this.popupShow = is;
+    },
+    // 接收query传参 数据处理
+    JSON_data: function (item) {
+      let objString = JSON.stringify(item);
+      let obj = JSON.parse(objString);
+      for (let index in obj) {
+        if (typeof obj[index] == "object")
+          obj[index] = JSON.stringify(obj[index]);
+      }
+      return obj;
     },
   },
 };
@@ -119,6 +130,7 @@ export default {
 }
 .imgBox img {
   width: 25%;
+  max-height: 5rem;
   padding: 0.2rem;
 }
 ul {
@@ -192,5 +204,12 @@ li > p {
 .orderForm .van-tab__pane {
   height: 100%;
   overflow-y: auto;
+}
+/* 顶部tab栏滚动关闭 */
+.orderForm .van-tabs__nav {
+  display: flex;
+}
+.orderForm .van-tab {
+  flex: 1;
 }
 </style>

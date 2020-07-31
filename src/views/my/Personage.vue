@@ -1,15 +1,13 @@
 <!-- 我的 -->
 <template>
   <div class="personage">
-    <van-nav-bar class="navBar" fixed placeholder title="我的">
+    <van-nav-bar class="navBar" :fixed="false" placeholder title="我的">
       <template #right>
         <van-icon @click="popupClick('setting')" style="margin:0.5rem" name="setting-o" size="20" />
         <van-icon @click="popupClick('information')" name="chat-o" size="20" />
       </template>
     </van-nav-bar>
     <div class="userImg">
-      <!-- <img @click="popupClick('center')" src="../../assets/img/my/tx.png" />
-      <p @click="popupClick('center')">昵称</p>-->
       <img src="../../assets/img/my/tx.png" />
       <p>{{ $store.state.user.companyName ? $store.state.user.companyName: '暂无' }}</p>
     </div>
@@ -22,7 +20,7 @@
           :key="index"
           @click="rutClick(index + 1)"
         >
-          <img :src="item.img"  />
+          <img :src="item.img" />
           <p>{{ item.name }}</p>
         </van-grid-item>
       </van-grid>
@@ -30,7 +28,7 @@
     <van-cell title="物流信息" is-link @click="rutlogisticsList" />
     <div class="sitelist">
       <div v-for="item in 2" :key="item" class="list" :class="item == 2?'list_active':''">
-        <img src="../../assets/img/product/particulars/chanpin.png"  />
+        <img src="../../assets/img/product/particulars/chanpin.png" />
         <div class="site">
           <p>
             <span>未发货</span>
@@ -230,5 +228,9 @@ export default {
 /* 物流信息 */
 .personage .van-cell:nth-child(5)::after {
   border: none !important;
+}
+/* 头部右侧按钮颜色 */
+.personage .van-nav-bar__right .van-icon {
+  color: #fff;
 }
 </style>

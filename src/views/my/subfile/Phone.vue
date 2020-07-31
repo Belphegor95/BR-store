@@ -1,7 +1,7 @@
 <!-- 换绑手机号 -->
 <template>
   <div class="phone">
-    <van-nav-bar left-arrow class="navBar" @click-left="back" fixed placeholder title="换绑手机号" />
+    <van-nav-bar left-arrow class="navBar" @click-left="back" :fixed="false" placeholder title="换绑手机号" />
     <div class="phonebox" v-if="type == 0">
       <van-field v-model="phoneNum" label="新手机号" placeholder="请输入手机号/用户名" :key="1">
         <template #button>

@@ -4,8 +4,7 @@
       left-arrow
       class="navBar"
       @click-left="$router.go(-1)"
-      fixed
-      placeholder
+      :fixed="false"
       :title="titlename"
     />
     <router-view></router-view>

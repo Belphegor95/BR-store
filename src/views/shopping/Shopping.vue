@@ -284,7 +284,8 @@ export default {
     // 单个种类
     checkedSingle: function (item, index, indexJ) {
       let arr = this.singles.filter((id) => {
-        return id.indexOf(item.plistId + "_") > -1;
+        // 判断 出现位置是否在 第一个位
+        return id.indexOf(item.plistId + "_") == 0;
       });
       if (arr.length == item.unit.length) {
         // 如果全部添加  就把父级也添加选中
@@ -448,12 +449,13 @@ export default {
   flex: 1;
   padding-right: 0.5rem;
   text-align: right;
-  color: #ee0a24;
+  /* color: #ee0a24; */
 }
 </style>
 <style  >
 .shopping .van-submit-bar {
-  bottom: 50px;
+  /* bottom: 50px; */
+  position: relative;
   background-color: #fff;
 }
 .shopping .van-card {

@@ -122,10 +122,13 @@ export default {
   },
   mounted() {
     this.$store.commit("show_activeid", 1);
-    this.cate_ = this.$route.query
+    this.cate_ = this.$route.query;
   },
   methods: {
     rutClick: function (data) {
+      data.plist_detail_img_url = JSON.stringify(data.plist_detail_img_url);
+      data.plist_img_url = JSON.stringify(data.plist_img_url);
+      data.price_lv = JSON.stringify(data.price_lv);
       this.$router.push({
         path: "/particulars",
         query: data,
@@ -236,7 +239,7 @@ export default {
 .head {
   display: flex;
   width: 100%;
-  height: 3rem;
+  height: 46px;
   z-index: 1;
   background-image: linear-gradient(to right, #ffc474, #ff855a);
 }
@@ -330,7 +333,7 @@ li > h4 {
 }
 /* 下拉弹窗位置 */
 .classification .van-dropdown-item--down {
-  top: 3rem!important;
+  top: 3rem !important;
   z-index: 12;
 }
 </style>

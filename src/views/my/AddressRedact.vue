@@ -118,6 +118,9 @@ export default {
   flex: auto;
 }
 .van-picker__frame {
-  top: 26%;
+  top: 7rem;
+}
+.van-picker__toolbar > button {
+  font-size: 1.1rem;
 }
 </style>

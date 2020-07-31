@@ -39,14 +39,13 @@
       <div class="paymentBox">
         <p>付款金额</p>
         <div>
+          <p>优惠券</p>
+          <p>请选择</p>
+        </div>
+        <div>
           <p>订单金额</p>
           <p>￥{{ orderdata.totalMoney }}</p>
         </div>
-        <div>
-          <p>优惠券</p>
-          <p>￥请选择</p>
-        </div>
-        <!-- <van-cell style="font-size: 1rem;padding: 0.3rem 1rem;" title="优惠券" is-link value="请选择" @click="popupClick(2)" /> -->
       </div>
       <!-- 配送方式 -->
       <div class="distributionBox">
@@ -299,6 +298,7 @@ export default {
 }
 .inventoryBox img {
   width: 5rem;
+  height: 5rem;
   margin-right: 0.5rem;
 }
 /* 付款 */
@@ -310,14 +310,8 @@ export default {
 }
 .paymentBox > div {
   display: flex;
-  padding: 0.3rem 1rem;
+  padding: 0.6rem 1rem;
   justify-content: space-between;
-}
-.paymentBox > div:nth-child(2) {
-  padding-top: 0.5rem;
-}
-.paymentBox > div:nth-child(4) {
-  padding-bottom: 0.5rem;
 }
 
 /* 配送方式 */

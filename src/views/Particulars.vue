@@ -10,7 +10,11 @@
           :show-indicators="false"
           @change="onChange"
         >
-          <van-swipe-item v-for="(item, index) in particularsData.plist_img_url" :key="index">
+          <van-swipe-item
+            v-for="(item, index) in particularsData.plist_img_url"
+            :key="index"
+            @click="swipeClick(index)"
+          >
             <img :src="item" style="width:100%" />
           </van-swipe-item>
           <template #indicator>
@@ -59,6 +63,7 @@
 <script>
 import topic from "@/components/Topic.vue";
 import popUp from "@/components/PopUp.vue";
+import { ImagePreview } from "vant";
 export default {
   components: {
     topic,
@@ -74,13 +79,19 @@ export default {
   mounted() {
     // 避免刷新 数据丢失
     this.particularsData = this.$route.query;
-    this.particularsData.plist_detail_img_url = JSON.parse(
-      this.particularsData.plist_detail_img_url
-    );
-    this.particularsData.plist_img_url = JSON.parse(
-      this.particularsData.plist_img_url
-    );
-    this.particularsData.price_lv = JSON.parse(this.particularsData.price_lv);
+    if (typeof this.particularsData.plist_detail_img_url == "string") {
+      this.particularsData.plist_detail_img_url = JSON.parse(
+        this.particularsData.plist_detail_img_url
+      );
+    }
+    if (typeof this.particularsData.plist_img_url == "string") {
+      this.particularsData.plist_img_url = JSON.parse(
+        this.particularsData.plist_img_url
+      );
+    }
+    if (typeof this.particularsData.price_lv == "string") {
+      this.particularsData.price_lv = JSON.parse(this.particularsData.price_lv);
+    }
   },
   methods: {
     integer: function (data) {
@@ -120,6 +131,13 @@ export default {
     },
     onChange: function (index) {
       this.current = index;
+    },
+    // 轮播图点击
+    swipeClick: function (index) {
+      ImagePreview({
+        images: this.particularsData.plist_img_url,
+        startPosition: index,
+      });
     },
   },
   // filters: {

@@ -29,6 +29,7 @@ export default {
   },
   methods: {
     popuClick: function () {
+      this.$router.push("/shopping/orderForm?formid=1");
       this.$emit("popuClick", false);
     },
   },
@@ -52,6 +53,9 @@ export default {
   display: flex;
   margin-top: 4rem;
   justify-content: space-around;
+}
+.btnbox div {
+  width: 4.5rem;
 }
 img {
   width: 8rem;

@@ -37,9 +37,6 @@ export default {
   height: 100%;
   background-color: #f5f5f5;
 }
-.btn {
-  border: 0px solid #ebedf0 !important;
-}
 .btn span {
   background: linear-gradient(to right, #ffd8a4, #fcaa8d);
   -webkit-background-clip: text;

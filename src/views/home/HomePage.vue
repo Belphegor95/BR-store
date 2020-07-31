@@ -29,11 +29,11 @@
               v-for="(item,index) in navigations"
               :key="index"
             >
-              <img :src="item.img_url"  />
+              <img :src="item.img_url" />
               <p>{{ item.name }}</p>
             </van-grid-item>
             <van-grid-item @click="gridClick( -1)" class="navigationBox">
-              <img src="../../assets/img/home/shouhou.png"  />
+              <img src="../../assets/img/home/shouhou.png" />
               <p>售后及维修</p>
             </van-grid-item>
           </van-grid>
@@ -157,16 +157,16 @@ export default {
       if (index != -1) {
         this.$router.push({
           path: "/classification",
-          query: item
+          query: item,
         });
       } else {
         this.$router.push("/maintainRecord");
       }
     },
     rutparClick: function (data) {
+      data.price_lv = JSON.stringify(data.price_lv);
       data.plist_detail_img_url = JSON.stringify(data.plist_detail_img_url);
       data.plist_img_url = JSON.stringify(data.plist_img_url);
-      data.price_lv = JSON.stringify(data.price_lv);
       this.$router.push({
         path: "/particulars",
         query: data,
@@ -213,7 +213,7 @@ export default {
 .head {
   display: flex;
   width: 100%;
-  height: 3rem;
+  height: 46px;
   z-index: 1;
   background-image: linear-gradient(to right, #ffc474, #ff855a);
 }

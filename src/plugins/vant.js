@@ -26,8 +26,8 @@ import { PullRefresh } from 'vant';
 import { Dialog } from 'vant'
 import { Step, Steps } from 'vant';
 import { Empty } from 'vant';
-import { Lazyload } from 'vant';
-
+// import { Lazyload } from 'vant';
+import { ImagePreview } from 'vant';
 
 import 'vant/lib/index.css'
 
@@ -70,5 +70,6 @@ Vue.use(Empty);
 // Vue.use(Lazyload, {
 //     lazyComponent: true,
 // });
+Vue.use(ImagePreview);
 Vue.use(Toast);
 Vue.use(Dialog);
