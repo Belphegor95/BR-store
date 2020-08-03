@@ -4,9 +4,11 @@ import persistedstate from 'vuex-persistedstate'
 Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
-    activeid: 1,
-    user: {},
-    count: 0, // 购物车个数
+    activeid: null,
+    user: null,
+    count: null, // 购物车个数
+    commodity: null, // 商品属性
+    order: null,// 订单属性
   },
   mutations: {
     show_activeid(state, payload) {
@@ -18,10 +20,23 @@ export default new Vuex.Store({
     show_count(state, payload) {
       state.count = payload;
     },
+    show_commodity(state, payload) {
+      state.commodity = payload;
+    },
+    show_order(state, payload) {
+      state.order = payload;
+    },
   },
   actions: {
   },
   modules: {
   },
-  plugins: [persistedstate()]
+  plugins: [persistedstate()],
+  // delstate: function () {
+  //   state.activeid = 1
+  //   state.user = {}
+  //   state.count = 0
+  //   state.commodity = {}
+  //   state.order = {}
+  // }
 })

@@ -1,17 +1,12 @@
 <!-- 头部搜索功能 -->
 <template>
-  <van-popup
-    class="search"
-    v-model="popUpShow"
-    duration="0"
-    :style="{ height: '100%',width: '100%' }"
-  >
+  <van-popup class="search" v-model="popUpShow" duration="0" :style="{ height: '100%',width: '100%' }">
     <!-- 头部 -->
     <div class="head">
       <div @click="shotClick" class="btnbox">
         <van-icon name="arrow-left" />
       </div>
-      <van-search @focus="onfocus" :autofocus="true" v-model="searchKey" placeholder="请输入搜索关键词" />
+      <van-search @focus="onfocus" v-model="searchKey" placeholder="请输入搜索关键词" />
       <div class="searchbtn" @click="searchClick">搜索</div>
     </div>
     <div class="recordbox" v-if="is_search">
@@ -21,8 +16,6 @@
       </div>
       <div class="recordbtnbox">
         <div v-for="(item,index) in browsings" :key="index" @click="btnClick(item)">{{ item }}</div>
-        <!-- <div @click="btnClick('名片')">名片</div>
-        <div @click="btnClick('铅笔')">铅笔</div>-->
       </div>
     </div>
     <div v-else>
@@ -35,17 +28,10 @@
           <img :src="item.plist_img_url[0]" @click="rutparClick(item)" />
           <div class="goodsContent">
             <p class="goodsName">{{ item.plist_name }}</p>
-            <div
-              class="goodsPrice"
-              v-for="(unitList,index1) in item.price_lv.unitList"
-              :key="index1"
-            >
+            <div class="goodsPrice" v-for="(unitList,index1) in item.price_lv.unitList" :key="index1">
               <p v-if="unitList.rate == 1">会员价: ￥{{ `${unitList.orderPrice}/${unitList.unitName}` }}</p>
             </div>
-            <div
-              class="moneyBox"
-              v-if="item.price_lv.cate.length > 1 || item.price_lv.unitList.length > 1"
-            >
+            <div class="moneyBox" v-if="item.price_lv.cate.length > 1 || item.price_lv.unitList.length > 1">
               <span>{{ item.price_lv.cate.length }}个规格可选</span>
               <span @click="shoppingclick(item)">
                 <img class="shoppingCart" src="../assets/img/home/gouwu.png" />
@@ -77,20 +63,20 @@ export default {
   data() {
     return {
       cartShow: false,
-      popUpData: {}, //购物车种类信息
+      popUpData: {}, // 购物车种类信息
       searchKey: "",
       is_search: true,
       value1: 0,
-      value2: "a",
+      value2: 0,
       option1: [
         { text: "全部商品", value: 0 },
         { text: "新款商品", value: 1 },
         { text: "活动商品", value: 2 },
       ],
       option2: [
-        { text: "默认排序", value: "a" },
-        { text: "好评排序", value: "b" },
-        { text: "销量排序", value: "c" },
+        { text: "默认排序", value: 0 },
+        { text: "好评排序", value: 1 },
+        { text: "销量排序", value: 2 },
       ],
       recommend: [], // 商品列表
       browsings: [], // 搜索历史记录
@@ -98,9 +84,13 @@ export default {
   },
   mounted() {
     let arr = localStorage.getItem("browsings");
-    if (arr) {
-      this.browsings = JSON.parse(arr);
-    }
+    if (arr) this.browsings = JSON.parse(arr);
+    // 获取焦点
+    // this.$nextTick((x) => {
+    //   let input = document.querySelector(".van-field__control")
+    //   input.focus();
+    //   console.info(input)
+    // });
   },
   methods: {
     //  关闭

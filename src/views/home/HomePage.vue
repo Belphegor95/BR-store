@@ -23,12 +23,7 @@
         <!-- 商品导航 -->
         <div>
           <van-grid>
-            <van-grid-item
-              @click="gridClick(index,item)"
-              class="navigationBox"
-              v-for="(item,index) in navigations"
-              :key="index"
-            >
+            <van-grid-item @click="gridClick(index,item)" class="navigationBox" v-for="(item,index) in navigations" :key="index">
               <img :src="item.img_url" />
               <p>{{ item.name }}</p>
             </van-grid-item>
@@ -46,16 +41,8 @@
             <div class="goodsList">
               <img :src="item.plist_img_url[0]" @click="rutparClick(item)" />
               <p class="goodsName">{{ item.plist_name }}</p>
-              <div
-                class="goodsPrice"
-                v-for="(unitList,index1) in item.price_lv.unitList"
-                :key="index1"
-                v-show="unitList.rate == 1"
-              >
-                <!-- <p class="three">市场价: 90.00￥</p> -->
-                <p
-                  v-if="unitList.rate == 1"
-                >会员价: ￥{{ `${unitList.orderPrice}/${unitList.unitName}` }}</p>
+              <div class="goodsPrice" v-for="(unitList,index1) in item.price_lv.unitList" :key="index1" v-show="unitList.rate == 1">
+                <p v-if="unitList.rate == 1">会员价: ￥{{ `${unitList.orderPrice}/${unitList.unitName}` }}</p>
               </div>
               <div class="moneyBox">
                 <span>{{ item.price_lv.cate.length }}个规格可选</span>
@@ -104,6 +91,7 @@ export default {
     };
   },
   mounted() {
+    console.info(this.$store)
     this.$store.commit("show_activeid", 0);
     this.getswipeImg();
     this.gethomeRecommend();
@@ -163,14 +151,10 @@ export default {
         this.$router.push("/maintainRecord");
       }
     },
+    // 跳转 商品详情
     rutparClick: function (data) {
-      data.price_lv = JSON.stringify(data.price_lv);
-      data.plist_detail_img_url = JSON.stringify(data.plist_detail_img_url);
-      data.plist_img_url = JSON.stringify(data.plist_img_url);
-      this.$router.push({
-        path: "/particulars",
-        query: data,
-      });
+      this.$store.commit("show_commodity", data);
+      this.$router.push("/particulars");
     },
     // 点击购物车 弹出购物车弹窗
     shoppingclick: function (data) {
@@ -226,16 +210,12 @@ export default {
 .swipeBox {
   width: 90%;
   margin: 0.5rem auto;
-  /* margin-bottom: 0; */
-  /* overflow: hidden; */
-  /* border-radius: 1.2rem; */
 }
 .my-swipe .van-swipe-item {
   color: #fff;
   font-size: 20px;
   line-height: 150px;
   text-align: center;
-  /* background-color: #39a9ed; */
 }
 /* 商品导航 */
 .navigationBox img {
@@ -299,7 +279,6 @@ li:nth-child(even) {
   display: flex;
   height: 2rem;
   color: #feb35c;
-  /* font-size: 1rem; */
   align-items: center;
   padding: 0.1rem 0.2rem;
   justify-content: space-between;
@@ -307,28 +286,6 @@ li:nth-child(even) {
 .moneyBox i {
   font-size: 1.4rem;
 }
-/* .numBox {
-  width: 4.5rem;
-  height: 2rem;
-  border-radius: 1rem;
-  display: flex;
-  justify-content: space-around;
-  -webkit-box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.1);
-  -moz-box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.1);
-  box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.1);
-}
-.numBox img {
-  width: 1rem;
-}
-.numBox div {
-  display: flex;
-  align-items: center;
-}
-.numBox b {
-  display: flex;
-  color: #000;
-  align-items: center;
-} */
 .shoppingCart {
   height: 2rem;
 }

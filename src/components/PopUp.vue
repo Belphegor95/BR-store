@@ -131,6 +131,10 @@ export default {
 }
 .content {
   flex: auto;
+  /* height: 1px; */
+  display: flex;
+  overflow-y: auto;
+  flex-direction: column;
 }
 .trailBox {
   margin-bottom: 0.5rem;
@@ -190,11 +194,10 @@ li > span {
 /* 底部按钮 */
 .btnForm {
   width: 98%;
+  min-height: 2.8rem;
   color: #fff;
   border-radius: 2rem !important;
-  position: absolute;
-  bottom: 0.2rem;
-  left: 0.2rem;
+  margin: 0.2rem auto;
 }
 </style>
 
@@ -205,6 +208,7 @@ li > span {
   border-color: #faa062;
 }
 .popup .van-action-sheet__content {
+  height: 100%;
   display: flex;
   flex-direction: column;
 }

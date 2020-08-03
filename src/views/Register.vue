@@ -7,14 +7,8 @@
         <!-- <p>
           欢迎加入开心兔商城,注册后,即可了解产品订货价格,可直接下单订货采购;支持货到付款,支持微信,信用卡,...
           <i>点击查看更多</i>
-        </p> -->
-        <van-field
-          v-model="phoneNum"
-          type="tel"
-          maxlength="11"
-          label="+86"
-          placeholder="请输入手机号/用户名"
-        >
+        </p>-->
+        <van-field v-model="phoneNum" type="tel" maxlength="11" label="+86" placeholder="请输入手机号/用户名">
           <template #button>
             <van-button size="small" class="btn" v-if="!isloading" @click="getYzm">获取验证码</van-button>
             <p class="btnloadClass" v-else>{{ btnload }} s</p>
@@ -69,6 +63,7 @@ export default {
     };
   },
   methods: {
+    // 注册账号
     saveUser: function () {
       if (!/^1[3456789]\d{9}$/.test(this.phoneNum)) {
         this.$toast("手机号输入有误");
@@ -76,7 +71,11 @@ export default {
       } else if (!/[0-9]{6}/.test(this.yzm)) {
         this.$toast("验证码输入有误");
         return;
-      } else if (!this.pwd || this.pwd.length < 6) {
+      } else if (
+        !this.pwd ||
+        this.pwd.trim().length < 6 ||
+        this.pwd.trim().length > 16
+      ) {
         this.$toast("密码输入有误");
         return;
       }
@@ -96,8 +95,8 @@ export default {
         })
         .catch(() => {});
     },
+    // 获取验证码
     getYzm: function () {
-      // var patrn = /^[+]{0,1}(\d){1,3}[ ]?([-]?((\d)|[ ]){1,12})+$/;
       if (!/^1[3456789]\d{9}$/.test(this.phoneNum)) {
         this.$toast("手机号输入有误");
         return;
@@ -117,20 +116,7 @@ export default {
         })
         .catch(() => {});
     },
-    saveregist: function () {
-      this.axios
-        .post(this.$api.regist, {
-          phoneNum: 0, // 手机/用户
-          pwd: 0, // 密码
-          yzm: 0, // 验证码
-        })
-        .then((data) => {
-          if (data.code) {
-          } else {
-          }
-        })
-        .catch(() => {});
-    },
+    // 验证码倒计时
     setloadingNum: function () {
       // 倒计时
       if (this.isloading && this.btnload != -1) {
@@ -191,7 +177,6 @@ export default {
   color: transparent;
   font-size: 1.2rem;
 }
-
 </style>
 <style >
 /* 每个输入框的高 */

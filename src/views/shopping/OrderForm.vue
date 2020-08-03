@@ -18,7 +18,7 @@
               <p>种类:{{ item.cateCount }},数量:{{ item.plistCount }},总计: ￥{{ item.money }}</p>
               <div class="btnBox">
                 <van-button class="paybtn" type="default" size="small">立即支付</van-button>
-                <van-button type="default" size="small">再次购买</van-button>
+                <!-- <van-button type="default" size="small">再次购买</van-button> -->
                 <van-button type="default" size="small" @click="orderClick(item,true)">修改订单</van-button>
               </div>
             </li>

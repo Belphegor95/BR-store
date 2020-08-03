@@ -6,7 +6,7 @@
       <van-field v-model="phoneNum" maxlength="11" placeholder="请输入手机号/用户名" />
       <van-field v-model="pwd" maxlength="18" type="password" placeholder="请输入密码" />
       <span class="losePassword" @click="( $router.push('/password'))">忘记密码</span>
-      <van-button class="btnForm" type="default" @click="loginClick">登录</van-button>
+      <van-button class="btnForm" type="default" :loading="btnload" @click="loginClick">登录</van-button>
     </div>
   </div>
 </template>
@@ -24,29 +24,31 @@ export default {
     return {
       phoneNum: "",
       pwd: "",
-      uppath: "",
+      btnload: false,
     };
   },
-  mounted() {
-    // console.info(this.$router)
-    // let url = decodeURIComponent(this.$route.query)
-    // console.info(Object.keys(this.$route.query).length);
-  },
+  mounted() {},
   methods: {
     loginClick: function () {
       if (!/^1[3456789]\d{9}$/.test(this.phoneNum)) {
         this.$toast("手机号输入有误");
         return;
-      } else if (!this.pwd || this.pwd.length < 6) {
+      } else if (
+        !this.pwd ||
+        this.pwd.trim().length < 6 ||
+        this.pwd.trim().length > 16
+      ) {
         this.$toast("密码输入有误");
         return;
       }
+      this.btnload = true;
       this.axios
         .post(this.$api.login, {
           phoneNum: this.phoneNum,
           pwd: this.pwd,
         })
         .then((data) => {
+          this.btnload = false;
           if (data.code == 200) {
             this.$toast("登录成功");
             localStorage.removeItem("vuex");
@@ -65,15 +67,10 @@ export default {
             this.$toast(this.ErrCode(data.msg));
           }
         })
-        .catch(() => {});
+        .catch(() => {
+          this.btnload = false;
+        });
     },
-  },
-  beforeRouteEnter(to, from, next) {
-    next((vm) => {
-      //  这里的vm指的就是vue实例，可以用来当做this使用
-      vm.uppath = from.path;
-      // console.info(vm.uppath)
-    });
   },
 };
 </script>

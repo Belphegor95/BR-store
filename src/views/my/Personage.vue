@@ -8,18 +8,13 @@
       </template>
     </van-nav-bar>
     <div class="userImg">
-      <img src="../../assets/img/my/tx.png" />
+      <img src="../../assets/img/my/defaultavatar_personal.png" />
       <p>{{ $store.state.user.companyName ? $store.state.user.companyName: '暂无' }}</p>
     </div>
     <van-cell title="我的订单" @click="rutClick(0)" is-link />
     <div>
       <van-grid>
-        <van-grid-item
-          class="navigationBox"
-          v-for="(item,index) in navigations"
-          :key="index"
-          @click="rutClick(index + 1)"
-        >
+        <van-grid-item class="navigationBox" v-for="(item,index) in navigations" :key="index" @click="rutClick(index + 1)">
           <img :src="item.img" />
           <p>{{ item.name }}</p>
         </van-grid-item>
@@ -27,7 +22,8 @@
     </div>
     <van-cell title="物流信息" is-link @click="rutlogisticsList" />
     <div class="sitelist">
-      <div v-for="item in 2" :key="item" class="list" :class="item == 2?'list_active':''">
+      <!-- <div v-for="item in 2" :key="item" class="list" :class="item == 2?'list_active':''"> -->
+      <div v-for="item in 2" :key="item" class="list">
         <img src="../../assets/img/product/particulars/chanpin.png" />
         <div class="site">
           <p>
@@ -46,19 +42,13 @@
     </van-cell>
     <van-cell @click="popupClick('address')" is-link>
       <template #title>
-        <img
-          style="width: 0.8rem;vertical-align:middle;margin-right:0.4rem"
-          src="../../assets/img/my/shdz.png"
-        />
+        <img style="width: 0.8rem;vertical-align:middle;margin-right:0.4rem" src="../../assets/img/my/shdz.png" />
         <span class="custom-title">常用收货地址</span>
       </template>
     </van-cell>
     <van-cell value="0371-123456">
       <template #title>
-        <img
-          style="width: 0.8rem;vertical-align:middle;margin-right:0.4rem"
-          src="../../assets/img/my/kf.png"
-        />
+        <img style="width: 0.8rem;vertical-align:middle;margin-right:0.4rem" src="../../assets/img/my/kf.png" />
         <span class="custom-title">客服电话</span>
       </template>
     </van-cell>
@@ -82,6 +72,11 @@ export default {
         {
           img: dpl,
           name: "待收货",
+        },
+
+        {
+          img: sh,
+          name: "已完成",
         },
         {
           img: dsk,
@@ -134,9 +129,10 @@ export default {
         this.$toast("未登录或登录信息失效！");
         return;
       }
+      // if (id == 4) {
+      //   this.$router.push("/shopping/aftermarket");
+      // } else
       if (id == 4) {
-        this.$router.push("/shopping/aftermarket");
-      } else if (id == 3) {
         this.$router.push("/personage/idea");
       } else {
         this.$router.push(`/shopping/orderForm?formid=${id}`);

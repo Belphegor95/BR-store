@@ -77,21 +77,22 @@ export default {
     };
   },
   mounted() {
+    this.particularsData = this.$store.state.commodity
     // 避免刷新 数据丢失
-    this.particularsData = this.$route.query;
-    if (typeof this.particularsData.plist_detail_img_url == "string") {
-      this.particularsData.plist_detail_img_url = JSON.parse(
-        this.particularsData.plist_detail_img_url
-      );
-    }
-    if (typeof this.particularsData.plist_img_url == "string") {
-      this.particularsData.plist_img_url = JSON.parse(
-        this.particularsData.plist_img_url
-      );
-    }
-    if (typeof this.particularsData.price_lv == "string") {
-      this.particularsData.price_lv = JSON.parse(this.particularsData.price_lv);
-    }
+    // this.particularsData = this.$route.query;
+    // if (typeof this.particularsData.plist_detail_img_url == "string") {
+    //   this.particularsData.plist_detail_img_url = JSON.parse(
+    //     this.particularsData.plist_detail_img_url
+    //   );
+    // }
+    // if (typeof this.particularsData.plist_img_url == "string") {
+    //   this.particularsData.plist_img_url = JSON.parse(
+    //     this.particularsData.plist_img_url
+    //   );
+    // }
+    // if (typeof this.particularsData.price_lv == "string") {
+    //   this.particularsData.price_lv = JSON.parse(this.particularsData.price_lv);
+    // }
   },
   methods: {
     integer: function (data) {

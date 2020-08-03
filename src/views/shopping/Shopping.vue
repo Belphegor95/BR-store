@@ -3,7 +3,7 @@
   <div class="shopping">
     <van-nav-bar class="navBar" :fixed="false" placeholder title="购物车">
       <template #right>
-        <span @click="foldClick">{{ fold? '收起':'折叠' }}</span>
+        <span @click="foldClick">{{ !fold? '展开':'折叠' }}</span>
         <span @click="operate = !operate">{{ operate? '编辑':'完成' }}</span>
       </template>
     </van-nav-bar>
@@ -14,12 +14,7 @@
         <p v-else>起送</p>
       </div>
     </div>
-    <van-checkbox-group
-      class="checkboxBox"
-      v-model="goodss"
-      ref="checkboxGroup"
-      checked-color="#feb35c"
-    >
+    <van-checkbox-group class="checkboxBox" v-model="goodss" ref="checkboxGroup" checked-color="#feb35c">
       <div class="van-card" v-for="(item,index) in shoppings" :key="index">
         <div class="van-card__header">
           <van-checkbox @click="checkedClural(item,index)" :name="item.plistId"></van-checkbox>
@@ -32,8 +27,8 @@
             <div class="contentbox">
               <div class="van-card__title van-multi-ellipsis--l2">{{ item.plistName }}</div>
               <van-button round @click="isfoldClick(item)" size="mini" type="info">
-                <p>{{ item.isfold? '收起':'折叠' }}</p>
-                <van-icon v-if="!item.isfold" name="arrow-up" />
+                <p>{{ !item.isfold? '展开':'折叠' }}</p>
+                <van-icon v-if="item.isfold" name="arrow-up" />
                 <van-icon v-else name="arrow-down" />
               </van-button>
             </div>
@@ -43,25 +38,9 @@
           </div>
         </div>
         <van-checkbox-group ref="checkboxGroup_" v-model="singles" checked-color="#feb35c">
-          <div
-            class="van-card_content"
-            v-show="item.isfold"
-            v-for="(itemJ,indexJ) in item.unit"
-            :key="indexJ"
-          >
-            <van-checkbox
-              checked-color="#feb35c"
-              :name="`${item.plistId}_${itemJ.cateId}_${itemJ.priceId}_${index}/${indexJ}`"
-              @click="checkedSingle(item,index,indexJ)"
-            >{{ itemJ.priceName }}</van-checkbox>
-            <van-stepper
-              v-model="itemJ.buyNum"
-              :integer="true"
-              :allow-empty="false"
-              :min="1"
-              theme="round"
-              @change="stepperClick(itemJ.buyNum,itemJ)"
-            />
+          <div class="van-card_content" v-show="item.isfold" v-for="(itemJ,indexJ) in item.unit" :key="indexJ">
+            <van-checkbox checked-color="#feb35c" :name="`${item.plistId}_${itemJ.cateId}_${itemJ.priceId}_${index}/${indexJ}`" @click="checkedSingle(item,index,indexJ)">{{ itemJ.priceName }}</van-checkbox>
+            <van-stepper v-model="itemJ.buyNum" :integer="true" :allow-empty="false" :min="1" theme="round" @change="stepperClick(itemJ.buyNum,itemJ)" />
           </div>
         </van-checkbox-group>
       </div>
@@ -72,10 +51,7 @@
     <div v-else class="submitBar">
       <van-checkbox checked-color="#feb35c" @click="checkedClick(checked)" v-model="checked">全选</van-checkbox>
       <p>{{ `种类${shoppings.length}数量${totalNum}` }}</p>
-      <button
-        @click="goods(false)"
-        class="van-button van-button--danger van-button--normal van-button--round van-submit-bar__button van-submit-bar__button--danger"
-      >
+      <button @click="goods(false)" class="van-button van-button--danger van-button--normal van-button--round van-submit-bar__button van-submit-bar__button--danger">
         <div class="van-button__content">
           <span class="van-button__text">删除</span>
         </div>
@@ -192,14 +168,16 @@ export default {
         .then((data) => {
           if (data.code == 200) {
             // 刷新丢失数据  先转json
-            data.data.address = JSON.stringify(data.data.address);
-            data.data.plistDetail = JSON.stringify(data.data.plistDetail);
-            data.data.picUrl = JSON.stringify(data.data.picUrl);
-            data.data.addressId = JSON.stringify(arr);
-            this.$router.push({
-              path: "/shopping/addOrder",
-              query: data.data,
-            });
+            // data.data.address = JSON.stringify(data.data.address);
+            // data.data.plistDetail = JSON.stringify(data.data.plistDetail);
+            // data.data.picUrl = JSON.stringify(data.data.picUrl);
+            // data.data.addressId = JSON.stringify(arr);
+            // this.$router.push({
+            //   path: "/shopping/addOrder",
+            //   query: data.data,
+            // });
+            this.$store.commit("show_order", data.data);
+            this.$router.push("/shopping/addOrder")
           } else {
             this.$toast(this.ErrCode(data.msg));
           }
@@ -440,7 +418,8 @@ export default {
 .submitBar {
   height: 50px;
   display: flex;
-  padding: 0 1rem;
+  padding-left: 1rem;
+  /* padding: 0 1rem; */
   align-items: center;
   background-color: #fff;
   justify-content: flex-end;
@@ -450,6 +429,12 @@ export default {
   padding-right: 0.5rem;
   text-align: right;
   /* color: #ee0a24; */
+}
+/* 删除按钮 */
+.submitBar button {
+  height: 100%;
+  border-radius: 0;
+  background: #e75858 !important;
 }
 </style>
 <style  >

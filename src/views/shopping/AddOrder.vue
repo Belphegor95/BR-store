@@ -1,13 +1,7 @@
 <!-- 填写订单 -->
 <template>
   <div class="addOrder">
-    <van-nav-bar
-      left-arrow
-      class="navBar"
-      @click-left="$router.go(-1)"
-      :fixed="false"
-      title="填写订单"
-    />
+    <van-nav-bar left-arrow class="navBar" @click-left="$router.go(-1)" :fixed="false" title="填写订单" />
     <div class="content">
       <!-- 地址 -->
       <div class="siteBox" @click="popupClick(0)">
@@ -24,13 +18,11 @@
       <div class="inventoryBox">
         <div>
           <p>商品清单</p>
-          <p
-            style="font-weight: 400;font-size: 0.8rem"
-          >种类:{{ orderdata.cateCount }},数量:{{ orderdata.plistCount }}</p>
+          <p style="font-weight: 400;font-size: 0.8rem">种类:{{ orderdata.cateCount }},数量:{{ orderdata.plistCount }}</p>
         </div>
         <div @click="popupClick(1)">
           <div>
-            <img v-for="(item,index) in JSON.parse(orderdata.picUrl)" :key="index" :src="item" />
+            <img v-for="(item,index) in orderdata.picUrl" :key="index" :src="item" />
           </div>
           <van-icon class="van-cell__right-icon" name="arrow" />
         </div>
@@ -57,7 +49,7 @@
 
     <van-submit-bar
       class="noSubmit"
-      v-if="orderdata.needMoney !=0"
+      v-if="orderdata.needMoney && orderdata.needMoney !=0"
       :price="orderdata.totalMoney * 100"
       label="应付金额："
       button-text="提交订单"
@@ -66,38 +58,18 @@
     >
       <template #tip>
         <i class="van-icon van-icon-info-o van-submit-bar__tip-icon"></i>
-        还差{{ orderdata.needMoney.toFixed(2) }}起送
+        <span>还差{{ orderdata.needMoney | toFixed }}起送</span>
       </template>
     </van-submit-bar>
-    <van-submit-bar
-      v-else
-      :loading="btnload"
-      class="yesSubmit"
-      label="应付金额："
-      :price="orderdata.totalMoney * 100"
-      button-text="提交订单"
-      @submit="onSubmit"
-    />
+    <van-submit-bar v-else :loading="btnload" class="yesSubmit" label="应付金额：" :price="orderdata.totalMoney * 100" button-text="提交订单" @submit="onSubmit" />
     <!-- 弹出框 -->
-    <van-popup
-      v-model="popupShow"
-      :overlay="false"
-      position="right"
-      :style="{ height: height }"
-      class="popup"
-    >
-      <van-nav-bar
-        left-arrow
-        class="navBar"
-        @click-left="popupShut"
-        :fixed="false"
-        :title="popupid == 0? '地址选择':popupid == 1? '订单详情':popupid == 2? '备注信息':'发票信息' "
-      />
+    <van-popup v-model="popupShow" :overlay="false" position="right" :style="{ height: height }" class="popup">
+      <van-nav-bar left-arrow class="navBar" @click-left="popupShut" :fixed="false" :title="popupid == 0? '地址选择':popupid == 1? '商品清单':popupid == 2? '备注信息':'发票信息' " />
       <!-- 地址选择 -->
       <address_ @address="addressClick" :address="orderdata.address" v-if="popupid == 0" />
       <!-- 订单详情 -->
       <div v-else-if="popupid == 1" class="productbox">
-        <div v-for="(item,index) in JSON.parse(orderdata.plistDetail)" :key="index" class="product">
+        <div v-for="(item,index) in orderdata.plistDetail" :key="index" class="product">
           <img :src="item.picUrl" />
           <div>
             <p>{{ item.plistName }}</p>
@@ -111,15 +83,7 @@
       </div>
       <!-- 备注信息 -->
       <div v-else-if="popupid == 2" class="remarksbox">
-        <van-field
-          v-model="notes"
-          rows="4"
-          autosize
-          type="textarea"
-          maxlength="50"
-          placeholder="请输入备注信息"
-          show-word-limit
-        />
+        <van-field v-model="notes" rows="4" autosize type="textarea" maxlength="50" placeholder="请输入备注信息" show-word-limit />
       </div>
       <!-- 发票信息 -->
       <div v-else class="invoicebox">
@@ -139,7 +103,7 @@ export default {
   },
   data() {
     return {
-      orderdata: this.$route.query, // 订单数据
+      orderdata: {}, // 订单数据
       site: {}, // 默认地址
       popupShow: false,
       popupid: 0,
@@ -153,6 +117,7 @@ export default {
     this.height = window.innerHeight;
     this.height % 2 != 0 ? this.height-- : "";
     this.height = this.height + "px";
+    this.orderdata = this.$store.state.order;
     this.getsite();
     if (this.orderdata.popupid) {
       this.popupShow = true;
@@ -163,7 +128,7 @@ export default {
     // 获取默认地址
     getsite: function () {
       if (this.orderdata.address == undefined) return;
-      let address = JSON.parse(this.orderdata.address);
+      let address = this.orderdata.address;
       for (let i = 0; i < address.length; i++) {
         if (address[i].address_default == 1) {
           this.site = address[i];
@@ -177,35 +142,36 @@ export default {
         this.$toast("请添加地址!");
         return;
       }
-      this.btnload = true;
-      this.axios
-        .post(this.$api.submitOrder, {
-          addressId: this.site.id,
-          plistIds: this.orderdata.addressId,
-          sendType: 0,
-          notes: this.notes,
-          billState: this.billState,
-        })
-        .then((data) => {
-          if (data.code == 200) {
-            this.btnload = false;
-            // this.$router.push("/shopping/orderForm?formid=1");
-            this.$router.push({
-              path: "/shopping/orderForm",
-              query: {
-                formid: 1,
-                order: JSON.stringify(data.data),
-              },
-            });
-          } else {
-            this.btnload = false;
-            this.$toast(this.ErrCode(data.msg));
-          }
-        })
-        .catch(() => {
-          this.btnload = false;
-          //   this.$toast.fail(this.$api.monmsg);
-        });
+      console.info(this.orderdata)
+      // this.btnload = true;
+      // this.axios
+      //   .post(this.$api.submitOrder, {
+      //     addressId: this.site.id,
+      //     plistIds: this.orderdata.addressId,
+      //     sendType: 0, //配送方式 0:免费配送,1:自提
+      //     notes: this.notes,
+      //     billState: this.billState,
+      //   })
+      //   .then((data) => {
+      //     if (data.code == 200) {
+      //       this.btnload = false;
+      //       // this.$router.push("/shopping/orderForm?formid=1");
+      //       this.$router.push({
+      //         path: "/shopping/orderForm",
+      //         query: {
+      //           formid: 1,
+      //           order: JSON.stringify(data.data),
+      //         },
+      //       });
+      //     } else {
+      //       this.btnload = false;
+      //       this.$toast(this.ErrCode(data.msg));
+      //     }
+      //   })
+      //   .catch(() => {
+      //     this.btnload = false;
+      //     //   this.$toast.fail(this.$api.monmsg);
+      //   });
     },
     // 打开弹出层
     popupClick: function (index) {
@@ -227,6 +193,12 @@ export default {
       this.$router.go(-1);
       this.site = data;
       this.popupShow = false;
+    },
+  },
+  filters: {
+    toFixed: function (value) {
+      // 替换地址 /
+      return value.toFixed(2);
     },
   },
 };
