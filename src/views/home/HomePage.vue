@@ -91,7 +91,6 @@ export default {
     };
   },
   mounted() {
-    console.info(this.$store)
     this.$store.commit("show_activeid", 0);
     this.getswipeImg();
     this.gethomeRecommend();

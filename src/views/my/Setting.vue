@@ -1,10 +1,7 @@
 <template>
   <div class="setting">
     <div>
-      <van-cell
-        title="用户名"
-        :value="$store.state.user.companyName ? $store.state.user.companyName: '暂无'"
-      />
+      <van-cell title="用户名" :value="$store.state.user.companyName ? $store.state.user.companyName: '暂无'" />
       <!-- <van-cell title="换绑手机" @click="tarPush(0)" is-link value="186****5358" /> -->
       <van-cell title="换绑手机" @click="tarPush(0)" is-link />
       <!-- <van-cell title="登录密码" @click="tarPush(1)" is-link value="******" /> -->
@@ -16,12 +13,7 @@
     </div>
     <!-- <div class="btnBox" @click="quitClick">切换账号</div> -->
     <div class="btnBox" @click="quitClick">退出登录</div>
-    <van-popup
-      :overlay="false"
-      v-model="popupShow"
-      position="right"
-      :style="{ height: height,width: '100%' }"
-    >
+    <van-popup :overlay="false" v-model="popupShow" position="right" :style="{ height: height,width: '100%' }">
       <phone v-if="tarbarType == 0" />
       <password v-else-if="tarbarType == 1" />
     </van-popup>
@@ -78,9 +70,8 @@ export default {
             .post(this.$api.logout)
             .then((data) => {
               if (data.code == 200) {
-                this.$store.commit("show_user", {});
-                this.$store.commit("show_activeid", 0);
                 localStorage.removeItem("vuex");
+                this.$store.commit("resetState");
                 this.$router.push("/login");
               } else {
                 this.$toast(this.ErrCode(data.msg));

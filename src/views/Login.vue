@@ -51,7 +51,9 @@ export default {
           this.btnload = false;
           if (data.code == 200) {
             this.$toast("登录成功");
+            // 删除重新赋值
             localStorage.removeItem("vuex");
+            this.$store.commit("resetState");
             this.$store.commit("show_user", data.data);
             if (data.data.type) {
               this.$router.push({
