@@ -11,7 +11,7 @@
     <div class="content">
       <!-- 下拉刷新 -->
       <van-pull-refresh v-model="isRefresh" @refresh="onRefresh">
-        <div class="bgc"></div>
+        <div class="bgc" v-if="picUrls.length != 0"></div>
         <!-- 轮播 -->
         <div class="swipeBox">
           <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
@@ -108,7 +108,7 @@ export default {
           }
         })
         .catch(() => {
-          //   this.$toast.fail(this.$api.monmsg);
+            this.$toast.fail(this.$api.monmsg);
         });
     },
     gethomeRecommend: function () {
@@ -122,7 +122,7 @@ export default {
           }
         })
         .catch(() => {
-          //   this.$toast.fail(this.$api.monmsg);
+            this.$toast.fail(this.$api.monmsg);
         });
     },
     // 首页分类入口
@@ -137,7 +137,7 @@ export default {
           }
         })
         .catch(() => {
-          //   this.$toast.fail(this.$api.monmsg);
+            this.$toast.fail(this.$api.monmsg);
         });
     },
     gridClick: function (index, item) {
@@ -188,6 +188,7 @@ export default {
 }
 /* 头部以下内容 */
 .content {
+  height: 100%;
   position: relative;
   display: flex;
   overflow-y: auto;

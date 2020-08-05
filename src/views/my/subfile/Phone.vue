@@ -65,7 +65,9 @@ export default {
             this.$toast(this.ErrCode(data.msg));
           }
         })
-        .catch(() => {});
+        .catch(() => {
+          this.$toast.fail(this.$api.monmsg);
+        });
     },
     // 换绑手机
     applyChangePhone: function () {
@@ -79,12 +81,13 @@ export default {
             this.type = 1;
             this.phoneNum = data.data.phoneNum;
             this.id = data.data.id;
-            console.info(data);
           } else {
             this.$toast(this.ErrCode(data.msg));
           }
         })
-        .catch(() => {});
+        .catch(() => {
+          this.$toast.fail(this.$api.monmsg);
+        });
     },
     // 换绑手机号
     changePhone: function () {
@@ -101,7 +104,9 @@ export default {
             this.$toast(this.ErrCode(data.msg));
           }
         })
-        .catch(() => {});
+        .catch(() => {
+          this.$toast.fail(this.$api.monmsg);
+        });
     },
     setloadingNum: function () {
       // 倒计时

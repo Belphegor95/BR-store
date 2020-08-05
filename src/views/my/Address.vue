@@ -78,7 +78,9 @@ export default {
             }
           }
         })
-        .catch(() => {});
+        .catch(() => {
+          this.$toast.fail(this.$api.monmsg);
+        });
     },
     editAddress: function (item, index) {
       this.axios
@@ -97,7 +99,9 @@ export default {
             this.$toast(this.ErrCode(data.msg));
           }
         })
-        .catch(() => {});
+        .catch(() => {
+          this.$toast.fail(this.$api.monmsg);
+        });
     },
     // 删除地址
     deladdress: function (item) {
@@ -118,7 +122,9 @@ export default {
                 this.$toast(this.ErrCode(data.msg));
               }
             })
-            .catch(() => {});
+            .catch(() => {
+              this.$toast.fail(this.$api.monmsg);
+            });
         })
         .catch(() => {});
     },

@@ -39,6 +39,7 @@ export default {
         })
         .catch(() => {
           this.btnload = false;
+          this.$toast.fail(this.$api.monmsg);
         });
     },
   },

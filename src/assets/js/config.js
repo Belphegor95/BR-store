@@ -4,6 +4,8 @@ var api = api || {};
 api.baseUrl = "http://121.196.123.181:3000"
 // api.baseUrl = "http://192.168.1.189:3000"   // 孙飞请求地址
 
+api.monmsg = "网络遇到问题,请重试!";
+
 api.regist = "/api/regist"  // 注册 1
 
 api.login = "/api/login"  // 登录 1

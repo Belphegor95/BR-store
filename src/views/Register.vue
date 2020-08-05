@@ -93,7 +93,9 @@ export default {
             this.$toast(this.ErrCode(data.msg));
           }
         })
-        .catch(() => {});
+        .catch(() => {
+          this.$toast.fail(this.$api.monmsg);
+        });
     },
     // 获取验证码
     getYzm: function () {
@@ -114,7 +116,9 @@ export default {
             this.$toast(this.ErrCode(data.msg));
           }
         })
-        .catch(() => {});
+        .catch(() => {
+          this.$toast.fail(this.$api.monmsg);
+        });
     },
     // 验证码倒计时
     setloadingNum: function () {

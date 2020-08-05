@@ -29,6 +29,7 @@ export default {
     this.getTicket();
   },
   methods: {
+    // 获取优惠券
     getTicket: function () {
       this.axios
         .post(this.$api.getTicket)
@@ -40,7 +41,7 @@ export default {
           }
         })
         .catch(() => {
-          //   this.$toast.fail(this.$api.monmsg);
+            this.$toast.fail(this.$api.monmsg);
         });
     },
   },

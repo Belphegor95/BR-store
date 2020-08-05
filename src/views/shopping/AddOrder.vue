@@ -142,36 +142,35 @@ export default {
         this.$toast("请添加地址!");
         return;
       }
-      console.info(this.orderdata)
-      // this.btnload = true;
-      // this.axios
-      //   .post(this.$api.submitOrder, {
-      //     addressId: this.site.id,
-      //     plistIds: this.orderdata.addressId,
-      //     sendType: 0, //配送方式 0:免费配送,1:自提
-      //     notes: this.notes,
-      //     billState: this.billState,
-      //   })
-      //   .then((data) => {
-      //     if (data.code == 200) {
-      //       this.btnload = false;
-      //       // this.$router.push("/shopping/orderForm?formid=1");
-      //       this.$router.push({
-      //         path: "/shopping/orderForm",
-      //         query: {
-      //           formid: 1,
-      //           order: JSON.stringify(data.data),
-      //         },
-      //       });
-      //     } else {
-      //       this.btnload = false;
-      //       this.$toast(this.ErrCode(data.msg));
-      //     }
-      //   })
-      //   .catch(() => {
-      //     this.btnload = false;
-      //     //   this.$toast.fail(this.$api.monmsg);
-      //   });
+      // console.info(this.orderdata.plistIds)
+      this.btnload = true;
+      this.axios
+        .post(this.$api.submitOrder, {
+          addressId: this.site.id,
+          plistIds: this.orderdata.plistIds,
+          sendType: 0, //配送方式 0:免费配送,1:自提
+          notes: this.notes,
+          billState: this.billState,
+        })
+        .then((data) => {
+          if (data.code == 200) {
+            this.btnload = false;
+            this.$router.push({
+              path: "/shopping/orderForm",
+              query: {
+                formid: 1,
+                order: JSON.stringify(data.data),
+              },
+            });
+          } else {
+            this.btnload = false;
+            this.$toast(this.ErrCode(data.msg));
+          }
+        })
+        .catch(() => {
+          this.btnload = false;
+          this.$toast.fail(this.$api.monmsg);
+        });
     },
     // 打开弹出层
     popupClick: function (index) {

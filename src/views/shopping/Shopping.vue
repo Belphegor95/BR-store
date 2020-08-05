@@ -111,7 +111,7 @@ export default {
           }
         })
         .catch(() => {
-          //   this.$toast.fail(this.$api.monmsg);
+            this.$toast.fail(this.$api.monmsg);
         });
     },
     // 修改购物车商品数量
@@ -132,7 +132,7 @@ export default {
           }
         })
         .catch(() => {
-          //   this.$toast.fail(this.$api.monmsg);
+            this.$toast.fail(this.$api.monmsg);
         });
     },
     // 删除商品
@@ -154,7 +154,7 @@ export default {
               }
             })
             .catch(() => {
-              //   this.$toast.fail(this.$api.monmsg);
+                this.$toast.fail(this.$api.monmsg);
             });
         })
         .catch(() => {});
@@ -183,7 +183,7 @@ export default {
           }
         })
         .catch(() => {
-          //   this.$toast.fail(this.$api.monmsg);
+            this.$toast.fail(this.$api.monmsg);
         });
     },
     goods: function (is) {

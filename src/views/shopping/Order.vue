@@ -143,7 +143,8 @@ export default {
     };
   },
   mounted() {
-    this.getorderData();
+    // this.getorderData();
+    this.orderData = this.$store.state.order
     this.isAlter = this.$route.query.is;
   },
   methods: {

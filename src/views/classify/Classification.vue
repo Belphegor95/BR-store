@@ -13,8 +13,8 @@
       <sidebar :cate="cate_" @cateid="getcatePlist" />
       <div class="contentBox">
         <van-dropdown-menu>
-          <van-dropdown-item v-model="value1" :options="option1" />
-          <van-dropdown-item v-model="value2" :options="option2" />
+          <van-dropdown-item v-model="value" :options="option1" />
+          <van-dropdown-item v-model="value1" :options="option2" />
         </van-dropdown-menu>
         <van-pull-refresh v-model="isRefresh" @refresh="onRefresh">
           <!-- <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
@@ -35,7 +35,7 @@
                   <p>15.86/个</p>
                 </div>
               </div>
-              <div class="stepperBox" @click="addGoods($event)">
+              <div class="stepperBox">
                 <span @click="shoppingclick(item)">
                   <img class="shoppingCart" src="../../assets/img/home/gouwu.png" />
                 </span>
@@ -70,37 +70,16 @@ export default {
       cate_: {},
       value: 0,
       value1: 0,
-      value2: "a",
       option1: [
         { text: "全部商品", value: 0 },
         { text: "新款商品", value: 1 },
         { text: "活动商品", value: 2 },
       ],
       option2: [
-        { text: "默认排序", value: "a" },
-        { text: "好评排序", value: "b" },
-        { text: "销量排序", value: "c" },
+        { text: "默认排序", value: 0 },
+        { text: "好评排序", value: 1 },
+        { text: "销量排序", value: 2 },
       ],
-      addShow: false,
-      balls: [
-        // 这里定义了多个ball,是因为可能同时有多个小球在动画中（快速点击多次或者多个商品）
-        {
-          show: false,
-        },
-        {
-          show: false,
-        },
-        {
-          show: false,
-        },
-        {
-          show: false,
-        },
-        {
-          show: false,
-        },
-      ],
-      dropBalls: [], // 在动画中的小球集合
       catePlist: [], // 分类商品列表
     };
   },
@@ -125,29 +104,18 @@ export default {
         .then((data) => {
           if (data.code == 200) {
             this.catePlist = data.data;
+            this.isRefresh = false;
           } else {
+            this.$toast(this.ErrCode(data.msg));
           }
         })
-        .catch(() => {});
+        .catch(() => {
+          this.$toast.fail(this.$api.monmsg);
+        });
     },
     // 下拉刷新
     onRefresh: function () {
       this.getcatePlist(this.cate);
-      this.isRefresh = false;
-    },
-    // 购物车动画
-    addGoods(e) {
-      // 利用事件冒泡  获取 组件的+号点击event对象
-      if (e.path[0].classList[0] != "van-stepper__plus") return; //判断你是否是+号
-      let el = e.target;
-      this.balls.forEach((v) => {
-        if (!v.show) {
-          v.show = true; // 当切换元素的display:block/none时，会触发vue的动画
-          v.el = el; // 将触发点击事件的“+”号保定道小球对象上，方便获取动画初始时的位置
-          this.dropBalls.push(v); // 取一个小球加入动画队列
-          return;
-        }
-      });
     },
     // 点击购物车 弹出购物车弹窗
     shoppingclick: function (data) {
@@ -205,6 +173,7 @@ ul {
 }
 li {
   display: flex;
+  padding: 0 0.5rem;
   flex-direction: column;
   border-bottom: 1px solid #f3f3f3;
 }
@@ -230,7 +199,6 @@ li > h4 {
 /* 步进器 */
 .stepperBox {
   display: flex;
-  margin-right: 0.5rem;
   margin-bottom: 0.5rem;
   flex-direction: row-reverse;
 }
@@ -254,7 +222,7 @@ li > h4 {
 }
 /* 下拉弹窗位置 */
 .classification .van-dropdown-item--down {
-  top: 2.9rem !important;
+  top: 45px !important;
   z-index: 12;
 }
 </style>

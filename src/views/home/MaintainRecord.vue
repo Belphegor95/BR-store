@@ -51,6 +51,7 @@ export default {
 
 <style scoped>
 .maintainRecord {
+  /* font-size: 0; */
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -58,7 +59,7 @@ export default {
 .btnbox {
   height: 3rem;
   display: flex;
-  /* padding: 0.5rem; */
+  margin-top: 3px;
   align-items: center;
   justify-content: center;
 }
@@ -81,13 +82,13 @@ export default {
 ul {
   flex: auto;
   height: 100%;
-  /* height: calc(100% - 5rem); */
   display: flex;
   overflow-y: auto;
   padding: 0.5rem 1rem;
   flex-direction: column;
 }
 li {
+  min-height: 6rem;
   display: flex;
   padding: 0.5rem;
   justify-content: space-between;
@@ -96,6 +97,7 @@ li {
   margin-bottom: 0.5rem;
 }
 .msg {
+  height: 100%;
   display: flex;
   align-items: flex-start;
 }
@@ -109,5 +111,6 @@ li {
 }
 img {
   width: 5rem;
+  height: 5rem;
 }
 </style>

@@ -78,7 +78,7 @@ export default {
               }
             })
             .catch(() => {
-              //   this.$toast.fail(this.$api.monmsg);
+                this.$toast.fail(this.$api.monmsg);
             });
         })
         .catch(() => {});

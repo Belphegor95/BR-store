@@ -19,7 +19,7 @@
               <div class="btnBox">
                 <van-button class="paybtn" type="default" size="small">立即支付</van-button>
                 <!-- <van-button type="default" size="small">再次购买</van-button> -->
-                <van-button type="default" size="small" @click="orderClick(item,true)">修改订单</van-button>
+                <!-- <van-button type="default" size="small" @click="orderClick(item,true)">修改订单</van-button> -->
               </div>
             </li>
           </ul>
@@ -27,13 +27,7 @@
       </van-tab>
     </van-tabs>
     <!-- 弹出框 -->
-    <van-popup
-      v-model="popupShow"
-      :overlay="false"
-      position="right"
-      :style="{ height: height,width: '100%' }"
-      class="popup"
-    >
+    <van-popup v-model="popupShow" :overlay="false" position="right" :style="{ height: height,width: '100%' }" class="popup">
       <addOrderForm :order="order" @popuClick="popuClick" />
     </van-popup>
   </div>
@@ -80,22 +74,21 @@ export default {
         })
         .then((data) => {
           if (data.code == 200) {
-            // console.info(data);
             this.orderList = data.data;
           } else {
             this.$toast(this.ErrCode(data.msg));
           }
         })
         .catch(() => {
-          //   this.$toast.fail(this.$api.monmsg);
+          this.$toast.fail(this.$api.monmsg);
         });
     },
     // 跳转详情
     orderClick: function (item, is) {
+      this.$store.commit("show_order", item);
       this.$router.push({
         path: "/shopping/order",
         query: {
-          data: JSON.stringify(this.JSON_data(item)),
           is: is,
         },
       });
