@@ -1,7 +1,8 @@
 <!-- 优惠券 -->
 <template>
   <div class="coupon">
-    <van-radio-group v-model="radio">
+    <van-empty v-if="ticketList.length == 0" description="暂无数据" />
+    <van-radio-group v-else v-model="radio">
       <div class="couponbox" v-for="(item,index) in ticketList" :key="index">
         <div>{{ item.amount }}元</div>
         <div>
@@ -41,7 +42,7 @@ export default {
           }
         })
         .catch(() => {
-            this.$toast.fail(this.$api.monmsg);
+          this.$toast.fail(this.$api.monmsg);
         });
     },
   },

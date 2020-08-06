@@ -1,7 +1,5 @@
 <template>
   <div class="switchoverUser">
-    <!-- <head_ /> -->
-    <!-- <div class="head"></div> -->
     <div class="contentbox">
       <h3>请选择要登录的ID</h3>
       <ul>

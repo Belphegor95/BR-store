@@ -51,7 +51,6 @@ export default {
 
 <style scoped>
 .maintainRecord {
-  /* font-size: 0; */
   height: 100%;
   display: flex;
   flex-direction: column;

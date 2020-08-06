@@ -19,11 +19,12 @@
       </div>
     </div>
     <div v-else>
-      <van-dropdown-menu>
+      <van-empty v-if="recommend.length == 0" description="暂无数据" />
+      <van-dropdown-menu v-if="recommend.length != 0">
         <van-dropdown-item v-model="value1" :options="option1" />
         <van-dropdown-item v-model="value2" :options="option2" />
       </van-dropdown-menu>
-      <ul>
+      <ul v-if="recommend.length != 0">
         <li class="goodsList" v-for="(item,index) in recommend" :key="index">
           <img :src="item.plist_img_url[0]" @click="rutparClick(item)" />
           <div class="goodsContent">
@@ -31,17 +32,11 @@
             <div class="goodsPrice" v-for="(unitList,index1) in item.price_lv.unitList" :key="index1">
               <p v-if="unitList.rate == 1">会员价: ￥{{ `${unitList.orderPrice}/${unitList.unitName}` }}</p>
             </div>
-            <div class="moneyBox" v-if="item.price_lv.cate.length > 1 || item.price_lv.unitList.length > 1">
+            <div class="moneyBox">
               <span>{{ item.price_lv.cate.length }}个规格可选</span>
               <span @click="shoppingclick(item)">
                 <img class="shoppingCart" src="../assets/img/home/gouwu.png" />
               </span>
-            </div>
-            <div class="moneyBox" v-else>
-              <span>库存充足</span>
-              <div class="stepperBox">
-                <van-stepper v-model="value1" theme="round" />
-              </div>
             </div>
           </div>
         </li>
@@ -66,6 +61,7 @@ export default {
       popUpData: {}, // 购物车种类信息
       searchKey: "",
       is_search: true,
+      value: 0,
       value1: 0,
       value2: 0,
       option1: [

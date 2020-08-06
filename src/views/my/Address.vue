@@ -2,13 +2,9 @@
 <template>
   <div class="address">
     <div class="siteBox">
-      <van-radio-group style="height: 100%" v-model="default_">
-        <div
-          class="site"
-          :class="default_== index?'pitchon':''"
-          v-for="(item,index) in address_"
-          :key="index"
-        >
+      <van-empty v-if="address_.length == 0" description="暂无数据" />
+      <van-radio-group style="height: 100%" v-else v-model="default_">
+        <div class="site" :class="default_== index?'pitchon':''" v-for="(item,index) in address_" :key="index">
           <p @click="addressClick(item)">{{ item.linkman }} {{ item.phone }}</p>
           <p @click="addressClick(item)">{{ item.address | site }}{{ item.address_detail }}</p>
           <div class="operationBox">
@@ -192,7 +188,7 @@ export default {
   padding: 0.5rem 1rem;
 }
 .pitchon {
-  border: 1px dashed #999!important;
+  border: 1px dashed #999 !important;
   /* background-color: #123; */
 }
 </style>
