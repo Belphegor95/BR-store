@@ -29,7 +29,8 @@ export default {
   },
   methods: {
     popuClick: function () {
-      this.$router.push("/shopping/orderForm?formid=1");
+      this.$store.commit("show_order_", {});
+      // this.$router.push("/shopping/orderForm?formid=1");
       this.$emit("popuClick", false);
     },
   },

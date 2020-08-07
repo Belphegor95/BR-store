@@ -155,13 +155,15 @@ export default {
         .then((data) => {
           if (data.code == 200) {
             this.btnload = false;
-            this.$router.push({
-              path: "/shopping/orderForm",
-              query: {
-                formid: 1,
-                order: JSON.stringify(data.data),
-              },
-            });
+            this.$store.commit("show_order_", data.data);
+            this.$router.push(`/shopping/orderForm?formid=1`);
+            // this.$router.push({
+            //   path: `/shopping/orderForm?formid=1`,
+            //   query: {
+            //     formid: 1,
+            //     order: JSON.stringify(data.data),
+            //   },
+            // });
           } else {
             this.btnload = false;
             this.$toast(this.ErrCode(data.msg));

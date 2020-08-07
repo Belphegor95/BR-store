@@ -55,8 +55,8 @@ export default {
     this.height = this.height + "px";
     this.formid = Number(this.$route.query.formid);
     this.getOrderList();
-    if (!this.$route.query.order) return;
-    let order = JSON.parse(this.$route.query.order);
+    // 处理 提交订单转跳过来
+    let order = this.$store.state.order_;
     this.order = order ? order : {};
     if (Object.keys(this.order).length != 0) this.popupShow = true;
   },

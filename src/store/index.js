@@ -9,6 +9,7 @@ export default new Vuex.Store({
     count: 0, // 购物车个数
     commodity: {}, // 商品属性
     order: {},// 订单属性
+    order_: {}, // 提交订单属性
   },
   mutations: {
     show_activeid(state, payload) {
@@ -25,6 +26,9 @@ export default new Vuex.Store({
     },
     show_order(state, payload) {
       state.order = payload;
+    },
+    show_order_(state, payload) {
+      state.order_ = payload;
     },
     resetState(state) {
       Object.assign(state, getDefaultState())
@@ -44,5 +48,6 @@ const getDefaultState = () => {
     count: 0, // 购物车个数
     commodity: {}, // 商品属性
     order: {},// 订单属性
+    order_: {}, // 提交订单属性
   }
 }
