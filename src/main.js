@@ -75,6 +75,9 @@ function ErrCode(code) {
 }
 Vue.prototype.ErrCode = ErrCode
 
+// 保存第一次进入
+// let isloading = sessionStorage.getItem("isloading")
+// if(!isloading) sessionStorage.setItem("isloading", "true");
 
 Vue.config.productionTip = false
 Vue.prototype.$api = api;

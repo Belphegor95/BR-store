@@ -27,6 +27,8 @@ import { Dialog } from 'vant'
 import { Step, Steps } from 'vant';
 import { Empty } from 'vant';
 import { ImagePreview } from 'vant';
+import { Picker } from 'vant';
+// import { DatetimePicker } from 'vant';
 
 import 'vant/lib/index.css'
 
@@ -65,6 +67,8 @@ Vue.use(PullRefresh);
 Vue.use(Step);
 Vue.use(Steps);
 Vue.use(Empty);
+Vue.use(Picker);
+// Vue.use(DatetimePicker);
 
 Vue.use(ImagePreview);
 Vue.use(Toast);
