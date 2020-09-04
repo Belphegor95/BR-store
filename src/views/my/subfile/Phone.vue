@@ -135,7 +135,7 @@ export default {
   background-color: #fff;
 }
 .phonebox > p {
-  height: 32px;
+  height: 49px;
   padding: 0.5rem 1rem;
   font-size: 0.8rem;
   color: #999;
