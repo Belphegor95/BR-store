@@ -28,6 +28,7 @@ import { Step, Steps } from 'vant';
 import { Empty } from 'vant';
 import { ImagePreview } from 'vant';
 import { Picker } from 'vant';
+import { Uploader } from 'vant';
 // import { DatetimePicker } from 'vant';
 
 import 'vant/lib/index.css'
@@ -68,6 +69,7 @@ Vue.use(Step);
 Vue.use(Steps);
 Vue.use(Empty);
 Vue.use(Picker);
+Vue.use(Uploader);
 // Vue.use(DatetimePicker);
 
 Vue.use(ImagePreview);

@@ -62,4 +62,14 @@ api.changePhone = "/api/changePhone"  // 换绑手机号
 
 api.logout = "/api/logout"  // 退出登录
 
+api.uploadFixImg = "/api/uploadFixImg"  // 上传图片
+
+api.getYzmForFindPwd = "/api/getYzmForFindPwd"  // 忘记密码 验证码
+
+api.resetPwd  = "/api/resetPwd"  //  重置密码
+
+api.getYzmForLogin = "/api/getYzmForLogin"  // 登录验证码 
+
+api.loginByYzm = "/api/loginByYzm"  // 验证码登录
+
 export { api };
