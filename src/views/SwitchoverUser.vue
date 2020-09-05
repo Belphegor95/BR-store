@@ -35,6 +35,8 @@ export default {
       this.axios
         .post(this.$api.selectAcc, {
           accOrderId: item.id,
+          token: this.$store.state.user.token,
+          accId: this.$store.state.user.accId,
         })
         .then((data) => {
           if (data.code == 200) {

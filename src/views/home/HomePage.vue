@@ -95,8 +95,22 @@ export default {
     this.getswipeImg();
     this.gethomeRecommend();
     this.getHomeCate();
+    this.announcement()
   },
   methods: {
+    // 公告
+    announcement: function () {
+      this.$dialog
+        .alert({
+          title: "公告",
+          message:
+            "公告公告公告公告公告公告公告公告公告公告公告公告公告公告公告公告公告公告公告公告公告公告公告公告",
+          theme: "round-button",
+        })
+        .then(() => {
+          // on close
+        });
+    },
     getswipeImg: function () {
       this.axios
         .get(this.$api.slideshow)
@@ -108,7 +122,7 @@ export default {
           }
         })
         .catch(() => {
-            this.$toast.fail(this.$api.monmsg);
+          this.$toast.fail(this.$api.monmsg);
         });
     },
     gethomeRecommend: function () {
@@ -122,7 +136,7 @@ export default {
           }
         })
         .catch(() => {
-            this.$toast.fail(this.$api.monmsg);
+          this.$toast.fail(this.$api.monmsg);
         });
     },
     // 首页分类入口
@@ -137,7 +151,7 @@ export default {
           }
         })
         .catch(() => {
-            this.$toast.fail(this.$api.monmsg);
+          this.$toast.fail(this.$api.monmsg);
         });
     },
     gridClick: function (index, item) {
