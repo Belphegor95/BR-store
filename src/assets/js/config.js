@@ -72,4 +72,10 @@ api.getYzmForLogin = "/api/getYzmForLogin"  // 登录验证码
 
 api.loginByYzm = "/api/loginByYzm"  // 验证码登录
 
+api.submitFixOrder = "/api/submitFixOrder" // 提交维修订单
+
+api.editAccOrderName = "/api/editAccOrderName"  // 修改用户名
+
+api.getFixOrder = "/api/getFixOrder"  //  获取维修单
+
 export { api };

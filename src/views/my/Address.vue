@@ -23,10 +23,11 @@
   </div>
 </template>
 <script>
+
 export default {
-  props: {
-    address: String,
-  },
+  // props: {
+  //   address: String,
+  // },
   data() {
     return {
       address_: [],

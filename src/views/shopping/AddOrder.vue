@@ -181,7 +181,6 @@ export default {
         path: `/shopping/addOrder?popupid=${index}`,
         query: this.$route.query,
       });
-      // this.$router.push();
       this.popupShow = true;
     },
     // 弹出层点击返回
