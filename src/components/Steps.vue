@@ -7,7 +7,7 @@
         <p>21:07</p>
       </div>
       <div class="statebox">
-        <img class="stateimg" v-if="index == 0" src="../assets/img/form/wc.png" />
+        <img class="stateimg" v-if="index == 0" src="../assets/img/form/wc.png"  />
         <img class="stateimg" v-else-if="index == 3" src="../assets/img/form/lj.png" />
         <img class="stateimg" v-else-if="index == 4" src="../assets/img/form/fh.png" />
         <i v-else class="van-step__circle"></i>

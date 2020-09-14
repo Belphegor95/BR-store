@@ -3,7 +3,7 @@
   <div>
     <van-nav-bar left-arrow class="navBar" @click-left="popuClick" :fixed="false" title="订单信息" />
     <div class="content">
-      <img src="../assets/img/order/wc.png" alt />
+      <img src="../assets/img/order/wc.png" />
       <div class="msgbox">
         <p>订单编号:{{ order.tradeNo }}</p>
         <p>
