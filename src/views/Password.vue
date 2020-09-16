@@ -31,7 +31,6 @@ export default {
   },
   data() {
     return {
-      text: "",
       isloading: false,
       btnload: 60,
       phoneNum: "",

@@ -3,27 +3,33 @@
   <div class="maintain">
     <van-nav-bar left-arrow class="navBar" @click-left="$router.go(-1)" :fixed="false" title="申请维护" />
     <div class="content">
-      <div class="siteBox">
+      <div class="siteBox" @click="popupClick(0)">
         <img src="../../assets/img/home/dw.png" />
         <div>
-          <p>张三 1863680607</p>
-          <p>河南郑州市中原区梧桐路高新区科学大道广告产业园2号楼8166</p>
+          <p>{{ defaultsite.linkman }} {{ defaultsite.phone }}</p>
+          <p>{{ defaultsite.address + defaultsite.address_detail }}</p>
         </div>
         <img src="../../assets/img/home/jsb.png" />
       </div>
       <div class="natureBox">
-        <p>待修物品名称</p>
-        <p>打印机</p>
+        <p>待修名称</p>
+        <van-field v-model="goodsName" placeholder="请输入商品名称" class="inputbox" />
+      </div>
+      <div class="natureBox">
+        <p>待修类型</p>
+        <van-dropdown-menu>
+          <van-dropdown-item v-model="fixsid" :options="fixs" />
+        </van-dropdown-menu>
       </div>
       <div class="natureBox">
         <p>设备型号</p>
-        <img src="../../assets/img/home/xiangji.png" />
+        <van-uploader v-model="unitType" :after-read="afterRead" :max-count="1" :before-read="beforeRead" @oversize="handleMaxSize" />
       </div>
       <div class="describeBox">
         <p>故障描述</p>
-        <van-field v-model="message" rows="2" autosize type="textarea" maxlength="50" placeholder="(必填)请填写设备的故障信息,协助师傅加快维修" />
+        <van-field v-model="detail" rows="2" autosize type="textarea" maxlength="50" placeholder="(必填)请填写设备的故障信息,协助师傅加快维修" />
       </div>
-      <van-cell title="上传图片" is-link value="0张图片" />
+      <van-cell title="上传图片" is-link :value="fileList.length + '张图片'" @click="popupClick(1)" />
       <van-cell value="11:00" is-link class="visitBox" @click="show = true">
         <template #title>
           <img src="../../assets/img/home/sm.png" />
@@ -31,28 +37,223 @@
         </template>
       </van-cell>
       <van-popup v-model="show" position="bottom" :style="{ height: '40%', width: '100%' }">
-        <van-picker show-toolbar title="选择时间" :columns="columns" @confirm="onConfirm" @cancel="onCancel" @change="onChange" />
+        <van-picker show-toolbar title="选择时间" :columns="columns" @confirm="onConfirm" @cancel="onCancel" />
       </van-popup>
     </div>
     <div class="btnBox">
-      <van-button class="btnForm" type="default" size="small">下单</van-button>
+      <van-button class="btnForm" type="default" size="small" @click="submitFixOrder">下单</van-button>
     </div>
+    <!-- 弹出框 -->
+    <van-popup v-model="popupShow" :overlay="false" position="right" :style="{ height: height, width: '100%' }" class="popup">
+      <van-nav-bar left-arrow class="navBar" @click-left="retreat" :fixed="false" :title="popupid == 0? '地址选择': '上传图片' " />
+      <!-- 地址选择 -->
+      <address_ @address="addressClick" v-if="popupid == 0" />
+      <upimg v-else-if="popupid == 1" @addupimg="upimgClick" />
+    </van-popup>
   </div>
 </template>
 <script>
+import address_ from "../my/Address";
+import upimg from "../../components/Upimg";
 export default {
+  components: {
+    address_,
+    upimg,
+  },
   data() {
     return {
-      message: "",
+      detail: "", // 故障描述
       show: false,
       columns: [],
+      popupShow: false,
+      height: null,
+      popupid: 0,
+      address: [], // 用户收货地址
+      defaultsite: {}, // 默认地址
+      unitType: [], // 型号图片
+      fileList: [], // 用户上传的图片
+      doorTime: 0, // 上门时间戳
+      goodsName: "", // 商品名称
+      fixsid: 0,
+      fixs: [
+        { text: "电脑", value: 0 },
+        { text: "打印机", value: 1 },
+        { text: "监控", value: 2 },
+        { text: "弱电", value: 3 },
+        { text: "其他", value: 4 },
+      ],
     };
   },
   mounted() {
+    this.height = window.innerHeight;
+    this.height % 2 != 0 ? this.height-- : "";
+    this.height = this.height + "px";
     this.getweek();
+    this.getAllAddress();
+    // if (this.orderdata.popupid) {
+    //   this.popupShow = true;
+    //   this.popupid = this.orderdata.popupid;
+    // }
     // this.gethour();
   },
   methods: {
+    // 页内转跳(打开弹窗)
+    popupClick: function (id) {
+      this.popupid = id;
+      this.popupShow = true;
+      if (this.$route.query.popupid == id) {
+        return;
+      }
+      this.$router.push({
+        path: `/maintain?popupid=${id}`,
+        // query: this.$route.query,
+      });
+    },
+    // 地址选择
+    addressClick: function (data) {
+      this.$router.go(-1);
+      this.defaultsite = data;
+      this.popupShow = false;
+    },
+    // 上传图片
+    upimgClick: function (data) {
+      this.$router.go(-1);
+      this.fileList = data;
+      this.popupShow = false;
+    },
+    afterRead: function (file) {
+      // let this_ = this;
+      // 此时可以自行将文件上传至服务器
+      // this.addimg(file.file);
+      let formdata = new FormData();
+      formdata.append("file", file.file);
+      //创建xhr，使用ajax进行文件上传
+      let xhr = new XMLHttpRequest();
+      xhr.withCredentialstrue = true;
+      xhr.open("post", this.$api.baseUrl + this.$api.uploadFixImg);
+      // 处理成功
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+          let data = JSON.parse(xhr.response);
+          file.content = data.data.path;
+        }
+      };
+      //将formdata上传
+      xhr.send(formdata);
+    },
+    // 返回
+    retreat: function () {
+      this.$router.go(-1);
+      this.popupShow = false;
+    },
+    // 获取用户所有地址
+    getAllAddress: function () {
+      this.axios
+        .post(this.$api.getAllAddress)
+        .then((data) => {
+          if (data.code == 200) {
+            this.address = data.data;
+            for (let i = 0; i < this.address.length; i++) {
+              let item = this.address[i];
+              // 默认地址展示
+              if (item.address_default == 1) {
+                // this.default_ = i;
+                // 排序 把默认地址第一个
+                this.defaultsite = item;
+                this.address.splice(i, 1);
+                this.address.unshift(this.defaultsite);
+                break;
+              }
+            }
+          }
+        })
+        .catch(() => {
+          this.$toast.fail(this.$api.monmsg);
+        });
+    },
+    // 下单
+    submitFixOrder: function () {
+      if (!this.defaultsite.id) {
+        this.$toast("未选择地址!");
+        return;
+      } else if (this.goodsName == "") {
+        this.$toast("未输入待修商品名!");
+        return;
+      } else if (this.unitType.length == 0) {
+        this.$toast("未上传设备型号图片!");
+        return;
+      } else if (this.detail == "") {
+        this.$toast("未输入故障描述!");
+        return;
+      } else if (this.fileList.length == 0) {
+        this.$toast("未上传描述图片!");
+        return;
+      } else if (this.doorTime == 0) {
+        this.$toast("未选择上门时间!");
+        return;
+      }
+      let attachPic = [];
+      for (let i = 0; i < this.fileList.length; i++) {
+        let item = this.fileList[i].content;
+        attachPic.push(item);
+      }
+      this.axios
+        .post(this.$api.submitFixOrder, {
+          addressId: this.defaultsite.id, // 地址id
+          fixType: this.fixsid, // 维修类型
+          goodsName: this.goodsName, // 待修商品名
+          unitType: this.unitType[0].content, // 设备型号 图片地址
+          detail: this.detail, // 故障描述
+          attachPic: JSON.stringify(attachPic), // 描述图片数组 9张以内
+          doorTime: this.doorTime, // 上门时间
+        })
+        .then((data) => {
+          if (data.code == 200) {
+            this.$toast("维修下单成功!");
+            this.$router.go(-1);
+          } else {
+            this.$toast(this.ErrCode(data.msg));
+          }
+        })
+        .catch(() => {
+          this.$toast(this.$api.monmsg);
+        });
+    },
+    // 点击确定
+    onConfirm(value, index) {
+      let nianyue = this.columns[index[0]].date;
+      let shifen = this.columns[index[0]].children[index[1]].text;
+      // 取零点
+      let ri = new Date(new Date(nianyue).toLocaleDateString()).getTime();
+      // 取 时 分
+      let arr = shifen.split(":");
+      let fen = parseInt(arr[1]) * 60 * 1000;
+      let shi = parseInt(arr[0]) * 60 * 60 * 1000;
+      this.doorTime = ri + shi + fen;
+      this.show = false;
+    },
+    //  点击取消
+    onCancel() {
+      this.show = false;
+    },
+    // 上传不符合条件
+    handleMaxSize: function () {
+      this.$toast("文件大小超过1M!");
+    },
+    // 格式验证 需要返回布尔值
+    beforeRead: function (file) {
+      console.info(file.type);
+      if (
+        file.type !== "image/jpeg" &&
+        file.type !== "image/jpg" &&
+        file.type !== "image/png"
+      ) {
+        this.$toast("请上传jpeg,jpg,png 格式图片");
+        return false;
+      }
+      return true;
+    },
+    // 处理月天
     getweek: function () {
       let now = new Date();
       let arr = ["周日", "周一", "周二", "周三", "周四", "周五", "周六"];
@@ -66,10 +267,12 @@ export default {
         let obj = {};
         obj.text = riqi;
         obj.children = [];
+        obj.date = index.getTime();
         this.columns.push(obj);
         this.gethour(i);
       }
     },
+    // 处理时分
     gethour: function (index) {
       let now = new Date();
       let arr = ["00", "30"];
@@ -93,21 +296,20 @@ export default {
         }
       }
     },
-    onConfirm(value,index) {
-      console.info(value);
-      console.info(index);
-    },
-    onChange(picker, value, index) {
-      console.info(value);
-      console.info(index);
-    },
-    onCancel() {
-      this.show = false;
-    },
   },
 };
 </script>
 <style scoped>
+/* 弹出层 */
+.popup {
+  width: 100%;
+  /* height: 100%; */
+  display: flex;
+  flex-direction: column;
+  /* top: 0;
+  left: 0;
+  transform: translate3d(0, 0, 0); */
+}
 .maintain {
   display: flex;
   height: 100%;
@@ -140,12 +342,24 @@ export default {
 .siteBox p:nth-child(2) {
   color: #999999;
 }
+.siteBox > div {
+  width: 100%;
+}
 .natureBox {
   display: flex;
   padding: 0.5rem 1rem;
   justify-content: space-between;
 }
-.describeBox p {
+.natureBox > p {
+  display: flex;
+  align-items: center;
+}
+.inputbox {
+  width: 8rem;
+  padding: 0.1rem 0 0.1rem 0.5rem;
+  /* border: 1px solid #eee; */
+}
+.describeBox > p {
   padding: 0.5rem 1rem 0 1rem;
 }
 .visitBox {
@@ -174,5 +388,15 @@ export default {
 .visitBox .van-cell__title {
   display: flex;
   align-items: center;
+}
+.maintain .van-dropdown-menu__bar {
+  height: auto;
+  box-shadow: none;
+  background-color: #fff;
+}
+.maintain .van-uploader__upload {
+  width: auto;
+  height: auto;
+  background-color: #fff;
 }
 </style>

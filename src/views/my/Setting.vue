@@ -1,7 +1,7 @@
 <template>
   <div class="setting">
     <div>
-      <van-cell title="用户名" :value="$store.state.user.companyName ? $store.state.user.companyName: '暂无'" />
+      <van-cell title="用户名" :value="$store.state.user.companyName ? $store.state.user.companyName: '暂无'" @click="tarPush(2)" />
       <!-- <van-cell title="换绑手机" @click="tarPush(0)" is-link value="186****5358" /> -->
       <van-cell title="换绑手机" @click="tarPush(0)" is-link />
       <!-- <van-cell title="登录密码" @click="tarPush(1)" is-link value="******" /> -->
@@ -16,16 +16,19 @@
     <van-popup :overlay="false" v-model="popupShow" position="right" :style="{ height: height,width: '100%' }">
       <phone v-if="tarbarType == 0" />
       <password v-else-if="tarbarType == 1" />
+      <orderName v-else-if="tarbarType == 2" />
     </van-popup>
   </div>
 </template>
 <script>
 import phone from "./subfile/Phone";
 import password from "./subfile/Password_";
+import orderName from "./subfile/OrderName";
 export default {
   components: {
     phone,
     password,
+    orderName,
   },
   data() {
     return {
@@ -78,7 +81,7 @@ export default {
               }
             })
             .catch(() => {
-                this.$toast.fail(this.$api.monmsg);
+              this.$toast.fail(this.$api.monmsg);
             });
         })
         .catch(() => {});

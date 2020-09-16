@@ -1,21 +1,21 @@
 <template>
   <div class="addressRedact">
-    <!-- <div class="searchbox">
+    <div class="searchbox">
       <p>
         郑州
         <van-icon name="arrow-down" />
       </p>
       <van-search v-model="searchKey" placeholder="请输入您的收货地址" @input="searchchange" />
       <p @click="delsearchc">取消</p>
-    </div>-->
-    <div v-show="!issearch" style="height: 95%;min-height:30rem">
+    </div>
+    <div v-show="!issearch" style="height: 93%;min-height:30rem">
       <div id="map" style="width: 100%;height: 50%"></div>
       <ul>
         <van-radio-group v-model="siteindex">
           <div class="sitebox" v-for="(item,index) in sitelist" :key="index" @click="siteclick(index,item)">
             <div>
               <p>{{ item.title }}</p>
-              <p>{{ item.city + item.address }}</p>
+              <p>{{ item.address }}</p>
             </div>
             <van-radio :name="index"></van-radio>
           </div>
@@ -33,7 +33,7 @@
       <div class="sitebtnbox">
         <div>
           <p>{{ site? site.title : ""}}</p>
-          <p>{{ site? site.city: "" }}{{ site? site.address: "" }}</p>
+          <p>{{ site? site.address: "" }}</p>
         </div>
         <van-button plain type="primary" class="sitebtn" @click="altersite">修改地址</van-button>
       </div>
@@ -75,6 +75,10 @@ export default {
     };
   },
   mounted() {
+    // let height = window.innerHeight - 46;
+    // let box = document.querySelector(".addressRedact");
+    // box.style.height = height + "px";
+    // console.info(height);
     this.getbaiduMap();
     if (this.$route.query.linkman) {
       this.addressInfo.name = this.$route.query.linkman;
@@ -83,71 +87,24 @@ export default {
       this.$route.query.address_default
         ? (this.addressInfo.isDefault = true)
         : (this.addressInfo.isDefault = false);
-      let address = this.$route.query.address.split("/");
-      // 地区的回显
-      if (address.length > 2) {
-        for (let item in this.areaList.county_list) {
-          if (this.areaList.county_list[item] == address[2]) {
-            this.addressInfo.areaCode = item;
-          }
-        }
-      }
     }
   },
   methods: {
     // 搜索位置
     searchchange: function (input) {
       let this_ = this;
-      // let LocalSearch = new BMap.LocalSearch(); //创建地理编码器
-      // LocalSearch.search(input, function (renderOptions) {
-      //   console.info(renderOptions);
-      // });
-      let local1 = new BMap.LocalSearch(this.map, {
-        // renderOptions: {
-        //   map: map,
-        //   // panel : "content"
-        // },
-        // onMarkersSet: function (array) {
-        //   console.log(array);
-        // },
-        // onInfoHtmlSet: function (LocalResultPoi) {
-        //   console.log(LocalResultPoi);
-        // },
-        // onResultsHtmlSet: function (element) {
-        //   console.log(element);
-        // },
+      let LocalSearch = new BMap.LocalSearch(this.map, {
         onSearchComplete: function (results) {
-          console.info(results);
           // 需要获取当前搜索总共有多少条结果
-          // let totalPages = results.getNumPages();
-          // let currPage = results.getPageIndex(); // 获取当前是第几页数据
-          // console.info(currPage);
           this_.searchlist = results.Hr;
           this_.issearch = true;
-          // if (currPage < totalPages - 1) {
-          //   console.log(results.getCurrentNumPois());
-          //   ResultArray.push(...local1.getResults().Br);
-          //   local1.gotoPage(currPage + 1); // 遍历到最后一页之后不再进行下一页搜索，此时，已经获取到全部的搜索结果，
-          //   console.log(local1.getResults());
-          // } else {
-          //   // 已经到达最后一页结果
-          //   ResultArray.push(...local1.getResults().Br);
-          //   console.log(ResultArray);
-          //   map.clearOverlays();
-          //   for (let store of ResultArray) {
-          //     // console.log('dayin');
-          //     let marker = new BMap.Marker(store.point);
-          //     map.addOverlay(marker);
-          //   }
-          // }
         },
         pageCapacity: 50,
       });
-
-      let point = new BMap.Point(113.64964385, 34.7566100641);
-      if (input != "") local1.searchNearby(input, point, 1000);
-
-      // console.info();
+      if (input != "")
+        LocalSearch.search(input, {
+          forceLocal: true,
+        });
     },
     // 取消 搜索
     delsearchc: function () {
@@ -164,14 +121,15 @@ export default {
       // 启用双指缩放地图。
       this_.map.enablePinchToZoom();
       // 中间钉子 位置
-      let m_height = (this_.map.getSize().height + 10) / 2;
+      let m_height = (this_.map.getSize().height + 120) / 2;
       let m_width = (this_.map.getSize().width - 24) / 2;
       let tack = document.querySelector("#img");
       let geolocation = new BMap.Geolocation();
       let Geocoder = new BMap.Geocoder(); //创建地理编码器
-      geolocation.enableSDKLocation();
+      geolocation.enableSDKLocation(); // 开启精准定位
       // 获取用户当前位置
       geolocation.getCurrentPosition(function (r) {
+        console.info(r);
         if (this.getStatus() == BMAP_STATUS_SUCCESS) {
           //  修改默认覆盖物图标
           let ico = new BMap.Icon(
@@ -183,17 +141,22 @@ export default {
           );
           var marker = new BMap.Marker(r.point, { icon: ico });
           this_.map.addOverlay(marker);
-          this_.map.panTo(r.point);
-          let pt = r.point;
-          this_.map.panTo(pt); //移动地图中心点
+          let pt = null;
+          // 判断修改还是 新添加
+          if (this_.$route.query.linkman) {
+            pt = new BMap.Point(this_.$route.query.lng, this_.$route.query.lat);
+            this_.map.panTo(pt); //移动地图中心点
+          } else {
+            pt = r.point;
+            this_.map.panTo(pt); //移动地图中心点
+          }
           this_.currentsite = pt;
-          // console.info(pt)
           Geocoder.getLocation(
             pt,
             function (rs) {
               let addComp = rs.addressComponents;
               this_.sitelist = rs.surroundingPois;
-              // alert(addComp.province + addComp.city + addComp.district);
+              this_.addsite(rs);
             },
             { poiRadius: 1000 }
           );
@@ -218,23 +181,20 @@ export default {
 
       // 拖动开始
       this_.map.addEventListener("dragstart", function (evt) {
-        // var cp = this_.map.getBounds();
         tack.style.top = m_height - 15 + "px";
       });
       // 拖动结束
       this_.map.addEventListener("dragend", function showInfo() {
         // 获取 中心位置坐标
-        var cp = this_.map.getCenter();
-        // console.info(cp)
+        var pt = this_.map.getCenter();
         tack.style.top = m_height + "px";
-        let LocalSearch = new BMap.LocalSearch();
         Geocoder.getLocation(
-          cp,
+          pt,
           function (rs) {
             let addComp = rs.addressComponents;
             this_.sitelist = rs.surroundingPois;
+            this_.addsite(rs);
             this_.siteindex = 0;
-            console.info(rs);
           },
           { poiRadius: 1000 }
         );
@@ -245,11 +205,22 @@ export default {
       this.siteindex = index;
       this.site = item;
       this.map.panTo(this.site.point);
+      this.issearch = false;
       this.siteshow = true;
     },
     // 修改单选位置
     altersite: function () {
       this.siteshow = false;
+    },
+    // 添加当前位置信息
+    addsite: function (data) {
+      let site = data.addressComponents;
+      let obj = new Object();
+      obj.point = data.point;
+      obj.address = `${site.province}${site.streetNumber}${site.district}`;
+      // obj.city = data.addressComponents.city;
+      obj.title = data.address;
+      this.sitelist.unshift(obj);
     },
     // 修改 地址
     editAddress: function (data) {
@@ -258,8 +229,9 @@ export default {
           addressId: this.$route.query.id,
           linkman: data.name,
           phone: data.tel,
-          // address: `${data.province}/${data.city}/${data.county}`,
-          address: this.site.address,
+          lat: this.site.point.lat,
+          lng: this.site.point.lng,
+          address: this.site.title,
           address_detail: data.addressDetail,
           address_default: data.isDefault ? 1 : 0,
         })
@@ -285,7 +257,9 @@ export default {
         .post(this.$api.addAddress, {
           linkman: data.name,
           phone: data.tel,
-          address: `${data.province}/${data.city}/${data.county}`,
+          lat: this.site.point.lat,
+          lng: this.site.point.lng,
+          address: this.site.title,
           address_detail: data.addressDetail,
           address_default: data.isDefault ? 1 : 0,
         })
@@ -307,9 +281,10 @@ export default {
 <style scoped>
 .searchbox {
   display: flex;
-  height: 5%;
+  height: 7%;
   align-items: center;
   padding: 0.5rem 1rem;
+  box-sizing: border-box;
 }
 .searchbox > p {
   display: flex;
@@ -326,16 +301,18 @@ export default {
   background-color: #eee;
 }
 .addressRedact > ul {
-  height: 95%;
+  height: 93%;
   min-height: 30rem;
   overflow-y: auto;
+  padding: 0 1rem;
 }
 .addressRedact > ul > li {
+  padding: 0.5rem 0;
   border-bottom: 1px solid #eee;
 }
 .addressRedact > ul > li > p:nth-child(2) {
   font-size: 0.8rem;
-  color: #999;
+  /* color: #999; */
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
@@ -382,12 +359,13 @@ export default {
 
 .addressRedact {
   height: 100%;
+  overflow: hidden;
 }
 </style>
 
 <style>
 body {
-  /* overflow: hidden; */
+  overflow: hidden;
 }
 .anchorBL {
   display: none;

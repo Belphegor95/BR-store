@@ -4,6 +4,16 @@ import router from './router'
 import store from './store'
 import { api } from "./assets/js/config";
 
+// // 引入vue-resource
+// import VueResource from 'vue-resource'
+
+// // 使用vue-resource
+// Vue.use(VueResource)
+// Vue.config.productionTip = false
+
+import Vuejsonp from "vue-jsonp"
+Vue.use(Vuejsonp)
+
 import axios from "axios";
 import qs from "qs";
 import "./plugins/vant.js"
@@ -35,7 +45,7 @@ axios.interceptors.response.use(
   }
 );
 axios.defaults.baseURL = api.baseUrl;
-// axios.defaults.baseURL = "/api";
+// axios.defaults.baseURL = "/baiduApi";
 // 允许携带cookie
 axios.defaults.withCredentials = true;
 function ErrCode(code) {

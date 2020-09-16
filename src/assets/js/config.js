@@ -60,22 +60,22 @@ api.applyChangePhone = "/api/applyChangePhone"  // 申请更换手机号
 
 api.changePhone = "/api/changePhone"  // 换绑手机号
 
-api.logout = "/api/logout"  // 退出登录
+api.logout = "/api/logout"  // 退出登录 1
 
-api.uploadFixImg = "/api/uploadFixImg"  // 上传图片
+api.uploadFixImg = "/api/uploadFixImg"  // 上传图片 1
+ 
+api.getYzmForFindPwd = "/api/getYzmForFindPwd"  // 忘记密码 验证码 1
 
-api.getYzmForFindPwd = "/api/getYzmForFindPwd"  // 忘记密码 验证码
+api.resetPwd  = "/api/resetPwd"  //  重置密码 1
 
-api.resetPwd  = "/api/resetPwd"  //  重置密码
+api.getYzmForLogin = "/api/getYzmForLogin"  // 登录验证码 1
 
-api.getYzmForLogin = "/api/getYzmForLogin"  // 登录验证码 
-
-api.loginByYzm = "/api/loginByYzm"  // 验证码登录
+api.loginByYzm = "/api/loginByYzm"  // 验证码登录 1
 
 api.submitFixOrder = "/api/submitFixOrder" // 提交维修订单
 
 api.editAccOrderName = "/api/editAccOrderName"  // 修改用户名
 
-api.getFixOrder = "/api/getFixOrder"  //  获取维修单
+api.getFixOrder = "/api/getFixOrder"  //  获取维修单 1
 
 export { api };
