@@ -1,12 +1,7 @@
 <template>
-  <van-action-sheet
-    v-model="popUpShow"
-    class="popup"
-    @click-overlay="showClick"
-    :close-on-click-overlay="false"
-  >
+  <van-action-sheet v-model="popUpShow" class="popup" @click-overlay="showClick" :close-on-click-overlay="false">
     <div class="headBox">
-      <img :src="popUpData.plist_img_url?popUpData.plist_img_url[0]: '' "  />
+      <img :src="popUpData.plist_img_url?popUpData.plist_img_url[0]: '' " />
       <h4>{{ popUpData.plist_name }}</h4>
     </div>
     <div class="content" v-if="popUpData.price_lv">
@@ -16,22 +11,11 @@
             <p style="margin-right:0.2rem">{{ cate.cateName?cate.cateName:'暂无' }}</p>
           </div>
           <div class="stepperBox">
-            <van-stepper
-              v-model="cate.num"
-              default-value="0"
-              :integer="true"
-              :allow-empty="false"
-              :min="0"
-              theme="round"
-            />
+            <van-stepper v-model="cate.num" default-value="0" :integer="true" :allow-empty="false" :min="0" theme="round" />
           </div>
         </div>
         <div class="price" v-if="popUpData.price_lv.unitList">
-          <div
-            v-show="item.rate == cate.unitId"
-            v-for="(item,index) in popUpData.price_lv.unitList"
-            :key="index"
-          >
+          <div v-show="item.rate == cate.unitId" v-for="(item,index) in popUpData.price_lv.unitList" :key="index">
             <p>市场价￥{{ `${item.marketPrice}/${item.unitName}` }}</p>
             <p>
               ￥
@@ -41,12 +25,18 @@
           </div>
           <span>库存充足</span>
         </div>
+        <div class="orderbox">
+          <p>
+            价格:
+            <span>￥{{ cate.order }}</span>
+          </p>
+        </div>
         <ul>
           <li v-if="popUpData.price_lv && popUpData.price_lv.unitList">
             <span>单位</span>
             <van-radio-group v-model="cate.rateType" direction="horizontal">
               <van-radio
-                @click="$forceUpdate()"
+                @click="rateTypeClick(cate,item)"
                 icon-size="16px"
                 :name="item.priceId"
                 v-for="(item,index) in popUpData.price_lv.unitList"
@@ -69,17 +59,21 @@ export default {
   },
   data() {
     return {
-      rate: 1,
-      value: "",
+      // rate: 1,
     };
   },
   mounted() {
     // if (this.popUpData.price_lv) this.popUpData.price_lv = JSON.parse(popUpData.price_lv)
   },
   methods: {
+    rateTypeClick: function (cate, item) {
+      this.$forceUpdate();
+      cate.order = item.orderPrice;
+    },
     showClick: function () {
       this.$emit("showClick", false);
     },
+    // 添加进入购物车
     addShopping: function () {
       let arr = [];
       for (let i = 0; i < this.popUpData.price_lv.cate.length; i++) {
@@ -140,13 +134,17 @@ export default {
   margin-bottom: 0.5rem;
 }
 .trail,
-.price {
+.price,
+.orderbox {
   padding: 0 1rem;
 }
 .trail {
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+.orderbox {
+  margin-top: 0.4rem;
 }
 .trailName {
   display: flex;
@@ -211,5 +209,8 @@ li > span {
   height: 100%;
   display: flex;
   flex-direction: column;
+}
+.popup .van-radio--horizontal {
+  margin-right: 1.5rem;
 }
 </style>

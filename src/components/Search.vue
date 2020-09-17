@@ -104,6 +104,14 @@ export default {
     },
     // 点击购物车 弹出购物车弹窗
     shoppingclick: function (data) {
+      for (let i = 0; i < data.price_lv.cate.length; i++) {
+        let item = data.price_lv.cate[i];
+        let rateType = data.price_lv.unitList[0].priceId;
+        let order = data.price_lv.unitList[0].orderPrice;
+        item.rateType = rateType;
+        item.order = order;
+        item.num = 0;
+      }
       this.popUpData = data;
       this.cartShow = true;
     },

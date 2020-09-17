@@ -78,7 +78,6 @@ export default {
     // let height = window.innerHeight - 46;
     // let box = document.querySelector(".addressRedact");
     // box.style.height = height + "px";
-    // console.info(height);
     this.getbaiduMap();
     if (this.$route.query.linkman) {
       this.addressInfo.name = this.$route.query.linkman;
@@ -129,7 +128,6 @@ export default {
       geolocation.enableSDKLocation(); // 开启精准定位
       // 获取用户当前位置
       geolocation.getCurrentPosition(function (r) {
-        console.info(r);
         if (this.getStatus() == BMAP_STATUS_SUCCESS) {
           //  修改默认覆盖物图标
           let ico = new BMap.Icon(

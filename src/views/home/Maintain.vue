@@ -30,7 +30,7 @@
         <van-field v-model="detail" rows="2" autosize type="textarea" maxlength="50" placeholder="(必填)请填写设备的故障信息,协助师傅加快维修" />
       </div>
       <van-cell title="上传图片" is-link :value="fileList.length + '张图片'" @click="popupClick(1)" />
-      <van-cell value="11:00" is-link class="visitBox" @click="show = true">
+      <van-cell :value="hour" is-link class="visitBox" @click="show = true">
         <template #title>
           <img src="../../assets/img/home/sm.png" />
           <span class="custom-title">上门时间</span>
@@ -62,6 +62,7 @@ export default {
   },
   data() {
     return {
+      hour: "请选择", // 展示用小时
       detail: "", // 故障描述
       show: false,
       columns: [],
@@ -220,9 +221,10 @@ export default {
         });
     },
     // 点击确定
-    onConfirm(value, index) {
+    onConfirm: function(value, index) {
       let nianyue = this.columns[index[0]].date;
       let shifen = this.columns[index[0]].children[index[1]].text;
+      this.hour = shifen;
       // 取零点
       let ri = new Date(new Date(nianyue).toLocaleDateString()).getTime();
       // 取 时 分
@@ -233,7 +235,7 @@ export default {
       this.show = false;
     },
     //  点击取消
-    onCancel() {
+    onCancel: function() {
       this.show = false;
     },
     // 上传不符合条件
@@ -242,7 +244,6 @@ export default {
     },
     // 格式验证 需要返回布尔值
     beforeRead: function (file) {
-      console.info(file.type);
       if (
         file.type !== "image/jpeg" &&
         file.type !== "image/jpg" &&
@@ -287,7 +288,8 @@ export default {
             if (j < hour) {
               obj.disabled = true;
             } else if (j == hour) {
-              if (Number(arr[i]) > minu) {
+              // 如果是当前小时 判断 分钟是否小于0或30
+              if (Number(arr[i]) <= minu) {
                 obj.disabled = true;
               }
             }
@@ -303,12 +305,8 @@ export default {
 /* 弹出层 */
 .popup {
   width: 100%;
-  /* height: 100%; */
   display: flex;
   flex-direction: column;
-  /* top: 0;
-  left: 0;
-  transform: translate3d(0, 0, 0); */
 }
 .maintain {
   display: flex;

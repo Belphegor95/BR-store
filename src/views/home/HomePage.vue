@@ -75,13 +75,6 @@ export default {
       isRefresh: false,
       lingdang: require("../../assets/img/home/lingdang.png"),
       searchShow: false,
-      value: "",
-      value1: 0,
-      option1: [
-        { text: "郑州", value: 0 },
-        { text: "北京", value: 1 },
-        { text: "上海", value: 2 },
-      ],
       active: 0,
       navigations: [],
       picUrls: [], //轮播图
@@ -95,20 +88,36 @@ export default {
     this.getswipeImg();
     this.gethomeRecommend();
     this.getHomeCate();
-    this.announcement()
+
+    // 保存第一次进入
+    let isloading = sessionStorage.getItem("isloading");
+    if (!isloading) this.announcement();
   },
   methods: {
     // 公告
     announcement: function () {
-      this.$dialog
-        .alert({
-          title: "公告",
-          message:
-            "公告公告公告公告公告公告公告公告公告公告公告公告公告公告公告公告公告公告公告公告公告公告公告公告",
-          theme: "round-button",
+      this.axios
+        .post(this.$api.masterUrl + this.$api.getServerNotice, {
+          type: 0,
         })
-        .then(() => {
-          // on close
+        .then((data) => {
+          if (data.code == 200) {
+            if (data.data.content == "") return;
+            this.$dialog
+              .alert({
+                title: "公告",
+                message: data.data.content,
+                theme: "round-button",
+              })
+              .then(() => {
+                sessionStorage.setItem("isloading", "true");
+              });
+          } else {
+            this.$toast(this.ErrCode(data.msg));
+          }
+        })
+        .catch(() => {
+          this.$toast.fail(this.$api.monmsg);
         });
     },
     getswipeImg: function () {
@@ -175,7 +184,9 @@ export default {
       for (let i = 0; i < data.price_lv.cate.length; i++) {
         let item = data.price_lv.cate[i];
         let rateType = data.price_lv.unitList[0].priceId;
+        let order = data.price_lv.unitList[0].orderPrice;
         item.rateType = rateType;
+        item.order = order;
         item.num = 0;
       }
       this.popUpData = data;
