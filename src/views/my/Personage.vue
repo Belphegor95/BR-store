@@ -27,7 +27,7 @@
         <img src="../../assets/img/product/particulars/chanpin.png" />
         <div class="site">
           <p>
-            <span @click="$router.push('/manage/addressRedact')">未发货</span>
+            <span>未发货</span>
             <span>11:00</span>
           </p>
           <p>由[郑州市高新区]发往[郑州市高新区瑞达路]</p>
@@ -82,14 +82,6 @@ export default {
           img: dsk,
           name: "意见建议",
         },
-        // {
-        //   img: dsk,
-        //   name: "待评论"
-        // },
-        // {
-        //   img: sh,
-        //   name: "退货/售后"
-        // }
       ],
     };
   },

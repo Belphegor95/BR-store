@@ -12,10 +12,11 @@
     <div class="nav">
       <sidebar :cate="cate_" @cateid="getcatePlist" />
       <div class="contentBox">
-        <van-dropdown-menu>
+        <!-- 排序方法 -->
+        <!-- <van-dropdown-menu>
           <van-dropdown-item v-model="value" :options="option1" />
           <van-dropdown-item v-model="value1" :options="option2" />
-        </van-dropdown-menu>
+        </van-dropdown-menu> -->
         <van-pull-refresh v-model="isRefresh" @refresh="onRefresh">
           <!-- <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
             <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">

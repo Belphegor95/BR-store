@@ -6,8 +6,8 @@
       <div class="siteBox" @click="popupClick(0)">
         <img src="../../assets/img/home/dw.png" />
         <div>
-          <p>{{ defaultsite.linkman }} {{ defaultsite.phone }}</p>
-          <p>{{ defaultsite.address + defaultsite.address_detail }}</p>
+          <p v-if="defaultsite">{{ defaultsite.linkman }} {{ defaultsite.phone }}</p>
+          <p>{{ defaultsite? defaultsite.address + defaultsite.address_detail: '暂无' }}</p>
         </div>
         <img src="../../assets/img/home/jsb.png" />
       </div>
@@ -23,7 +23,8 @@
       </div>
       <div class="natureBox">
         <p>设备型号</p>
-        <van-uploader v-model="unitType" :after-read="afterRead" :max-count="1" :before-read="beforeRead" @oversize="handleMaxSize" />
+        <van-field v-model="unitType" placeholder="请输入设备型号" class="inputbox" />
+        <!-- <van-uploader v-model="unitType" :after-read="afterRead" :max-count="1" :before-read="beforeRead" @oversize="handleMaxSize" /> -->
       </div>
       <div class="describeBox">
         <p>故障描述</p>
@@ -70,13 +71,15 @@ export default {
       height: null,
       popupid: 0,
       address: [], // 用户收货地址
-      defaultsite: {}, // 默认地址
-      unitType: [], // 型号图片
+      defaultsite: null, // 默认地址
+      unitType: "", // 型号名称
+      // unitType: [], // 型号图片
       fileList: [], // 用户上传的图片
       doorTime: 0, // 上门时间戳
       goodsName: "", // 商品名称
-      fixsid: 0,
+      fixsid: -1,
       fixs: [
+        { text: "请选择", value: -1 },
         { text: "电脑", value: 0 },
         { text: "打印机", value: 1 },
         { text: "监控", value: 2 },
@@ -174,15 +177,18 @@ export default {
     },
     // 下单
     submitFixOrder: function () {
-      if (!this.defaultsite.id) {
+      if (this.defaultsite.id) {
         this.$toast("未选择地址!");
         return;
       } else if (this.goodsName == "") {
         this.$toast("未输入待修商品名!");
         return;
-      } else if (this.unitType.length == 0) {
-        this.$toast("未上传设备型号图片!");
+      } else if (this.unitType == "") {
+        this.$toast("未输入设备型号!");
         return;
+        // } else if (this.unitType.length == 0) {
+        //   this.$toast("未上传设备型号图片!");
+        //   return;
       } else if (this.detail == "") {
         this.$toast("未输入故障描述!");
         return;
@@ -191,6 +197,9 @@ export default {
         return;
       } else if (this.doorTime == 0) {
         this.$toast("未选择上门时间!");
+        return;
+      } else if (this.fixsid == -1) {
+        this.$toast("待修类型未选择!");
         return;
       }
       let attachPic = [];
@@ -203,7 +212,8 @@ export default {
           addressId: this.defaultsite.id, // 地址id
           fixType: this.fixsid, // 维修类型
           goodsName: this.goodsName, // 待修商品名
-          unitType: this.unitType[0].content, // 设备型号 图片地址
+          unitType: this.unitType, // 设备型号
+          // unitType: this.unitType[0].content, // 设备型号 图片地址
           detail: this.detail, // 故障描述
           attachPic: JSON.stringify(attachPic), // 描述图片数组 9张以内
           doorTime: this.doorTime, // 上门时间
@@ -221,7 +231,7 @@ export default {
         });
     },
     // 点击确定
-    onConfirm: function(value, index) {
+    onConfirm: function (value, index) {
       let nianyue = this.columns[index[0]].date;
       let shifen = this.columns[index[0]].children[index[1]].text;
       this.hour = shifen;
@@ -235,7 +245,7 @@ export default {
       this.show = false;
     },
     //  点击取消
-    onCancel: function() {
+    onCancel: function () {
       this.show = false;
     },
     // 上传不符合条件

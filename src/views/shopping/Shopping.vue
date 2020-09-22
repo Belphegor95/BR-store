@@ -15,6 +15,7 @@
       </div>
     </div>
     <van-checkbox-group class="checkboxBox" v-model="goodss" ref="checkboxGroup" checked-color="#feb35c">
+      <van-empty v-if="shoppings.length == 0" description="暂无数据" />
       <div class="van-card" v-for="(item,index) in shoppings" :key="index">
         <div class="van-card__header">
           <van-checkbox @click="checkedClural(item,index)" :name="item.plistId"></van-checkbox>
@@ -39,7 +40,11 @@
         </div>
         <van-checkbox-group ref="checkboxGroup_" v-model="singles" checked-color="#feb35c">
           <div class="van-card_content" v-show="item.isfold" v-for="(itemJ,indexJ) in item.unit" :key="indexJ">
-            <van-checkbox checked-color="#feb35c" :name="`${item.plistId}_${itemJ.cateId}_${itemJ.priceId}_${index}/${indexJ}`" @click="checkedSingle(item,index,indexJ)">{{ itemJ.priceName }}</van-checkbox>
+            <van-checkbox
+              checked-color="#feb35c"
+              :name="`${item.plistId}_${itemJ.cateId}_${itemJ.priceId}_${index}/${indexJ}`"
+              @click="checkedSingle(item,index,indexJ)"
+            >{{ itemJ.priceName }}</van-checkbox>
             <van-stepper v-model="itemJ.buyNum" :integer="true" :allow-empty="false" :min="1" theme="round" @change="stepperClick(itemJ.buyNum,itemJ)" />
           </div>
         </van-checkbox-group>
@@ -111,7 +116,7 @@ export default {
           }
         })
         .catch(() => {
-            this.$toast.fail(this.$api.monmsg);
+          this.$toast.fail(this.$api.monmsg);
         });
     },
     // 修改购物车商品数量
@@ -132,7 +137,7 @@ export default {
           }
         })
         .catch(() => {
-            this.$toast.fail(this.$api.monmsg);
+          this.$toast.fail(this.$api.monmsg);
         });
     },
     // 删除商品
@@ -154,7 +159,7 @@ export default {
               }
             })
             .catch(() => {
-                this.$toast.fail(this.$api.monmsg);
+              this.$toast.fail(this.$api.monmsg);
             });
         })
         .catch(() => {});
@@ -177,13 +182,13 @@ export default {
             //   query: data.data,
             // });
             this.$store.commit("show_order", data.data);
-            this.$router.push("/shopping/addOrder")
+            this.$router.push("/shopping/addOrder");
           } else {
             this.$toast(this.ErrCode(data.msg));
           }
         })
         .catch(() => {
-            this.$toast.fail(this.$api.monmsg);
+          this.$toast.fail(this.$api.monmsg);
         });
     },
     goods: function (is) {

@@ -45,7 +45,7 @@ axios.interceptors.response.use(
   }
 );
 axios.defaults.baseURL = api.baseUrl;
-// axios.defaults.baseURL = "/baiduApi";
+// axios.defaults.baseURL = "/api";
 // 允许携带cookie
 axios.defaults.withCredentials = true;
 function ErrCode(code) {

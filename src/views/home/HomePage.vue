@@ -21,7 +21,7 @@
           </van-swipe>
         </div>
         <!-- 商品导航 -->
-        <div>
+        <div class="navigation">
           <van-grid>
             <van-grid-item @click="gridClick(index,item)" class="navigationBox" v-for="(item,index) in navigations" :key="index">
               <img :src="item.img_url" />
@@ -42,7 +42,8 @@
               <img :src="item.plist_img_url[0]" @click="rutparClick(item)" />
               <p class="goodsName">{{ item.plist_name }}</p>
               <div class="goodsPrice" v-for="(unitList,index1) in item.price_lv.unitList" :key="index1" v-show="unitList.rate == 1">
-                <p v-if="unitList.rate == 1">会员价: ￥{{ `${unitList.orderPrice}/${unitList.unitName}` }}</p>
+                <!-- <p v-if="unitList.rate == 1">会员价: ￥{{ `${unitList.orderPrice}/${unitList.unitName}` }}</p> -->
+                <p>{{ unitList.orderPrice }}/{{ unitList.unitName }}</p>
               </div>
               <div class="moneyBox">
                 <span>{{ item.price_lv.cate.length }}个规格可选</span>
@@ -243,6 +244,10 @@ export default {
   text-align: center;
 }
 /* 商品导航 */
+.navigation {
+  margin-bottom: 1rem;
+  border-bottom: 1px solid #f6f7f8;
+}
 .navigationBox img {
   width: 2.5rem;
 }
@@ -290,7 +295,8 @@ li:nth-child(even) {
   height: 3rem;
 }
 .goodsPrice {
-  font-size: 0.7rem;
+  text-indent: 0.5rem;
+  font-size: 0.9rem;
   color: #a3a3a3;
 }
 .goodsPrice > p {

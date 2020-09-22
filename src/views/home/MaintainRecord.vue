@@ -7,6 +7,7 @@
       <button :class="maintaintype ==1?'pitchon': '' " class="donebtn" @click="typeClick(1)">已完成</button>
     </div>
     <ul>
+      <van-empty v-if="orderlist.length == 0" description="暂无数据" />
       <li v-for="(item,index) in orderlist" :key="index">
         <div class="msg">
           <img src="../../assets/img/product/particulars/chanpin.png" />
@@ -65,7 +66,7 @@ export default {
       let arr = value.split(" ");
       if (arr.length != 2) return value;
       let miao = arr[1].split(":");
-      return `${arr[0]} ${miao[0]}:${miao[1]}`
+      return `${arr[0]} ${miao[0]}:${miao[1]}`;
     },
   },
 };

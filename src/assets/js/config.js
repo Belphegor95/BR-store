@@ -2,9 +2,11 @@ var api = api || {};
 
 
 // api.baseUrl = "http://121.196.123.181:3000"
-api.baseUrl = "http://192.168.1.189:3000"   // 孙飞请求地址
+// api.baseUrl = "http://192.168.1.189:3000"   // 孙飞请求地址
 
-api.masterUrl = "http://192.168.1.189:3002"   // 公告请求地址
+api.baseUrl = "http://39.105.230.213:3000"   // 孙飞请求地址
+
+api.masterUrl = "http://39.105.230.213:3002"   // 公告请求地址
 
 api.monmsg = "网络遇到问题,请重试!";
 

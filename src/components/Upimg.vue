@@ -47,7 +47,6 @@ export default {
     },
     // 格式验证 需要返回布尔值
     beforeRead: function (file) {
-      console.info(file.type);
       if (
         file.type !== "image/jpeg" &&
         file.type !== "image/jpg" &&

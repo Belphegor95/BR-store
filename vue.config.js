@@ -14,32 +14,23 @@ module.exports = {
     },
     //=>直接去修改内置的webpack配置项
 
-    // //=>修改webpack-dev-server配置（尤其是跨域代理）
-    // devServer: {
-    //     open: true,
-    //     host: '0.0.0.0',
-    //     port: '8080',
-    //     https: false,
-    //     hotOnly: false,
-    //     proxy: {
-    //         "/api": {
-    //             changeOrigin: false,
-    //             target: "http://192.168.1.159:3000",
-    //             pathRewrite: {
-    //                 '^/api': '/'
-    //             }
-    //         },
-    //         '/baiduApi': {
-    //             target: 'https://api.baidubce.com', //访问地址
-    //             changeOrigin: true,
-    //             secure: false, //只有代理https 地址需要次选项
-    //             pathRewrite: {
-    //                 '^/baiduApi': ''
-    //             }
-
-    //         }
-    //     }
-    // },
+    //=>修改webpack-dev-server配置（尤其是跨域代理）
+    devServer: {
+        open: true,
+        host: '0.0.0.0',
+        port: '8080',
+        https: false,
+        hotOnly: false,
+        proxy: {
+            "/api": {
+                changeOrigin: false,
+                target: "http://192.168.1.189:3000",
+                pathRewrite: {
+                    '^/api': '/'
+                }
+            }
+        }
+    },
     //=>多余1核cpu时：启动并行压缩
     parallel: require('os').cpus().length > 1
 }

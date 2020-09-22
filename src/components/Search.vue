@@ -30,7 +30,7 @@
           <div class="goodsContent">
             <p class="goodsName">{{ item.plist_name }}</p>
             <div class="goodsPrice" v-for="(unitList,index1) in item.price_lv.unitList" :key="index1">
-              <p v-if="unitList.rate == 1">会员价: ￥{{ `${unitList.orderPrice}/${unitList.unitName}` }}</p>
+              <!-- <p v-if="unitList.rate == 1">会员价: ￥{{ `${unitList.orderPrice}/${unitList.unitName}` }}</p> -->
             </div>
             <div class="moneyBox">
               <span>{{ item.price_lv.cate.length }}个规格可选</span>
