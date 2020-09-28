@@ -7,7 +7,7 @@
         <van-field v-model="phoneNum" label="+86" placeholder="请输入手机号/用户名">
           <template #button>
             <van-button size="small" class="btn" v-if="!isloading" @click="yzmClick">获取验证码</van-button>
-            <p class="btnloadClass" v-else>{{ btnload }} s</p>
+            <p class="btnloadClass" v-else>{{ btnload }} s后重新获取</p>
           </template>
         </van-field>
         <van-field v-model="yzm" label="验证码" placeholder="请输入验证码" />

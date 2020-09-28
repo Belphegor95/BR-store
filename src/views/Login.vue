@@ -8,7 +8,7 @@
       <van-field key="101" v-model="yzm" maxlength="6" placeholder="验证码" v-else>
         <template #button>
           <van-button size="small" class="btn" v-if="!isloading" @click="getYzm">获取验证码</van-button>
-          <p class="btnloadClass" v-else>{{ btnloadnum }} s</p>
+          <p class="btnloadClass" v-else>{{ btnloadnum }} s后重新获取</p>
         </template>
       </van-field>
       <div class="btnbox">

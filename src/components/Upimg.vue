@@ -1,7 +1,15 @@
 <!-- 上传图片 -->
 <template>
   <div class="upimg">
-    <van-uploader v-model="fileList" multiple  :after-read="afterRead" :max-size="1048576" :max-count="9" :before-read="beforeRead" @oversize="handleMaxSize" />
+    <van-uploader
+      v-model="fileList"
+      multiple
+      :after-read="afterRead"
+      :max-size="1048576"
+      :max-count="9"
+      :before-read="beforeRead"
+      @oversize="handleMaxSize"
+    />
     <div class="btnbox">
       <van-button type="primary" @click="addimg">确认上传</van-button>
     </div>
@@ -18,10 +26,23 @@ export default {
         // 如果图片 URL 中不包含类型信息，可以添加 isImage 标记来声明
         // { url: "https://cloud-image" },
       ],
+      upOkList: [],
     };
   },
   methods: {
+    // 区分多选单选
     afterRead: function (file) {
+      console.info(file);
+      if (Array.isArray(file)) {
+        for (let i = 0; i < file.length; i++) {
+          this.upimg(file[i]);
+        }
+      } else {
+        this.upimg(file);
+      }
+    },
+    // 手动上传
+    upimg: function (file) {
       let this_ = this;
       // 此时可以自行将文件上传至服务器
       // this.addimg(file.file);
@@ -35,7 +56,10 @@ export default {
       xhr.onreadystatechange = function () {
         if (xhr.readyState == 4 && xhr.status == 200) {
           let data = JSON.parse(xhr.response);
-          file.content = data.data.path;
+          this_.upOkList.push({
+            content: data.data.path
+          })
+          // file.content = data.data.path;
         }
       };
       //将formdata上传
@@ -47,7 +71,19 @@ export default {
     },
     // 格式验证 需要返回布尔值
     beforeRead: function (file) {
-      if (
+      if (Array.isArray(file)) {
+        for (let i = 0; i < file.length; i++) {
+          let item = file[i].type;
+          if (
+            item !== "image/jpeg" &&
+            item !== "image/jpg" &&
+            item !== "image/png"
+          ) {
+            this.$toast("请上传jpeg,jpg,png 格式图片");
+            return false;
+          }
+        }
+      } else if (
         file.type !== "image/jpeg" &&
         file.type !== "image/jpg" &&
         file.type !== "image/png"
@@ -59,10 +95,10 @@ export default {
     },
     // 确定提交
     addimg: function () {
-      if (this.fileList.length == 0) {
-        this.$toast("没有上传图片");
+      if (this.upOkList.length == 0) {
+        this.$toast("没有上传图片或上传失败!");
       } else {
-        this.$emit("addupimg", this.fileList);
+        this.$emit("addupimg", this.upOkList);
       }
     },
   },

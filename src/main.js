@@ -53,8 +53,6 @@ function ErrCode(code) {
     return "参数非法"
   } else if (code == 102) {
     return "请输入正确的密码！"
-  } else if (code == 102) {
-    return "请输入正确的密码！"
   } else if (code == 103) {
     return "密码不正确！"
   } else if (code == 104) {
@@ -79,6 +77,50 @@ function ErrCode(code) {
     return "最多只能保存10个地址！"
   } else if (code == 401) {
     return "换绑需要提供新手机账号的密码！"
+  } else if (code == 402) {
+    return "换绑的手机号和当前账号手机号一致，无法换绑！"
+  } else if (code == 403) {
+    return "输入的密码与原账号密码不一致"
+  } else if (code == 601) {
+    return "商品价格不满足起送!"
+  } else if (code == 701) {
+    return "意见建议,超过100字符!"
+  } else if (code == 702) {
+    return "无公告"
+  } else if (code == 703) {
+    return "无可用仓库"
+  } else if (code == 801) {
+    return "骑手已离职"
+  } else if (code == 802) {
+    return "仓库已休息"
+  } else if (code == 803) {
+    return "改单已被抢"
+  } else if (code == 901) {
+    return "未填写维修地址"
+  } else if (code == 902) {
+    return "未填写待修物品名称"
+  } else if (code == 903) {
+    return "待修商品名称需少于50字"
+  } else if (code == 904) {
+    return "未填写故障描述"
+  } else if (code == 905) {
+    return "故障描述不能超过500字"
+  } else if (code == 906) {
+    return "图片上传错误"
+  } else if (code == 907) {
+    return "上传的图片格式不支持"
+  } else if (code == 908) {
+    return "未选择维修类别"
+  } else if (code == 909) {
+    return "超出维修范围"
+  } else if (code == 1001) {
+    return "后台账号名不能为空"
+  } else if (code == 1002) {
+    return "后台账号密码不能为空"
+  } else if (code == 1003) {
+    return "后台账号长度错误"
+  } else if (code == 1004) {
+    return "后台账号密码长度错误"
   } else {
     return "操作失败！"
   }

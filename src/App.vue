@@ -10,6 +10,7 @@
   padding: 0;
   margin: 0;
 }
+/* 关闭滚动条 */
 *::-webkit-scrollbar {
   display: none;
 }
@@ -54,7 +55,7 @@ body,
   padding: 0 8px;
   height: 30px;
   line-height: 30px;
-  color: #000;
+  color: #999;
   font-size: 12px;
   border: 1px solid #ebedf0;
 }

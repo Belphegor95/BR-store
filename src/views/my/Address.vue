@@ -3,27 +3,45 @@
   <div class="address">
     <div class="siteBox">
       <van-empty v-if="address_.length == 0" description="暂无数据" />
-      <van-radio-group style="height: 100%" v-else v-model="default_">
-        <div class="site" :class="default_== index?'pitchon':''" v-for="(item,index) in address_" :key="index">
+      <van-radio-group
+        style="height: 100%; overflow-y: auto"
+        v-else
+        v-model="default_"
+      >
+        <div
+          class="site"
+          :class="default_ == index ? 'pitchon' : ''"
+          v-for="(item, index) in address_"
+          :key="index"
+        >
           <p @click="addressClick(item)">{{ item.linkman }} {{ item.phone }}</p>
-          <p @click="addressClick(item)">{{ item.address | site }}{{ item.address_detail }}</p>
+          <p @click="addressClick(item)">
+            {{ item.address | site }}{{ item.address_detail }}
+          </p>
           <div class="operationBox">
-            <van-radio :name="index" @click="editAddress(item,index)">默认地址</van-radio>
+            <van-radio :name="index" @click="editAddress(item, index)"
+              >默认地址</van-radio
+            >
             <div>
-              <van-button type="default" size="small" @click="rut(item)">编辑</van-button>
-              <van-button type="default" size="small" @click="deladdress(item)">删除</van-button>
+              <van-button type="default" size="small" @click="rut(item)"
+                >编辑</van-button
+              >
+              <van-button type="default" size="small" @click="deladdress(item)"
+                >删除</van-button
+              >
             </div>
           </div>
         </div>
       </van-radio-group>
     </div>
     <div class="btnBox">
-      <van-button class="btnForm" type="default" @click="rut">新增地址</van-button>
+      <van-button class="btnForm" type="default" @click="rut"
+        >新增地址</van-button
+      >
     </div>
   </div>
 </template>
 <script>
-
 export default {
   // props: {
   //   address: String,
