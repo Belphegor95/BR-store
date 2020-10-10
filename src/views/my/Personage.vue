@@ -9,7 +9,7 @@
     </van-nav-bar>
     <div class="userImg">
       <img src="../../assets/img/my/defaultavatar_personal.png" />
-      <p>{{ $store.state.user.companyName ? $store.state.user.companyName: '暂无' }}</p>
+      <p>{{ $store.state.user.companyName ? $store.state.user.companyName: '未登录' }}</p>
     </div>
     <van-cell title="我的订单" @click="rutClick(0)" is-link />
     <div>

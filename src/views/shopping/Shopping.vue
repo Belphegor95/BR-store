@@ -3,32 +3,53 @@
   <div class="shopping">
     <van-nav-bar class="navBar" :fixed="false" placeholder title="购物车">
       <template #right>
-        <span @click="foldClick">{{ !fold? '展开':'折叠' }}</span>
-        <span @click="operate = !operate">{{ operate? '编辑':'完成' }}</span>
+        <span @click="foldClick">{{ !fold ? "展开" : "折叠" }}</span>
+        <span @click="operate = !operate">{{ operate ? "编辑" : "完成" }}</span>
       </template>
     </van-nav-bar>
     <div>
       <div class="shortofBox">
         <p>满{{ freeSend }}起送</p>
-        <p v-if="freeSend - (totalPrice/100) > 0">还差{{ (freeSend - (totalPrice/100)).toFixed(2) }}起送</p>
+        <p v-if="freeSend - totalPrice / 100 > 0">
+          还差{{ (freeSend - totalPrice / 100).toFixed(2) }}起送
+        </p>
         <p v-else>起送</p>
       </div>
     </div>
-    <van-checkbox-group class="checkboxBox" v-model="goodss" ref="checkboxGroup" checked-color="#feb35c">
+    <van-checkbox-group
+      class="checkboxBox"
+      v-model="goodss"
+      ref="checkboxGroup"
+      checked-color="#feb35c"
+    >
       <van-empty v-if="shoppings.length == 0" description="暂无数据" />
-      <div class="van-card" v-for="(item,index) in shoppings" :key="index">
+      <div class="van-card" v-for="(item, index) in shoppings" :key="index">
         <div class="van-card__header">
-          <van-checkbox @click="checkedClural(item,index)" :name="item.plistId"></van-checkbox>
+          <van-checkbox
+            @click="checkedClural(item, index)"
+            :name="item.plistId"
+          ></van-checkbox>
           <a class="van-card__thumb">
-            <div class="van-image" style="width: 100%; height: 100%;">
-              <img :src="item.picUrl" class="van-image__img" style="object-fit: cover;" />
+            <div class="van-image" style="width: 100%; height: 100%">
+              <img
+                :src="item.picUrl"
+                class="van-image__img"
+                style="object-fit: cover"
+              />
             </div>
           </a>
           <div class="van-card__content">
             <div class="contentbox">
-              <div class="van-card__title van-multi-ellipsis--l2">{{ item.plistName }}</div>
-              <van-button round @click="isfoldClick(item)" size="mini" type="info">
-                <p>{{ !item.isfold? '展开':'折叠' }}</p>
+              <div class="van-card__title van-multi-ellipsis--l2">
+                {{ item.plistName }}
+              </div>
+              <van-button
+                round
+                @click="isfoldClick(item)"
+                size="mini"
+                type="info"
+              >
+                <p>{{ !item.isfold ? "展开" : "折叠" }}</p>
                 <van-icon v-if="item.isfold" name="arrow-up" />
                 <van-icon v-else name="arrow-down" />
               </van-button>
@@ -38,25 +59,60 @@
             </div>
           </div>
         </div>
-        <van-checkbox-group ref="checkboxGroup_" v-model="singles" checked-color="#feb35c">
-          <div class="van-card_content" v-show="item.isfold" v-for="(itemJ,indexJ) in item.unit" :key="indexJ">
+        <van-checkbox-group
+          ref="checkboxGroup_"
+          v-model="singles"
+          checked-color="#feb35c"
+        >
+          <div
+            class="van-card_content"
+            v-show="item.isfold"
+            v-for="(itemJ, indexJ) in item.unit"
+            :key="indexJ"
+          >
             <van-checkbox
               checked-color="#feb35c"
               :name="`${item.plistId}_${itemJ.cateId}_${itemJ.priceId}_${index}/${indexJ}`"
-              @click="checkedSingle(item,index,indexJ)"
-            >{{ itemJ.priceName }}</van-checkbox>
-            <van-stepper v-model="itemJ.buyNum" :integer="true" :allow-empty="false" :min="1" theme="round" @change="stepperClick(itemJ.buyNum,itemJ)" />
+              @click="checkedSingle(item, index, indexJ)"
+              >{{ itemJ.priceName }}</van-checkbox
+            >
+            <van-stepper
+              v-model="itemJ.buyNum"
+              :integer="true"
+              :allow-empty="false"
+              :min="1"
+              theme="round"
+              @change="stepperClick(itemJ.buyNum, itemJ)"
+            />
           </div>
         </van-checkbox-group>
       </div>
     </van-checkbox-group>
-    <van-submit-bar v-if="operate" :price="totalPrice" button-text="结算" @submit="goods(true)">
-      <van-checkbox checked-color="#feb35c" @click="checkedClick(checked)" v-model="checked">全选</van-checkbox>
+    <van-submit-bar
+      v-if="operate"
+      :price="totalPrice"
+      button-text="结算"
+      @submit="goods(true)"
+    >
+      <van-checkbox
+        checked-color="#feb35c"
+        @click="checkedClick(checked)"
+        v-model="checked"
+        >全选</van-checkbox
+      >
     </van-submit-bar>
     <div v-else class="submitBar">
-      <van-checkbox checked-color="#feb35c" @click="checkedClick(checked)" v-model="checked">全选</van-checkbox>
+      <van-checkbox
+        checked-color="#feb35c"
+        @click="checkedClick(checked)"
+        v-model="checked"
+        >全选</van-checkbox
+      >
       <p>{{ `种类${shoppings.length}数量${totalNum}` }}</p>
-      <button @click="goods(false)" class="van-button van-button--danger van-button--normal van-button--round van-submit-bar__button van-submit-bar__button--danger">
+      <button
+        @click="goods(false)"
+        class="van-button van-button--danger van-button--normal van-button--round van-submit-bar__button van-submit-bar__button--danger"
+      >
         <div class="van-button__content">
           <span class="van-button__text">删除</span>
         </div>
@@ -172,15 +228,6 @@ export default {
         })
         .then((data) => {
           if (data.code == 200) {
-            // 刷新丢失数据  先转json
-            // data.data.address = JSON.stringify(data.data.address);
-            // data.data.plistDetail = JSON.stringify(data.data.plistDetail);
-            // data.data.picUrl = JSON.stringify(data.data.picUrl);
-            // data.data.addressId = JSON.stringify(arr);
-            // this.$router.push({
-            //   path: "/shopping/addOrder",
-            //   query: data.data,
-            // });
             this.$store.commit("show_order", data.data);
             this.$router.push("/shopping/addOrder");
           } else {
@@ -203,19 +250,18 @@ export default {
           cateId: Number(item[1]),
           priceId: Number(item[2]),
         };
-        obj.unit.push(obj_);
-        if (arr.length > 0) {
-          for (let j = 0; j < arr.length; j++) {
-            if (obj.plistId == arr[j].plistId) {
-              arr[j].unit.push(obj_);
-              break;
-            } else {
-              arr.push(obj);
-              break;
-            }
+        let index_ = -1; // 重复位置索引
+        for (let j = 0; j < arr.length; j++) {
+          if (obj.plistId == arr[j].plistId) {
+            index_ = j;
+            break;
           }
-        } else {
+        }
+        if (index_ == -1) {
+          obj.unit.push(obj_);
           arr.push(obj);
+        } else {
+          arr[index_].unit.push(obj_);
         }
       }
       if (arr.length == 0) return;
@@ -225,8 +271,6 @@ export default {
         this.delShopping(arr);
       }
     },
-    //   点击结算
-    onSubmit: function () {},
     // 单个商品
     checkedClural: function (item, index_I) {
       // console.info(123)

@@ -1,7 +1,13 @@
 <!-- 填写订单 -->
 <template>
   <div class="addOrder">
-    <van-nav-bar left-arrow class="navBar" @click-left="$router.go(-1)" :fixed="false" title="填写订单" />
+    <van-nav-bar
+      left-arrow
+      class="navBar"
+      @click-left="$router.go(-1)"
+      :fixed="false"
+      title="填写订单"
+    />
     <div class="content">
       <!-- 地址 -->
       <div class="siteBox" @click="popupClick(0)">
@@ -18,11 +24,17 @@
       <div class="inventoryBox">
         <div>
           <p>商品清单</p>
-          <p style="font-weight: 400;font-size: 0.8rem">种类:{{ orderdata.cateCount }},数量:{{ orderdata.plistCount }}</p>
+          <p style="font-weight: 400; font-size: 0.8rem">
+            种类:{{ orderdata.cateCount }},数量:{{ orderdata.plistCount }}
+          </p>
         </div>
         <div @click="popupClick(1)">
           <div>
-            <img v-for="(item,index) in orderdata.picUrl" :key="index" :src="item" />
+            <img
+              v-for="(item, index) in orderdata.picUrl"
+              :key="index"
+              :src="item"
+            />
           </div>
           <van-icon class="van-cell__right-icon" name="arrow" />
         </div>
@@ -42,14 +54,24 @@
       <!-- 配送方式 -->
       <div class="distributionBox">
         <van-cell title="配送方式" value="免费配送" />
-        <van-cell title="备注信息" is-link :value="notes?notes: '请输入'" @click="popupClick(2)" />
-        <van-cell title="发票信息" is-link :value="billState?'电子发票':'不开发票'" @click="popupClick(3)" />
+        <van-cell
+          title="备注信息"
+          is-link
+          :value="notes ? notes : '请输入'"
+          @click="popupClick(2)"
+        />
+        <van-cell
+          title="发票信息"
+          is-link
+          :value="billState ? '电子发票' : '不开发票'"
+          @click="popupClick(3)"
+        />
       </div>
     </div>
 
     <van-submit-bar
       class="noSubmit"
-      v-if="orderdata.needMoney && orderdata.needMoney !=0"
+      v-if="orderdata.needMoney && orderdata.needMoney != 0"
       :price="orderdata.totalMoney * 100"
       label="应付金额："
       button-text="提交订单"
@@ -61,20 +83,47 @@
         <span>还差{{ orderdata.needMoney | toFixed }}起送</span>
       </template>
     </van-submit-bar>
-    <van-submit-bar v-else :loading="btnload" class="yesSubmit" label="应付金额：" :price="orderdata.totalMoney * 100" button-text="提交订单" @submit="onSubmit" />
+    <van-submit-bar
+      v-else
+      :loading="btnload"
+      class="yesSubmit"
+      label="应付金额："
+      :price="orderdata.totalMoney * 100"
+      button-text="提交订单"
+      @submit="onSubmit"
+    />
     <!-- 弹出框 -->
-    <van-popup v-model="popupShow" :overlay="false" position="right" :style="{ height: height }" class="popup">
-      <van-nav-bar left-arrow class="navBar" @click-left="popupShut" :fixed="false" :title="popupid == 0? '地址选择':popupid == 1? '商品清单':popupid == 2? '备注信息':'发票信息' " />
+    <van-popup
+      v-model="popupShow"
+      :overlay="false"
+      :style="{ height: height }"
+      class="popup"
+    >
+      <van-nav-bar
+        left-arrow
+        class="navBar"
+        @click-left="popupShut"
+        :fixed="false"
+        :title="popupid == 0? '地址选择': popupid == 1? '商品清单': popupid == 2? '备注信息': '发票信息'"
+      />
       <!-- 地址选择 -->
-      <address_ @address="addressClick" :address="orderdata.address" v-if="popupid == 0" />
+      <address_
+        @address="addressClick"
+        :address="orderdata.address"
+        v-if="popupid == 0"
+      />
       <!-- 订单详情 -->
       <div v-else-if="popupid == 1" class="productbox">
-        <div v-for="(item,index) in orderdata.plistDetail" :key="index" class="product">
+        <div
+          v-for="(item, index) in orderdata.plistDetail"
+          :key="index"
+          class="product"
+        >
           <img :src="item.picUrl" />
           <div>
             <p>{{ item.plistName }}</p>
             <div class="productSize">
-              <span>颜色分类:{{ item.cateName? item.cateName: '暂无' }}</span>
+              <span>颜色分类:{{ item.cateName ? item.cateName : "暂无" }}</span>
               <span>{{ item.priceName }}</span>
             </div>
             <div class="productNum">x{{ item.buyNum }}</div>
@@ -83,7 +132,15 @@
       </div>
       <!-- 备注信息 -->
       <div v-else-if="popupid == 2" class="remarksbox">
-        <van-field v-model="notes" rows="4" autosize type="textarea" maxlength="50" placeholder="请输入备注信息" show-word-limit />
+        <van-field
+          v-model="notes"
+          rows="4"
+          autosize
+          type="textarea"
+          maxlength="50"
+          placeholder="请输入备注信息"
+          show-word-limit
+        />
       </div>
       <!-- 发票信息 -->
       <div v-else class="invoicebox">
@@ -122,6 +179,9 @@ export default {
     if (this.orderdata.popupid) {
       this.popupShow = true;
       this.popupid = this.orderdata.popupid;
+    } else if (this.$route.query.popupid) {
+      this.popupShow = true;
+      this.popupid = this.$route.query.popupid;
     }
   },
   methods: {
@@ -142,7 +202,6 @@ export default {
         this.$toast("请添加地址!");
         return;
       }
-      // console.info(this.orderdata.plistIds)
       this.btnload = true;
       this.axios
         .post(this.$api.submitOrder, {

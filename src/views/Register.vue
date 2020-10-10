@@ -1,6 +1,6 @@
 <template>
   <div class="register">
-    <head_ />
+    <!-- <head_ /> -->
     <div class="registerBox">
       <title_ titleId="1" />
       <div class="phoneBox">
@@ -8,14 +8,38 @@
           欢迎加入开心兔商城,注册后,即可了解产品订货价格,可直接下单订货采购;支持货到付款,支持微信,信用卡,...
           <i>点击查看更多</i>
         </p>-->
-        <van-field v-model="phoneNum" type="tel" maxlength="11" label="+86" placeholder="请输入手机号/用户名">
+        <van-field
+          v-model="phoneNum"
+          type="tel"
+          maxlength="11"
+          label="+86"
+          placeholder="请输入手机号/用户名"
+        >
           <template #button>
-            <van-button size="small" class="btn" v-if="!isloading" @click="getYzm">获取验证码</van-button>
+            <van-button
+              size="small"
+              class="btn"
+              v-if="!isloading"
+              @click="getYzm"
+              >获取验证码</van-button
+            >
             <p class="btnloadClass" v-else>{{ btnload }} s后重新获取</p>
           </template>
         </van-field>
-        <van-field v-model="yzm" type="digit" maxlength="6" label="验证码" placeholder="请输入验证码" />
-        <van-field v-model="pwd" label="密码" maxlength="18" type="password" placeholder="请输入密码" />
+        <van-field
+          v-model="yzm"
+          type="digit"
+          maxlength="6"
+          label="验证码"
+          placeholder="请输入验证码"
+        />
+        <van-field
+          v-model="pwd"
+          label="密码"
+          maxlength="18"
+          type="password"
+          placeholder="请输入密码"
+        />
       </div>
       <!-- 详细信息 -->
       <!-- <topic name="详细信息" color="#feb35c" />
@@ -25,14 +49,22 @@
         <van-field v-model="address" label="所属地区" placeholder="请输入所属地区" />
         <van-field v-model="address_detail" label="详细地址" placeholder="请输入详细地址" />
       </div>-->
-      <van-button class="btnForm" type="default" @click="saveUser">完成注册</van-button>
+      <van-button class="btnForm" type="default" @click="saveUser"
+        >完成注册</van-button
+      >
     </div>
-    <van-popup v-model="popupShow" position="right" :style="{ height: '100%',width: '100%' }">
+    <van-popup
+      v-model="popupShow"
+      position="right"
+      :style="{ height: '100%', width: '100%' }"
+    >
       <head_ />
       <div class="popupbox">
         <img src="../assets/img/form/wc.png" />
         <p>恭喜你账号注册成功</p>
-        <van-button class="btnForm" type="default" @click="$router.push('/')">立即进入</van-button>
+        <van-button class="btnForm" type="default" @click="$router.push('/')"
+          >立即进入</van-button
+        >
       </div>
     </van-popup>
   </div>
@@ -40,13 +72,13 @@
 <script>
 import title_ from "@/components/Title.vue";
 import topic from "@/components/Topic.vue";
-import head_ from "@/components/Head.vue";
+// import head_ from "@/components/Head.vue";
 
 export default {
   components: {
     title_,
     topic,
-    head_,
+    // head_,
   },
   data() {
     return {
@@ -139,6 +171,7 @@ export default {
 <style scoped>
 .registerBox {
   padding: 0 1rem;
+  margin-top: 3.5rem;
 }
 
 .phoneBox {
