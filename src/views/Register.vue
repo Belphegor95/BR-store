@@ -13,7 +13,7 @@
           type="tel"
           maxlength="11"
           label="+86"
-          placeholder="请输入手机号/用户名"
+          placeholder="请输入手机号"
         >
           <template #button>
             <van-button
@@ -38,7 +38,7 @@
           label="密码"
           maxlength="18"
           type="password"
-          placeholder="请输入密码"
+          placeholder="请输入初始密码"
         />
       </div>
       <!-- 详细信息 -->

@@ -1,20 +1,50 @@
 <!-- 修改密码 -->
 <template>
   <div class="password_">
-    <van-nav-bar left-arrow class="navBar" @click-left="$router.go(-1)" fixed placeholder title="修改密码" />
+    <van-nav-bar
+      left-arrow
+      class="navBar"
+      @click-left="$router.go(-1)"
+      fixed
+      placeholder
+      title="修改密码"
+    />
     <div>
-      <van-field v-model="phoneNum" label="手机号" placeholder="请输入手机号/用户名">
+      <van-field
+        v-model="phoneNum"
+        label="手机号"
+        placeholder="请输入手机号"
+        readonly
+      >
         <template #button>
-          <van-button size="small" class="btn" v-if="!isloading" @click="yzmClick">获取验证码</van-button>
+          <van-button
+            size="small"
+            class="btn"
+            v-if="!isloading"
+            @click="yzmClick"
+            >获取验证码</van-button
+          >
           <p class="btnloadClass" v-else>{{ btnload }} s后重新获取</p>
         </template>
       </van-field>
       <van-field v-model="yzm" label="验证码" placeholder="请输入验证码" />
-      <van-field v-model="pwd" label="新密码" type="password" placeholder="请输入新密码" />
-      <van-field v-model="pwd_" label="再次新密码" type="password" placeholder="请输入再次新密码" />
+      <van-field
+        v-model="pwd"
+        label="新密码"
+        type="password"
+        placeholder="请输入新密码"
+      />
+      <van-field
+        v-model="pwd_"
+        label="再次新密码"
+        type="password"
+        placeholder="请输入再次新密码"
+      />
     </div>
     <div class="btnBox">
-      <van-button class="btnForm" type="default" @click="resetPwd">提交</van-button>
+      <van-button class="btnForm" type="default" @click="resetPwd"
+        >提交</van-button
+      >
     </div>
   </div>
 </template>
@@ -22,6 +52,7 @@
 export default {
   data() {
     return {
+      user: this.$store.state.user,
       phoneNum: "",
       yzm: "",
       pwd: "",
@@ -29,6 +60,9 @@ export default {
       isloading: false,
       btnload: 60,
     };
+  },
+  mounted() {
+    this.phoneNum = this.user.phone;
   },
   methods: {
     // 获取验证码
@@ -123,5 +157,12 @@ export default {
 }
 .btnForm {
   width: 98%;
+}
+</style>
+<style>
+/* input 左边居中 */
+.manage .van-field__label {
+  display: flex;
+  align-items: center;
 }
 </style>

@@ -4,7 +4,7 @@
     <div class="passwordBox">
       <title_ titleId="2" />
       <div class="formBox">
-        <van-field v-model="phoneNum" label="+86" placeholder="请输入手机号/用户名">
+        <van-field v-model="phoneNum" label="+86" placeholder="请输入手机号">
           <template #button>
             <van-button size="small" class="btn" v-if="!isloading" @click="yzmClick">获取验证码</van-button>
             <p class="btnloadClass" v-else>{{ btnload }} s后重新获取</p>

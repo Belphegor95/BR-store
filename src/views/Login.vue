@@ -3,7 +3,7 @@
     <head_ />
     <title_ titleId="0" />
     <div class="formBox">
-      <van-field v-model="phoneNum" maxlength="11" placeholder="请输入手机号/用户名" />
+      <van-field v-model="phoneNum" maxlength="11" placeholder="请输入手机号" />
       <van-field key="010" v-model="pwd" maxlength="18" type="password" placeholder="请输入密码" v-if="logintype" />
       <van-field key="101" v-model="yzm" maxlength="6" placeholder="验证码" v-else>
         <template #button>
