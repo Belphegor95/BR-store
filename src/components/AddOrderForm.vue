@@ -1,9 +1,15 @@
 <!-- 订单生成成功 -->
 <template>
   <div>
-    <van-nav-bar left-arrow class="navBar" @click-left="popuClick" :fixed="false" title="订单信息" />
+    <van-nav-bar
+      left-arrow
+      class="navBar"
+      @click-left="popuClick"
+      :fixed="false"
+      title="订单信息"
+    />
     <div class="content">
-      <img src="../assets/img/order/wc.png" />
+      <img src="../assets/img/form/wc.png" />
       <div class="msgbox">
         <p>订单编号:{{ order.tradeNo }}</p>
         <p>
@@ -12,8 +18,12 @@
         </p>
       </div>
       <div class="btnbox">
-        <van-button type="primary" color="#faa062" @click="popuClick">返回</van-button>
-        <van-button type="primary" color="#e75858">立即支付</van-button>
+        <van-button type="primary" color="#faa062" @click="popuClick"
+          >返回</van-button
+        >
+        <van-button type="primary" color="#e75858" @click="onPay"
+          >立即支付</van-button
+        >
       </div>
     </div>
   </div>
@@ -32,6 +42,10 @@ export default {
       this.$store.commit("show_order_", {});
       // this.$router.push("/shopping/orderForm?formid=1");
       this.$emit("popuClick", false);
+    },
+    onPay: function () {
+      let url = `http://kzf.banruogame.com/wxPay/pay/jsapi.php?tradeNo=${this.order.tradeNo}1&money=${this.order.money}&baseUrl=${this.$api.baseUrl}`;
+      window.location.href = url;
     },
   },
 };

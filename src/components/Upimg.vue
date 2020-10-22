@@ -32,7 +32,6 @@ export default {
   methods: {
     // 区分多选单选
     afterRead: function (file) {
-      console.info(file);
       if (Array.isArray(file)) {
         for (let i = 0; i < file.length; i++) {
           this.upimg(file[i]);

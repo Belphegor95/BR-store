@@ -1,9 +1,19 @@
 <!-- 我的订单 -->
 <template>
   <div class="orderForm">
-    <van-nav-bar left-arrow class="navBar" @click-left="$router.go(-1)" :fixed="false" title="订单" />
+    <van-nav-bar
+      left-arrow
+      class="navBar"
+      @click-left="$router.go(-1)"
+      :fixed="false"
+      title="订单"
+    />
     <van-tabs animated lazy-render v-model="formid" @click="getOrderList">
-      <van-tab v-for="(title,titleindex) in titleList" :key="titleindex" :title="title">
+      <van-tab
+        v-for="(title, titleindex) in titleList"
+        :key="titleindex"
+        :title="title"
+      >
         <van-pull-refresh v-model="isRefresh" @refresh="onRefresh">
           <van-empty v-if="orderList.length == 0" description="暂无数据" />
           <ul v-else>
@@ -12,12 +22,33 @@
                 <p>{{ item.tradeNo }}</p>
                 <p>订单{{ titleList[item.type] }}</p>
               </div>
-              <div class="imgBox" @click="orderClick(item,false)">
-                <img v-for="(img,indeximg) in item.picurl" :key="indeximg" :src="img" />
+              <div class="imgBox" @click="orderClick(item, false)">
+                <img
+                  v-for="(img, indeximg) in item.picurl"
+                  :key="indeximg"
+                  :src="img"
+                />
               </div>
-              <p>种类:{{ item.cateCount }},数量:{{ item.plistCount }},总计: ￥{{ item.money }}</p>
+              <p>
+                种类:{{ item.cateCount }},数量:{{ item.plistCount }},总计: ￥{{
+                  item.money
+                }}
+              </p>
               <div class="btnBox">
-                <van-button class="paybtn" type="default" size="small">立即支付</van-button>
+                <van-button
+                  class="paybtn"
+                  type="default"
+                  size="small"
+                  @click="onPay"
+                  >立即支付</van-button
+                >
+                <van-button
+                  class="paybtn"
+                  type="default"
+                  size="small"
+                  @click="onEditOrder(item.tradeNo)"
+                  >修改订单</van-button
+                >
                 <!-- <van-button type="default" size="small">再次购买</van-button> -->
                 <!-- <van-button type="default" size="small" @click="orderClick(item,true)">修改订单</van-button> -->
               </div>
@@ -27,7 +58,13 @@
       </van-tab>
     </van-tabs>
     <!-- 弹出框 -->
-    <van-popup v-model="popupShow" :overlay="false" position="right" :style="{ height: height,width: '100%' }" class="popup">
+    <van-popup
+      v-model="popupShow"
+      :overlay="false"
+      position="right"
+      :style="{ height: height, width: '100%' }"
+      class="popup"
+    >
       <addOrderForm :order="order" @popuClick="popuClick" />
     </van-popup>
   </div>
@@ -83,6 +120,29 @@ export default {
           this.$toast.fail(this.$api.monmsg);
         });
     },
+    onEditOrder: function (tradeNo) {
+      this.$dialog
+        .confirm({
+          message: "确定退出吗?",
+        })
+        .then(() => {
+          this.axios
+            .post(this.$api.editOrder, {
+              tradeNo: tradeNo,
+            })
+            .then((data) => {
+              if (data.code == 200) {
+                this.$router.push("/shopping");
+              } else {
+                this.$toast(this.ErrCode(data.msg));
+              }
+            })
+            .catch(() => {
+              this.$toast(this.$api.monmsg);
+            });
+        })
+        .catch(() => {});
+    },
     // 跳转详情
     orderClick: function (item, is) {
       this.$store.commit("show_order", item);
@@ -106,6 +166,11 @@ export default {
           obj[index] = JSON.stringify(obj[index]);
       }
       return obj;
+    },
+    // 点击支付
+    onPay: function () {
+      let url = `http://kzf.banruogame.com/wxPay/pay/jsapi.php?tradeNo=${this.order.tradeNo}1&money=${this.order.money}`;
+      window.location.href = url;
     },
   },
 };

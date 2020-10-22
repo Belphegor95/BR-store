@@ -1,21 +1,43 @@
 <template>
-  <van-action-sheet v-model="popUpShow" class="popup" @click-overlay="showClick" :close-on-click-overlay="false">
+  <van-action-sheet
+    v-model="popUpShow"
+    class="popup"
+    @click-overlay="showClick"
+    :close-on-click-overlay="false"
+  >
     <div class="headBox">
-      <img :src="popUpData.plist_img_url?popUpData.plist_img_url[0]: '' " />
+      <img :src="popUpData.plist_img_url ? popUpData.plist_img_url[0] : ''" />
       <h4>{{ popUpData.plist_name }}</h4>
     </div>
     <div class="content" v-if="popUpData.price_lv">
-      <div class="trailBox" v-for="(cate,indexcate) in popUpData.price_lv.cate" :key="indexcate">
+      <div
+        class="trailBox"
+        v-for="(cate, indexcate) in popUpData.price_lv.cate"
+        :key="indexcate"
+      >
         <div class="trail">
           <div class="trailName">
-            <p style="margin-right:0.2rem">{{ cate.cateName?cate.cateName:'暂无' }}</p>
+            <p style="margin-right: 0.2rem">
+              {{ cate.cateName ? cate.cateName : "暂无" }}
+            </p>
           </div>
           <div class="stepperBox">
-            <van-stepper v-model="cate.num" default-value="0" :integer="true" :allow-empty="false" :min="0" theme="round" />
+            <van-stepper
+              v-model="cate.num"
+              default-value="0"
+              :integer="true"
+              :allow-empty="false"
+              :min="0"
+              theme="round"
+            />
           </div>
         </div>
         <div class="price" v-if="popUpData.price_lv.unitList">
-          <div v-show="item.rate == cate.unitId" v-for="(item,index) in popUpData.price_lv.unitList" :key="index">
+          <div
+            v-show="item.rate == cate.unitId"
+            v-for="(item, index) in popUpData.price_lv.unitList"
+            :key="index"
+          >
             <p>市场价￥{{ `${item.marketPrice}/${item.unitName}` }}</p>
             <p>
               ￥
@@ -36,18 +58,21 @@
             <span>单位</span>
             <van-radio-group v-model="cate.rateType" direction="horizontal">
               <van-radio
-                @click="rateTypeClick(cate,item)"
+                @click="rateTypeClick(cate, item)"
                 icon-size="16px"
                 :name="item.priceId"
-                v-for="(item,index) in popUpData.price_lv.unitList"
+                v-for="(item, index) in popUpData.price_lv.unitList"
                 :key="index"
-              >{{ item.unitName }}</van-radio>
+                >{{ item.unitName }}</van-radio
+              >
             </van-radio-group>
           </li>
         </ul>
       </div>
     </div>
-    <van-button class="btnForm" @click="addShopping" type="default">确定</van-button>
+    <van-button class="btnForm" @click="addShopping" type="default"
+      >确定</van-button
+    >
   </van-action-sheet>
 </template>
 <script>
@@ -90,7 +115,7 @@ export default {
       if (arr.length == 0) return;
       this.axios
         .post(this.$api.addToShoppingCart, {
-          plist: JSON.stringify(arr),
+          plist: JSON.stringify(arr), 
         })
         .then((data) => {
           if (data.code == 200) {
@@ -158,7 +183,6 @@ export default {
 .price {
   color: #b8bcc4;
   font-size: 0.8rem;
-  /* margin: 0.5rem 0; */
   display: flex;
   justify-content: space-between;
 }

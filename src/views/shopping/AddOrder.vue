@@ -66,6 +66,7 @@
           :value="billState ? '电子发票' : '不开发票'"
           @click="popupClick(3)"
         />
+        <van-cell title="优惠券" is-link @click="ticketShow = true" />
       </div>
     </div>
 
@@ -104,7 +105,15 @@
         class="navBar"
         @click-left="popupShut"
         :fixed="false"
-        :title="popupid == 0? '地址选择': popupid == 1? '商品清单': popupid == 2? '备注信息': '发票信息'"
+        :title="
+          popupid == 0
+            ? '地址选择'
+            : popupid == 1
+            ? '商品清单'
+            : popupid == 2
+            ? '备注信息'
+            : '发票信息'
+        "
       />
       <!-- 地址选择 -->
       <address_
@@ -150,13 +159,23 @@
         </van-radio-group>
       </div>
     </van-popup>
+    <van-action-sheet v-model="ticketShow" title="优惠券">
+      <!-- <div class="content">内容</div> -->
+      <ticket
+        :ticket="item"
+        v-for="(item, index) in ticketList"
+        :key="index"
+      />
+    </van-action-sheet>
   </div>
 </template>
 <script>
 import address_ from "../my/Address";
+import ticket from "../../components/Ticket";
 export default {
   components: {
     address_,
+    ticket,
   },
   data() {
     return {
@@ -168,6 +187,9 @@ export default {
       billState: 0,
       btnload: false,
       height: 0,
+      ticketId: -1, // 优惠券id
+      ticketShow: false,
+      ticketList: [], // 优惠券
     };
   },
   mounted() {
@@ -176,6 +198,7 @@ export default {
     this.height = this.height + "px";
     this.orderdata = this.$store.state.order;
     this.getsite();
+    this.getTicket();
     if (this.orderdata.popupid) {
       this.popupShow = true;
       this.popupid = this.orderdata.popupid;
@@ -230,6 +253,22 @@ export default {
         })
         .catch(() => {
           this.btnload = false;
+          this.$toast.fail(this.$api.monmsg);
+        });
+    },
+    // 获取优惠券
+    getTicket: function () {
+      this.axios
+        .post(this.$api.getTicket)
+        .then((data) => {
+          if (data.code == 200) {
+            this.ticketList = data.data;
+            // this.onTicketType(0);
+          } else {
+            this.$toast(this.ErrCode(data.msg));
+          }
+        })
+        .catch(() => {
           this.$toast.fail(this.$api.monmsg);
         });
     },

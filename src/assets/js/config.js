@@ -87,4 +87,6 @@ api.getServerNotice = "/api/master/getServerNotice"  // 获取公告  单独端�
 
 api.getFixDoorMoney = "/api/getFixDoorMoney"  // 获取上门维修费用
 
+api.editOrder = "/api/editOrder"  // 修改订单
+
 export { api };
