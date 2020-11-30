@@ -4,19 +4,47 @@
     <title_ titleId="0" />
     <div class="formBox">
       <van-field v-model="phoneNum" maxlength="11" placeholder="请输入手机号" />
-      <van-field key="010" v-model="pwd" maxlength="18" type="password" placeholder="请输入密码" v-if="logintype" />
-      <van-field key="101" v-model="yzm" maxlength="6" placeholder="验证码" v-else>
+      <van-field
+        key="010"
+        v-model="pwd"
+        maxlength="18"
+        type="password"
+        placeholder="请输入密码"
+        v-if="logintype"
+      />
+      <van-field
+        key="101"
+        v-model="yzm"
+        maxlength="6"
+        placeholder="验证码"
+        v-else
+      >
         <template #button>
-          <van-button size="small" class="btn" v-if="!isloading" @click="getYzm">获取验证码</van-button>
+          <van-button size="small" class="btn" v-if="!isloading" @click="getYzm"
+            >获取验证码</van-button
+          >
           <p class="btnloadClass" v-else>{{ btnloadnum }} s后重新获取</p>
         </template>
       </van-field>
       <div class="btnbox">
-        <span @click="logintype = !logintype">{{ logintype ? "验证码登录": "密码登录" }}</span>
-        <span class="losePassword" @click="( $router.push('/password'))">忘记密码</span>
+        <span @click="logintype = !logintype">{{
+          logintype ? "验证码登录" : "密码登录"
+        }}</span>
+        <span class="losePassword" @click="$router.push('/password')"
+          >忘记密码</span
+        >
       </div>
-      <van-button class="btnForm" type="default" :loading="btnload" @click="loginClick">登录</van-button>
+      <van-button
+        class="btnForm"
+        type="default"
+        :loading="btnload"
+        @click="loginClick"
+        >登录</van-button
+      >
     </div>
+    <footer>
+      登录代表同意<span @click="$router.push('/policy')">开心兔隐私政策</span>,并授权使用您的开心兔账号信息(如昵称、头像、收货地址)以便您统一管理
+    </footer>
   </div>
 </template>
 
@@ -42,6 +70,10 @@ export default {
   },
   mounted() {},
   methods: {
+    ok: function () {
+      console.info(123)
+
+    },
     loginClick: function () {
       if (!/^1[3456789]\d{9}$/.test(this.phoneNum)) {
         this.$toast("手机号输入有误");
@@ -149,6 +181,10 @@ export default {
 </script>
 
 <style scoped>
+.login {
+  height: 100%;
+  position: relative;
+}
 .Title {
   padding: 0 1rem;
 }
@@ -178,6 +214,18 @@ export default {
 }
 .btnForm {
   margin-top: 0.5rem;
+}
+footer {
+  position: absolute;
+  bottom: 0;
+  padding: 0.5rem;
+  font-size: 0.8rem;
+  /* display: flex; */
+  text-align: center;
+}
+footer span {
+  padding: 0 0.2rem;
+  color: #ffc474;
 }
 </style>
 <style >

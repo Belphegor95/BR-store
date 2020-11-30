@@ -1,22 +1,34 @@
 <template>
   <div class="setting">
     <div>
-      <van-cell title="用户名" :value="$store.state.user.companyName ? $store.state.user.companyName: '暂无'" @click="tarPush(2)" />
+      <van-cell
+        title="用户名"
+        :value="
+          $store.state.user.companyName ? $store.state.user.companyName : '暂无'
+        "
+        @click="tarPush(2)"
+      />
       <!-- <van-cell title="换绑手机" @click="tarPush(0)" is-link value="186****5358" /> -->
       <van-cell title="换绑手机" @click="tarPush(0)" is-link />
       <!-- <van-cell title="登录密码" @click="tarPush(1)" is-link value="******" /> -->
       <van-cell title="修改密码" @click="tarPush(1)" is-link />
     </div>
     <div>
-      <van-cell title="关于开心兔" is-link />
+      <van-cell title="关于开心兔" @click="tarPush(3)" is-link />
       <van-cell title="当前版本" value="1.02" />
     </div>
     <!-- <div class="btnBox" @click="quitClick">切换账号</div> -->
     <div class="btnBox" @click="quitClick">退出登录</div>
-    <van-popup :overlay="false" v-model="popupShow" position="right" :style="{ height: height,width: '100%' }">
+    <van-popup
+      :overlay="false"
+      v-model="popupShow"
+      position="right"
+      :style="{ height: height, width: '100%' }"
+    >
       <phone v-if="tarbarType == 0" />
       <password v-else-if="tarbarType == 1" />
       <orderName v-else-if="tarbarType == 2" />
+      <happyRabbit v-else-if="tarbarType == 3" />
     </van-popup>
   </div>
 </template>
@@ -24,11 +36,13 @@
 import phone from "./subfile/Phone";
 import password from "./subfile/Password_";
 import orderName from "./subfile/OrderName";
+import happyRabbit from "./subfile/HappyRabbit";
 export default {
   components: {
     phone,
     password,
     orderName,
+    happyRabbit,
   },
   data() {
     return {

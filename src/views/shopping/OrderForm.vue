@@ -123,7 +123,7 @@ export default {
     onEditOrder: function (tradeNo) {
       this.$dialog
         .confirm({
-          message: "确定退出吗?",
+          message: "确定修改订单吗?",
         })
         .then(() => {
           this.axios
@@ -169,7 +169,7 @@ export default {
     },
     // 点击支付
     onPay: function () {
-      let url = `http://kzf.banruogame.com/wxPay/pay/jsapi.php?tradeNo=${this.order.tradeNo}1&money=${this.order.money}`;
+      let url = `http://kzf.banruogame.com/wxPay/pay/jsapi.php?tradeNo=${this.order.tradeNo}1&money=${this.order.money}&orderType=0&baseUrl=${this.$api.baseUrl}`;
       window.location.href = url;
     },
   },
@@ -248,7 +248,8 @@ li > p {
 }
 /* 设置高度占满 */
 .orderForm .van-tabs {
-  height: 100%;
+  flex: auto;
+  height: 1px;
   display: flex;
   flex-direction: column;
 }

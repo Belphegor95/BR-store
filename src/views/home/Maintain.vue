@@ -295,7 +295,8 @@ export default {
         .then((data) => {
           if (data.code == 200) {
             this.$toast("维修下单成功!");
-            this.$router.go(-1);
+            this.onPay(data.data);
+            // this.$router.go(-1);
           } else {
             this.$toast(this.ErrCode(data.msg));
           }
@@ -303,6 +304,10 @@ export default {
         .catch(() => {
           this.$toast(this.$api.monmsg);
         });
+    },
+    onPay: function (data) {
+      let url = `http://kzf.banruogame.com/wxPay/pay/jsapi.php?tradeNo=${data.tradeNo}1&money=${data.money}&orderType=1&baseUrl=${this.$api.baseUrl}`;
+      window.location.href = url;
     },
     // 点击确定
     onConfirm: function (value, index) {

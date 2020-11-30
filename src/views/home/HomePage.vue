@@ -5,7 +5,8 @@
     <div class="head">
       <van-search disabled @click="searchShow= true" placeholder="请输入搜索关键词" />
       <div class="icoBox" @click="$router.push('/manage/information')">
-        <van-icon :name="lingdang" badge="1" />
+        <!--  <van-icon :name="lingdang" badge="0" />-->
+        <van-icon :name="lingdang"  />
       </div>
     </div>
     <div class="content">
@@ -235,6 +236,7 @@ export default {
 }
 .swipeBox {
   width: 90%;
+  /* width: 100%; */
   margin: 0.5rem auto;
 }
 .my-swipe .van-swipe-item {

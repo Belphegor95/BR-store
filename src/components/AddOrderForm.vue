@@ -44,7 +44,7 @@ export default {
       this.$emit("popuClick", false);
     },
     onPay: function () {
-      let url = `http://kzf.banruogame.com/wxPay/pay/jsapi.php?tradeNo=${this.order.tradeNo}1&money=${this.order.money}&baseUrl=${this.$api.baseUrl}`;
+      let url = `http://kzf.banruogame.com/wxPay/pay/jsapi.php?tradeNo=${this.order.tradeNo}1&money=${this.order.money}&orderType=0&baseUrl=${this.$api.baseUrl}`;
       window.location.href = url;
     },
   },

@@ -3,25 +3,30 @@
     <!-- 路由 -->
     <router-view></router-view>
     <!-- 底部导航 -->
-    <van-tabbar v-model="activeid" class="tabbarBox" @change="tabbarClick" :fixed="false">
+    <van-tabbar
+      v-model="activeid"
+      class="tabbarBox"
+      @change="tabbarClick"
+      :fixed="false"
+    >
       <van-tabbar-item>
-        <img v-if="activeid === 0" src="../assets/img/home/shouye01.png"  />
-        <img v-else src="../assets/img/home/shouye.png"  />
+        <img v-if="activeid === 0" src="../assets/img/home/shouye01.png" />
+        <img v-else src="../assets/img/home/shouye.png" />
         首页
       </van-tabbar-item>
       <van-tabbar-item>
-        <img v-if="activeid === 1" src="../assets/img/home/feilei01.png"  />
-        <img v-else src="../assets/img/home/feilei.png"  />
+        <img v-if="activeid === 1" src="../assets/img/home/feilei01.png" />
+        <img v-else src="../assets/img/home/feilei.png" />
         分类
       </van-tabbar-item>
       <van-tabbar-item :badge="count">
-        <img v-if="activeid === 2" src="../assets/img/home/gouwuche01.png"  />
-        <img v-else src="../assets/img/home/gouwuche.png"  />
+        <img v-if="activeid === 2" src="../assets/img/home/gouwuche01.png" />
+        <img v-else src="../assets/img/home/gouwuche.png" />
         购物车
       </van-tabbar-item>
       <van-tabbar-item>
-        <img v-if="activeid === 3" src="../assets/img/home/wode01.png"  />
-        <img v-else src="../assets/img/home/wode.png"  />
+        <img v-if="activeid === 3" src="../assets/img/home/wode01.png" />
+        <img v-else src="../assets/img/home/wode.png" />
         我的
       </van-tabbar-item>
     </van-tabbar>
@@ -44,7 +49,7 @@ export default {
       }
     },
     "$store.state.activeid": function (value) {
-      this.activeid = value
+      this.activeid = value;
     },
   },
   mounted() {
@@ -55,13 +60,13 @@ export default {
     tabbarClick: function (id) {
       this.$store.commit("show_activeid", id);
       if (id === 0) {
-        this.$router.push("/homePage");
+        this.$router.replace("/homePage");
       } else if (id === 1) {
-        this.$router.push("/classification");
+        this.$router.replace("/classification");
       } else if (id === 2) {
-        this.$router.push("/shopping");
+        this.$router.replace("/shopping");
       } else if (id === 3) {
-        this.$router.push("/personage");
+        this.$router.replace("/personage");
       }
     },
     // 获取购物车里商品数量

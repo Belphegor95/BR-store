@@ -44,8 +44,9 @@ axios.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-// axios.defaults.baseURL = api.baseUrl;
-axios.defaults.baseURL = "/api";
+axios.defaults.baseURL = api.baseUrl;
+// axios.defaults.baseURL = "/api";
+
 // 允许携带cookie
 axios.defaults.withCredentials = true;
 function ErrCode(code) {
@@ -126,7 +127,6 @@ function ErrCode(code) {
   }
 }
 Vue.prototype.ErrCode = ErrCode
-
 
 Vue.config.productionTip = false
 Vue.prototype.$api = api;

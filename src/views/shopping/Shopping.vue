@@ -273,7 +273,6 @@ export default {
     },
     // 单个商品
     checkedClural: function (item, index_I) {
-      // console.info(123)
       // 判断是否是添加
       if (this.goodss.indexOf(item.plistId) > -1) {
         // 把未添加的 添加进选中

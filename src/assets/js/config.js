@@ -4,28 +4,32 @@ var api = api || {};
 // api.baseUrl = "http://121.196.123.181:3000"
 
 api.baseUrl = "http://192.168.1.189:3000"   // 孙飞请求地址
- 
+
 // api.baseUrl = "http://39.105.230.213:3000"   // 孙飞请求地址
 
-api.masterUrl = "http://39.105.230.213:3002"   // 公告请求地址
+// api.baseUrl = "http://8.131.87.240:3000"   // 孙飞请求地址
+
+// api.baseUrl = "http://www.kaixintu.cn:3000"   // 孙飞请求地址
+
+api.masterUrl = "http://www.kaixintu.cn:3002"   // 公告请求地址
 
 api.monmsg = "网络遇到问题,请重试!";
 
-api.regist = "/api/regist"  // 注册 1
+api.regist = "/api/regist"  // 注册
 
-api.login = "/api/login"  // 登录 1
+api.login = "/api/login"  // 登录
 
 api.selectAcc = "/api/selectAcc"  // 登录角色
 
-api.slideshow = "/api/slideshow"  // 轮播图 1
+api.slideshow = "/api/slideshow"  // 轮播图
 
-api.homeRecommend = "/api/homeRecommend"  // 推荐商品 1
+api.homeRecommend = "/api/homeRecommend"  // 推荐商品
 
-api.cate = "/api/cate"  // 分类 1
+api.cate = "/api/cate"  // 分类
 
-api.getCatePlist = "/api/getCatePlist"  // 获取分类商品 1
+api.getCatePlist = "/api/getCatePlist"  // 获取分类商品
 
-api.getHomeCate = "/api/getHomeCate"  // 首页分类入口
+api.getHomeCate = "/api/getHomeCate"  // 首页分类入口 
 
 api.getYzm = "/api/getYzm"  // 获取验证码
 
@@ -65,23 +69,23 @@ api.applyChangePhone = "/api/applyChangePhone"  // 申请更换手机号
 
 api.changePhone = "/api/changePhone"  // 换绑手机号
 
-api.logout = "/api/logout"  // 退出登录 1
+api.logout = "/api/logout"  // 退出登录
 
-api.uploadFixImg = "/api/uploadFixImg"  // 上传图片 1
+api.uploadFixImg = "/api/uploadFixImg"  // 上传图片
 
-api.getYzmForFindPwd = "/api/getYzmForFindPwd"  // 忘记密码 验证码 1
+api.getYzmForFindPwd = "/api/getYzmForFindPwd"  // 忘记密码 验证码
 
-api.resetPwd = "/api/resetPwd"  //  重置密码 1
+api.resetPwd = "/api/resetPwd"  //  重置密码
 
-api.getYzmForLogin = "/api/getYzmForLogin"  // 登录验证码 1
+api.getYzmForLogin = "/api/getYzmForLogin"  // 登录验证码
 
-api.loginByYzm = "/api/loginByYzm"  // 验证码登录 1
+api.loginByYzm = "/api/loginByYzm"  // 验证码登录
 
 api.submitFixOrder = "/api/submitFixOrder" // 提交维修订单
 
 api.editAccOrderName = "/api/editAccOrderName"  // 修改用户名
 
-api.getFixOrder = "/api/getFixOrder"  //  获取维修单 1
+api.getFixOrder = "/api/getFixOrder"  //  获取维修单
 
 api.getServerNotice = "/api/master/getServerNotice"  // 获取公告  单独端口 3002
 

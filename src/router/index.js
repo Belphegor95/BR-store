@@ -135,6 +135,11 @@ const routes = [
     name: 'Comment',
     component: () => import('../views/Comment.vue'),
   },
+  {
+    path: '/policy',
+    name: 'Policy',
+    component: () => import('../views/Policy.vue')
+  },
 ]
 
 const router = new VueRouter({

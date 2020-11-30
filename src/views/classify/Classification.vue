@@ -30,16 +30,19 @@
               <div class="tagBox" @click="rutClick(item)">
                 <img :src="item.plist_img_url.length !=0? item.plist_img_url[0]: '' " />
                 <div class="tagRight">
-                  <p>蓝</p>
-                  <p>市场价: 19.8/个</p>
+                  <p><span style="margin-right:1rem" v-for="(itemI,index) in item.price_lv.cate" :key="index">{{ itemI.cateName }}</span></p>
+                  <!-- <p>市场价: 19.8/个</p> -->
                   <p>商品标签:</p>
-                  <p>15.86/个</p>
+                  <p><span style="margin-right:1rem" v-for="(itemI,index) in item.price_lv.unitList" :key="index">{{ itemI.unitName }}</span></p>
+                  <p class="orderPricebox">¥ <span>{{ item.price_lv.unitList[0].orderPrice }}</span></p>
                 </div>
               </div>
               <div class="stepperBox">
+                
                 <span @click="shoppingclick(item)">
                   <img class="shoppingCart" src="../../assets/img/home/gouwu.png" />
                 </span>
+                <p>库存充足</p>
               </div>
             </li>
           </ul>
@@ -199,11 +202,25 @@ li > h4 {
   justify-content: center;
   flex-direction: column;
 }
+.orderPricebox {
+  color: #ec4141;
+  margin-top: 0.1rem;
+}
+.orderPricebox > span {
+  
+  font-size: 1.2rem;
+}
 /* 步进器 */
 .stepperBox {
   display: flex;
+  align-items: center;
   margin-bottom: 0.5rem;
   flex-direction: row-reverse;
+}
+.stepperBox > p {
+  margin-right: 1.5rem;
+  font-size: 0.9rem;
+  color: #999;
 }
 .shoppingCart {
   height: 2rem;

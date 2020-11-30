@@ -85,7 +85,6 @@ export default {
     // this.$nextTick((x) => {
     //   let input = document.querySelector(".van-field__control")
     //   input.focus();
-    //   console.info(input)
     // });
   },
   methods: {

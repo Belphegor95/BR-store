@@ -171,7 +171,8 @@ export default {
 </script>
 <style scoped>
 .address {
-  height: 100%;
+  flex: auto;
+  height: 1px;
   display: flex;
   flex-direction: column;
   background-color: #f5f5f5;
@@ -180,6 +181,7 @@ export default {
   flex: auto;
   height: 1px;
   overflow-y: auto;
+  /* margin-bottom: 4rem; */
 }
 .site {
   border: 1px dashed #fff;
@@ -204,6 +206,11 @@ export default {
   color: #999999;
 }
 .btnBox {
+  /* position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 98%; */
+  height: 3rem;
   padding: 0.5rem 1rem;
 }
 .pitchon {

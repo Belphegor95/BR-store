@@ -38,10 +38,10 @@
             v-for="(item, index) in popUpData.price_lv.unitList"
             :key="index"
           >
-            <p>市场价￥{{ `${item.marketPrice}/${item.unitName}` }}</p>
+            <p>市场价￥{{ `${item.orderPrice}/${item.unitName}` }}</p>
             <p>
               ￥
-              <i>{{ item.marketPrice }}</i>
+              <i>{{ item.orderPrice }}</i>
               /{{ item.unitName }}
             </p>
           </div>
@@ -63,7 +63,7 @@
                 :name="item.priceId"
                 v-for="(item, index) in popUpData.price_lv.unitList"
                 :key="index"
-                >{{ item.unitName }}</van-radio
+                >{{ item.unitName }}<i v-if="item.rate != 1">({{item.rate}}{{ popUpData.price_lv.unitList[0].unitName }})</i></van-radio
               >
             </van-radio-group>
           </li>
@@ -87,10 +87,17 @@ export default {
       // rate: 1,
     };
   },
-  mounted() {
-    // if (this.popUpData.price_lv) this.popUpData.price_lv = JSON.parse(popUpData.price_lv)
+  watch: {
+    popUpShow(val) {
+      if (val)  this.getOrderPrice()
+    }
   },
   methods: {
+    getOrderPrice: function () {
+      this.popUpData.price_lv.cate.forEach(item => {
+        item.order = this.popUpData.price_lv.unitList[0].orderPrice
+      })
+    },
     rateTypeClick: function (cate, item) {
       this.$forceUpdate();
       cate.order = item.orderPrice;
@@ -211,6 +218,7 @@ li {
   border-bottom: 1px solid #d2d5df;
 }
 li > span {
+  flex-shrink: 0;
   margin-right: 1rem;
 }
 /* 底部按钮 */

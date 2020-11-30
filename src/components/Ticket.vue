@@ -1,6 +1,7 @@
 <!-- 优惠券 -->
 <template>
   <div
+    @click="onTicket"
     class="ticket"
     :class="
       ticket.type == 0 ? 'ticket_0' : ticket.type == 1 ? 'ticket_1' : 'ticket_2'
@@ -26,6 +27,11 @@ export default {
   },
   data() {
     return {};
+  },
+  methods: {
+    onTicket: function () {
+      this.$emit("onTicket", this.ticket);
+    },
   },
   filters: {
     date(val) {

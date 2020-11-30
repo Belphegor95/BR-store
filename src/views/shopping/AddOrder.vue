@@ -66,7 +66,12 @@
           :value="billState ? '电子发票' : '不开发票'"
           @click="popupClick(3)"
         />
-        <van-cell title="优惠券" is-link @click="ticketShow = true" />
+        <van-cell
+          title="优惠券"
+          is-link
+          :value="ticket.id != -1 ? ticket.name : ''"
+          @click="ticketShow = true"
+        />
       </div>
     </div>
 
@@ -159,13 +164,16 @@
         </van-radio-group>
       </div>
     </van-popup>
-    <van-action-sheet v-model="ticketShow" title="优惠券">
-      <!-- <div class="content">内容</div> -->
-      <ticket
-        :ticket="item"
-        v-for="(item, index) in ticketList"
-        :key="index"
-      />
+    <van-action-sheet class="ticketbox" v-model="ticketShow" title="优惠券">
+      <div style="flex: auto; overflow: auto">
+        <ticket
+          @onTicket="onTicket"
+          :ticket="item"
+          v-for="(item, index) in ticketList"
+          :key="index"
+        />
+      </div>
+      <button class="noTicket" @click="onNoTicket">取消使用</button>
     </van-action-sheet>
   </div>
 </template>
@@ -187,7 +195,10 @@ export default {
       billState: 0,
       btnload: false,
       height: 0,
-      ticketId: -1, // 优惠券id
+      ticket: {
+        id: -1,
+        name: "",
+      }, // 优惠券id
       ticketShow: false,
       ticketList: [], // 优惠券
     };
@@ -233,19 +244,13 @@ export default {
           sendType: 0, //配送方式 0:免费配送,1:自提
           notes: this.notes,
           billState: this.billState,
+          ticketId: this.ticket.id,
         })
         .then((data) => {
           if (data.code == 200) {
             this.btnload = false;
             this.$store.commit("show_order_", data.data);
             this.$router.push(`/shopping/orderForm?formid=1`);
-            // this.$router.push({
-            //   path: `/shopping/orderForm?formid=1`,
-            //   query: {
-            //     formid: 1,
-            //     order: JSON.stringify(data.data),
-            //   },
-            // });
           } else {
             this.btnload = false;
             this.$toast(this.ErrCode(data.msg));
@@ -262,8 +267,10 @@ export default {
         .post(this.$api.getTicket)
         .then((data) => {
           if (data.code == 200) {
-            this.ticketList = data.data;
-            // this.onTicketType(0);
+            // 过滤优惠券 只有优惠券能用才能选
+            this.ticketList = data.data.filter((item) => {
+              return item.type == 0;
+            });
           } else {
             this.$toast(this.ErrCode(data.msg));
           }
@@ -292,6 +299,16 @@ export default {
       this.site = data;
       this.popupShow = false;
     },
+    onTicket: function (item) {
+      this.ticket.id = item.id;
+      this.ticket.name = `${item.money}元现金券`;
+      this.ticketShow = false;
+    },
+    onNoTicket: function () {
+      this.ticket.id = -1;
+      this.ticket.name = "";
+      this.ticketShow = false;
+    },
   },
   filters: {
     toFixed: function (value) {
@@ -302,6 +319,22 @@ export default {
 };
 </script>
 <style scoped>
+.ticketbox {
+  height: 50%;
+  display: flex;
+  flex-direction: column;
+}
+/* 取消按钮 */
+.noTicket {
+  width: 97%;
+  height: 3rem;
+  border-radius: 2rem;
+  color: #fff;
+  flex-shrink: 0;
+  white-space: nowrap;
+  margin-bottom: 0.2rem;
+  background-color: #1989fa;
+}
 .addOrder {
   height: 100%;
   display: flex;
@@ -338,7 +371,7 @@ export default {
 }
 .site span {
   color: #fff;
-  font-size: 0.1rem;
+  font-size: 0.8rem;
   padding: 0 0.2rem;
   border-radius: 1rem;
   background: #feb35c;
@@ -563,5 +596,19 @@ export default {
 }
 .yesSubmit .van-submit-bar__button {
   background: #e75858 !important;
+}
+/* 优惠券 */
+.addOrder .van-action-sheet__header {
+  flex-shrink: 0;
+}
+.addOrder .van-action-sheet__content {
+  flex: auto;
+  display: flex;
+  overflow-y: auto;
+  align-items: center;
+  flex-direction: column;
+}
+.addOrder .van-action-sheet__content > div > div {
+  margin-top: 0.5rem;
 }
 </style>

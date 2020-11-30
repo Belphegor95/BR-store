@@ -41,7 +41,6 @@ export default {
   },
   mounted() {
     this.getcate();
-    // console.info(Object.keys(this.cate).length)
   },
   methods: {
     sidebarClick: function (item) {
