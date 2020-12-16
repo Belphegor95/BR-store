@@ -370,7 +370,7 @@ body {
 }
 .addressRedact .van-address-edit__buttons .van-button {
   border: none;
-  background-image: linear-gradient(to right, #ffd8a4, #fcaa8d);
+  background-image: linear-gradient(to right, #ffc474, #ff855a);
 }
 /* 设置选择地址高度 */
 .addressRedact .van-popup--bottom {

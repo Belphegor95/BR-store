@@ -4,7 +4,7 @@
     <van-nav-bar
       left-arrow
       class="navBar"
-      @click-left="$router.go(-1)"
+      @click-left="onBack"
       :fixed="false"
       placeholder
       title="关于开心兔"
@@ -15,7 +15,9 @@
         <p>当前版本号: 0.0.1</p>
       </div>
       <div class="btnbox">
-        <van-button @click="$router.push('/policy')"> 开心兔隐私政策 </van-button>
+        <van-button @click="$router.push('/policy?name=policy')">
+          开心兔隐私政策
+        </van-button>
       </div>
     </div>
   </div>
@@ -26,35 +28,38 @@ export default {
   data() {
     return {};
   },
-  methods: {},
+  methods: {
+    onBack: function () {
+      this.$emit("onBack", false);
+    },
+  },
 };
 </script>
 <style  scoped>
 .content {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 .logobox {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    padding: 2rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 2rem 0;
 }
 .logobox > img {
-    width: 10rem;
-    
+  width: 10rem;
 }
 .logobox > p {
-    font-size: 1.1rem;
-    margin-top: 1rem;
+  font-size: 1.1rem;
+  margin-top: 1rem;
 }
 .btnbox {
-    display: flex;
-    flex-direction: column;
-    padding: 0 1rem;
+  display: flex;
+  flex-direction: column;
+  padding: 0 1rem;
 }
 .btnbox > button {
-    margin-top: 1rem;
+  margin-top: 1rem;
 }
 </style>

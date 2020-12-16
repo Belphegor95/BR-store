@@ -74,10 +74,10 @@ export default {
   bottom: -0.1rem;
   left: 0;
   height: 0.5rem;
-  background-image: linear-gradient(to right, #ffd8a4, #fcaa8d);
+  background-image: linear-gradient(to right, #ffc474, #ff855a);
 }
 i {
-  background: linear-gradient(to right, #ffd8a4, #fcaa8d);
+  background: linear-gradient(to right, #ffc474, #ff855a);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;

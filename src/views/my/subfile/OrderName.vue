@@ -1,10 +1,19 @@
 <!-- 修改用户名 -->
 <template>
   <div class="orderName">
-    <van-nav-bar left-arrow class="navBar" @click-left="$router.go(-1)" :fixed="false" placeholder title="修改用户名" />
+    <van-nav-bar
+      left-arrow
+      class="navBar"
+      @click-left="onBack"
+      :fixed="false"
+      placeholder
+      title="修改用户名"
+    />
     <van-field v-model="name" label="用户名" placeholder="请输入用户名" />
     <div class="btnBox">
-      <van-button class="btnForm" type="default" @click="editAccOrderName">提交</van-button>
+      <van-button class="btnForm" type="default" @click="editAccOrderName"
+        >提交</van-button
+      >
     </div>
   </div>
 </template>
@@ -36,6 +45,9 @@ export default {
         .catch(() => {
           this.$toast(this.$api.monmsg);
         });
+    },
+    onBack: function () {
+      this.$emit("onBack", false);
     },
   },
 };

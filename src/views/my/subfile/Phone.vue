@@ -1,19 +1,40 @@
 <!-- 换绑手机号 -->
 <template>
   <div class="phone">
-    <van-nav-bar left-arrow class="navBar" @click-left="back" :fixed="false" placeholder title="换绑手机号" />
+    <van-nav-bar
+      left-arrow
+      class="navBar"
+      @click-left="onBack"
+      :fixed="false"
+      placeholder
+      title="换绑手机号"
+    />
     <div class="phonebox" v-if="type == 0">
-      <van-field v-model="phoneNum" label="新手机号" placeholder="请输入手机号" :key="1">
+      <van-field
+        v-model="phoneNum"
+        label="新手机号"
+        placeholder="请输入手机号"
+        :key="1"
+      >
         <template #button>
-          <van-button size="small" class="btn" v-if="!isloading" @click="getYzm">获取验证码</van-button>
+          <van-button size="small" class="btn" v-if="!isloading" @click="getYzm"
+            >获取验证码</van-button
+          >
           <p class="btnloadClass" v-else>{{ btnload }}</p>
         </template>
       </van-field>
       <van-field v-model="yzm" label="验证码" placeholder="请输入验证码" />
     </div>
     <div class="phonebox" v-else-if="type == 1">
-      <p>您的手机号包含了其他订货服务,输入手机号登录密码可以将当前账号与手机号关联,同时该账号密码也将同步为手机号登录密码</p>
-      <van-field readonly v-model="id" label="当前账号" placeholder="请输入当前账号" />
+      <p>
+        您的手机号包含了其他订货服务,输入手机号登录密码可以将当前账号与手机号关联,同时该账号密码也将同步为手机号登录密码
+      </p>
+      <van-field
+        readonly
+        v-model="id"
+        label="当前账号"
+        placeholder="请输入当前账号"
+      />
       <van-field
         readonly
         v-model="phoneNum"
@@ -22,10 +43,17 @@
         placeholder="请输入登录手机号"
         :key="2"
       />
-      <van-field v-model="pwd" label="登录密码" type="password" placeholder="请再次输入登录密码" />
+      <van-field
+        v-model="pwd"
+        label="登录密码"
+        type="password"
+        placeholder="请再次输入登录密码"
+      />
     </div>
     <div class="btnBox">
-      <van-button class="btnForm" type="default" @click="confirmClick">确定</van-button>
+      <van-button class="btnForm" type="default" @click="confirmClick"
+        >确定</van-button
+      >
     </div>
   </div>
 </template>
@@ -120,8 +148,8 @@ export default {
         this.isloading = false;
       }
     },
-    back: function () {
-      this.type == 0 ? this.$router.go(-1) : (this.type = 0);
+    onBack: function () {
+      this.$emit("onBack", false);
     },
   },
 };
@@ -149,7 +177,7 @@ export default {
   width: 98%;
 }
 .btn span {
-  background: linear-gradient(to right, #ffd8a4, #fcaa8d);
+  background: linear-gradient(to right, #ffc474, #ff855a);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;

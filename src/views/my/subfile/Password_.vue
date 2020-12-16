@@ -4,7 +4,7 @@
     <van-nav-bar
       left-arrow
       class="navBar"
-      @click-left="$router.go(-1)"
+      @click-left="onBack"
       fixed
       placeholder
       title="修改密码"
@@ -136,6 +136,9 @@ export default {
         this.isloading = false;
       }
     },
+    onBack: function () {
+      this.$emit("onBack", false);
+    },
   },
 };
 </script>
@@ -145,7 +148,7 @@ export default {
   background-color: #f5f5f5;
 }
 .btn span {
-  background: linear-gradient(to right, #ffd8a4, #fcaa8d);
+  background: linear-gradient(to right, #ffc474, #ff855a);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;

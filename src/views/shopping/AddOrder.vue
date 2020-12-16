@@ -44,11 +44,17 @@
         <p>付款金额</p>
         <div>
           <p>优惠券</p>
-          <p>请选择</p>
+          <p>{{ ticket.money != 0 ? `-¥${ticket.money}` : "请选择" }}</p>
         </div>
         <div>
           <p>订单金额</p>
-          <p>￥{{ orderdata.totalMoney }}</p>
+          <p>
+            ￥{{
+              orderdata.totalMoney - ticket.money > 0
+                ? orderdata.totalMoney - ticket.money
+                : 0
+            }}
+          </p>
         </div>
       </div>
       <!-- 配送方式 -->
@@ -78,7 +84,11 @@
     <van-submit-bar
       class="noSubmit"
       v-if="orderdata.needMoney && orderdata.needMoney != 0"
-      :price="orderdata.totalMoney * 100"
+      :price="
+        (orderdata.totalMoney - ticket.money) * 100 < 0
+          ? 0
+          : (orderdata.totalMoney - ticket.money) * 100
+      "
       label="应付金额："
       button-text="提交订单"
       @submit="onSubmit"
@@ -94,7 +104,11 @@
       :loading="btnload"
       class="yesSubmit"
       label="应付金额："
-      :price="orderdata.totalMoney * 100"
+      :price="
+        (orderdata.totalMoney - ticket.money) * 100 < 0
+          ? 0
+          : (orderdata.totalMoney - ticket.money) * 100
+      "
       button-text="提交订单"
       @submit="onSubmit"
     />
@@ -165,7 +179,7 @@
       </div>
     </van-popup>
     <van-action-sheet class="ticketbox" v-model="ticketShow" title="优惠券">
-      <div style="flex: auto; overflow: auto">
+      <div class="box">
         <ticket
           @onTicket="onTicket"
           :ticket="item"
@@ -198,6 +212,7 @@ export default {
       ticket: {
         id: -1,
         name: "",
+        money: 0,
       }, // 优惠券id
       ticketShow: false,
       ticketList: [], // 优惠券
@@ -302,11 +317,13 @@ export default {
     onTicket: function (item) {
       this.ticket.id = item.id;
       this.ticket.name = `${item.money}元现金券`;
+      this.ticket.money = item.money;
       this.ticketShow = false;
     },
     onNoTicket: function () {
       this.ticket.id = -1;
       this.ticket.name = "";
+      this.ticket.money = 0;
       this.ticketShow = false;
     },
   },
@@ -558,6 +575,15 @@ export default {
   border-top-width: 7px;
   border-top-color: #e75858;
 }
+.box {
+  flex: auto;
+  overflow: auto;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  /* margin: auto; */
+}
 </style>
 <style>
 .addOrder .van-submit-bar__text {
@@ -609,6 +635,6 @@ export default {
   flex-direction: column;
 }
 .addOrder .van-action-sheet__content > div > div {
-  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
 }
 </style>

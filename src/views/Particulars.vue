@@ -53,8 +53,8 @@
     <van-goods-action>
       <van-goods-action-icon icon="chat-o" text="客服" @click="onClickIcon" />
       <van-goods-action-icon icon="cart-o" text="购物车" to="/shopping" />
-      <van-goods-action-icon v-if="false" icon="star-o" text="已收藏" />
-      <van-goods-action-icon v-else icon="star" text="已收藏" color="#feb35c" />
+      <!-- <van-goods-action-icon v-if="false" icon="star-o" text="已收藏" /> -->
+      <!-- <van-goods-action-icon v-else icon="star" text="已收藏" color="#feb35c" /> -->
       <van-goods-action-button type="warning" text="加入购物车" @click="popClick" />
     </van-goods-action>
     <popUp :popUpShow="popUpShow" :popUpData="particularsData" @showClick="showClick" />

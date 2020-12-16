@@ -80,11 +80,11 @@ export default {
             }
             this.$store.commit("show_count", data.data.count);
           } else {
-            this.$toast(this.ErrCode(data.msg));
+            // this.$toast(this.ErrCode(data.msg));
           }
         })
         .catch(() => {
-          this.$toast.fail(this.$api.monmsg);
+          // this.$toast.fail(this.$api.monmsg);
         });
     },
     onSearch: function (val) {

@@ -43,7 +43,7 @@
       >
     </div>
     <footer>
-      登录代表同意<span @click="$router.push('/policy')">开心兔隐私政策</span>,并授权使用您的开心兔账号信息(如昵称、头像、收货地址)以便您统一管理
+      登录代表同意<span @click="$router.push('/policy?name=policy')">开心兔隐私政策</span>,并授权使用您的开心兔账号信息(如昵称、头像、收货地址)以便您统一管理
     </footer>
   </div>
 </template>

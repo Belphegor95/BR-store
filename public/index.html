@@ -5,8 +5,10 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0, user-scalable=0;">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
   <link rel="icon" href="<%= BASE_URL %>favicon.ico">
-  <title><%= htmlWebpackPlugin.options.title %></title>
+  <title>开心兔商城</title>
   <script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=FMxNKCVYPKKweAKH5b5Drv31Kz6pOGAg"></script>
   <script src=" //cdn.jsdelivr.net/npm/eruda"></script>
 </head>
@@ -14,10 +16,35 @@
 <body>
   <noscript>
     <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled.
-      Please enable it to continue.</strong>
+        Please enable it to continue.</strong>
   </noscript>
-  <div id="app"></div>
+  <div class="htmlBox">
+    <div id="headBox" style="background-image: linear-gradient(to right, #ffc474, #ff855a);width: 100%;">
+
+    </div>
+    <div id="app"></div>
+  </div>
   <!-- built files will be auto injected -->
+  <script>
+    let immersed = 0;
+    let ms = /Html5Plus\/.+\s\(.*(Immersed\/(\d+\.?\d*).*)\)/gi.exec(
+      navigator.userAgent
+    );
+    if (ms && ms.length >= 3) {
+      // 当前环境为沉浸式状态栏模式
+      immersed = parseFloat(ms[2]); // 获取状态栏的高度
+    }
+    let headBox = document.getElementById("headBox");
+    headBox.style.height = immersed + "px";
+  </script>
+  <style>
+    .htmlBox {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+  </style>
 </body>
 
 </html>

@@ -3,13 +3,13 @@ var api = api || {};
 
 // api.baseUrl = "http://121.196.123.181:3000"
 
-api.baseUrl = "http://192.168.1.189:3000"   // 孙飞请求地址
+// api.baseUrl = "http://192.168.0.189:3000"   // 孙飞请求地址
 
 // api.baseUrl = "http://39.105.230.213:3000"   // 孙飞请求地址
 
 // api.baseUrl = "http://8.131.87.240:3000"   // 孙飞请求地址
 
-// api.baseUrl = "http://www.kaixintu.cn:3000"   // 孙飞请求地址
+api.baseUrl = "http://www.kaixintu.cn:3000"   // 孙飞请求地址
 
 api.masterUrl = "http://www.kaixintu.cn:3002"   // 公告请求地址
 

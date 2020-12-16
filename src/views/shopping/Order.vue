@@ -50,15 +50,15 @@
           <p>￥{{ orderData.money }}</p>
         </div>
         <div>
-          <p>免费配送</p>
-          <p style="color: #e75858;">￥{{ orderData.money }}</p>
+          <p>优惠券</p>
+          <p style="color: #e75858;">-￥{{ orderData.ticketMoney }}</p>
         </div>
         <div>
           <p>应付金额</p>
         </div>
       </div>
       <div class="settlement">
-        <p>待付: ￥{{ orderData.money }}</p>
+        <p>待付: ￥{{ orderData.money - orderData.ticketMoney }}</p>
       </div>
       <!-- 配送方式 -->
       <div class="distributionBox">

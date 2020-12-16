@@ -3,26 +3,35 @@
   <div class="personage">
     <van-nav-bar class="navBar" :fixed="false" placeholder title="我的">
       <template #right>
-        <van-icon @click="popupClick('setting')" style="margin:0.5rem" name="setting-o" size="20" />
+        <van-icon
+          @click="popupClick('setting')"
+          style="margin: 0.5rem"
+          name="setting-o"
+          size="20"
+        />
         <van-icon @click="popupClick('information')" name="chat-o" size="20" />
       </template>
     </van-nav-bar>
-    <div class="userImg">
+    <div class="userImg" @click="onIsLogin">
       <img src="../../assets/img/my/defaultavatar_personal.png" />
-      <p>{{ $store.state.user.companyName ? $store.state.user.companyName: '未登录' }}</p>
+      <p>{{ $store.state.user ? $store.state.user.companyName : "未登录" }}</p>
     </div>
     <van-cell title="我的订单" @click="rutClick(0)" is-link />
     <div>
       <van-grid>
-        <van-grid-item class="navigationBox" v-for="(item,index) in navigations" :key="index" @click="rutClick(index + 1)">
+        <van-grid-item
+          class="navigationBox"
+          v-for="(item, index) in navigations"
+          :key="index"
+          @click="rutClick(index + 1)"
+        >
           <img :src="item.img" />
           <p>{{ item.name }}</p>
         </van-grid-item>
       </van-grid>
     </div>
-    <van-cell title="物流信息" is-link @click="rutlogisticsList" />
+    <!-- <van-cell title="物流信息" is-link @click="rutlogisticsList" />
     <div class="sitelist">
-      <!-- <div v-for="item in 2" :key="item" class="list" :class="item == 2?'list_active':''"> -->
       <div v-for="item in 2" :key="item" class="list">
         <img src="../../assets/img/product/particulars/chanpin.png" />
         <div class="site">
@@ -33,22 +42,28 @@
           <p>由[郑州市高新区]发往[郑州市高新区瑞达路]</p>
         </div>
       </div>
-    </div>
+    </div> -->
     <van-cell @click="popupClick('coupon')" is-link>
       <template #title>
-        <van-icon style="margin-right: 0.4rem;" name="coupon-o" />
+        <van-icon style="margin-right: 0.4rem" name="coupon-o" />
         <span class="custom-title">优惠券</span>
       </template>
     </van-cell>
     <van-cell @click="popupClick('address')" is-link>
       <template #title>
-        <img style="width: 0.8rem;vertical-align:middle;margin-right:0.4rem" src="../../assets/img/my/shdz.png" />
+        <img
+          style="width: 0.8rem; vertical-align: middle; margin-right: 0.4rem"
+          src="../../assets/img/my/shdz.png"
+        />
         <span class="custom-title">常用收货地址</span>
       </template>
     </van-cell>
     <van-cell value="0371-123456">
       <template #title>
-        <img style="width: 0.8rem;vertical-align:middle;margin-right:0.4rem" src="../../assets/img/my/kf.png" />
+        <img
+          style="width: 0.8rem; vertical-align: middle; margin-right: 0.4rem"
+          src="../../assets/img/my/kf.png"
+        />
         <span class="custom-title">客服电话</span>
       </template>
     </van-cell>
@@ -89,8 +104,17 @@ export default {
     this.$store.commit("show_activeid", 3);
   },
   methods: {
+    onIsLogin: function () {
+      if (!this.$store.state.user) {
+        this.$router.push({
+          path: "/login",
+          query: this.$router.currentRoute.fullPath,
+        });
+        this.$toast("未登录或登录信息失效！");
+      }
+    },
     popupClick: function (rutname, id) {
-      if (this.$store.state.user.companyName) {
+      if (this.$store.state.user) {
         this.$router.push(`/manage/${rutname}`);
       } else {
         this.$router.push({

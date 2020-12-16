@@ -48,7 +48,7 @@ body,
   color: #fff !important;
   font-size: 1.2rem !important;
   border-radius: 0.3rem !important;
-  background-image: linear-gradient(to right, #ffd8a4, #fcaa8d);
+  background-image: linear-gradient(to right, #ffc474, #ff855a);
 }
 /* 计时按钮 */
 .btnloadClass {
@@ -64,7 +64,7 @@ body,
 .van-nav-bar--fixed {
   height: 3rem;
   line-height: 3rem !important;
-  background-image: linear-gradient(to right, #ffd8a4, #fcaa8d);
+  background-image: linear-gradient(to right, #ffc474, #ff855a);
 }
 .navBar .van-nav-bar .van-icon {
   color: #fff;
@@ -119,5 +119,14 @@ body,
 .van-pull-refresh {
   overflow: auto !important;
   height: 100%;
+}
+
+/* 适配刘海屏 */
+body {
+  padding-top: constant(safe-area-inset-top);
+}
+
+.mui-bar.mui-bar-nav {
+  top: constant(safe-area-inset-top);
 }
 </style>

@@ -75,7 +75,7 @@ export default {
   text-align: center;
   padding-bottom: 1rem;
   /* padding-top: 1rem; */
-  background: linear-gradient(to right, #ffd8a4, #fcaa8d);
+  background: linear-gradient(to right, #ffc474, #ff855a);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;

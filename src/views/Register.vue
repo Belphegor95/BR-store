@@ -183,13 +183,13 @@ export default {
   line-height: 1.4rem;
 }
 .register i {
-  background: linear-gradient(to right, #ffd8a4, #fcaa8d);
+  background: linear-gradient(to right, #ffc474, #ff855a);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
 .btn span {
-  background: linear-gradient(to right, #ffd8a4, #fcaa8d);
+  background: linear-gradient(to right, #ffc474, #ff855a);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -207,7 +207,7 @@ export default {
   width: 8rem;
 }
 .popupbox > p {
-  background: linear-gradient(to right, #ffd8a4, #fcaa8d);
+  background: linear-gradient(to right, #ffc474, #ff855a);
   -webkit-background-clip: text;
   background-clip: text;
   margin-top: 1.5rem;

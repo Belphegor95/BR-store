@@ -46,8 +46,8 @@ export default {
 .ticket {
   /* width: 12.6rem;
   height: 4.3rem; */
-  width: 23rem;
-  height: 6.5rem;
+  width: 98%;
+  /* height: 6.5rem; */
   cursor: pointer;
   color: #fff;
   display: flex;
@@ -77,7 +77,7 @@ export default {
   align-items: center;
   justify-content: space-around;
   padding-right: 0.5rem;
-  padding-bottom: 2.5rem;
+  padding-bottom: 15%;
   flex-direction: column;
 }
 .ticket > div:nth-child(2) > div {

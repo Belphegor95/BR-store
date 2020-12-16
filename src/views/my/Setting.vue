@@ -25,10 +25,10 @@
       position="right"
       :style="{ height: height, width: '100%' }"
     >
-      <phone v-if="tarbarType == 0" />
-      <password v-else-if="tarbarType == 1" />
-      <orderName v-else-if="tarbarType == 2" />
-      <happyRabbit v-else-if="tarbarType == 3" />
+      <phone @onBack="onBack" v-if="tarbarType == 0" />
+      <password @onBack="onBack" v-else-if="tarbarType == 1" />
+      <orderName @onBack="onBack" v-else-if="tarbarType == 2" />
+      <happyRabbit @onBack="onBack" v-else-if="tarbarType == 3" />
     </van-popup>
   </div>
 </template>
@@ -51,19 +51,6 @@ export default {
       height: 0,
     };
   },
-  watch: {
-    $route: {
-      handler(newValue) {
-        if (newValue.query.tarbar) {
-          this.tarbarType = newValue.query.tarbar;
-          !this.popupShow ? (this.popupShow = true) : null;
-          return;
-        }
-        this.popupShow = false;
-      },
-      deep: true,
-    },
-  },
   mounted() {
     // 弹窗动画有小数导致字模糊
     this.height = window.innerHeight;
@@ -71,10 +58,11 @@ export default {
     this.height = this.height + "px";
     // 如果没登录让他跳转到首页
     if (!this.$store.state.user.companyName) this.$router.push("/");
+    this.onBack();
   },
   methods: {
     tarPush: function (type) {
-      this.$router.push(`/manage/setting?tarbar=${type}`);
+      this.$router.replace(`/manage/setting?tarbar=${type}`);
     },
     // 退出登录
     quitClick: function () {
@@ -99,6 +87,12 @@ export default {
             });
         })
         .catch(() => {});
+    },
+    onBack: function () {
+      this.popupShow = false;
+      this.$route.path != "/manage/setting"
+        ? this.$router.replace(`/manage/setting`)
+        : "";
     },
   },
 };
