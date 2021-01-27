@@ -18,9 +18,20 @@ import axios from "axios";
 import qs from "qs";
 import "./plugins/vant.js"
 Vue.config.keyCodes.caps = 20;
+
+console.info(Vue.prototype)
+
 Vue.prototype.axios = axios;
 axios.interceptors.request.use(function (config) {
+  let token = JSON.parse(localStorage.vuex).token
   if (config.method == "post") {
+    if (config.data) {
+      config.data.Token = token
+    } else {
+      config.data = {}
+      config.data.Token = token
+    }
+    console.info(token)
     config.data = qs.stringify(config.data);
   }
   return config;
@@ -48,7 +59,8 @@ axios.defaults.baseURL = api.baseUrl;
 // axios.defaults.baseURL = "/api";
 
 // 允许携带cookie
-axios.defaults.withCredentials = true;
+axios.defaults.withCredentials = !api.isApp;
+
 function ErrCode(code) {
   if (code == 100) {
     return "参数非法"
@@ -128,6 +140,93 @@ function ErrCode(code) {
 }
 Vue.prototype.ErrCode = ErrCode
 
+// 设置适配高度
+let immersed = 0;
+let ms = /Html5Plus\/.+\s\(.*(Immersed\/(\d+\.?\d*).*)\)/gi.exec(
+  navigator.userAgent
+);
+if (ms && ms.length >= 3) {
+  // 当前环境为沉浸式状态栏模式
+  immersed = parseFloat(ms[2]); // 获取状态栏的高度
+}
+
+Vue.prototype.$height = immersed
+
+// console.info(window)
+window.$vue = Vue.prototype
+
+// let axios = {}
+// axios.get = get()
+// axios.post = post()
+
+// function get(url,data) {
+//   // let this_ = this
+//   var xhr = new XMLHttpRequest();
+//   xhr.timeout = 3000;
+//   xhr.ontimeout = get().catch()
+//   // function (event) {
+//   //   Vue.prototype.$toast.fail(api.monmsg)
+//   // };
+//   var formData = new FormData();
+//   // formData.append("tel", "18217767969");
+//   // formData.append("psw", "111111");
+//   xhr.open("GET", api.baseUrl + url);
+//   xhr.send(formData);
+//   xhr.onreadystatechange = get().then()
+//   // function () {
+//   //   if (xhr.readyState == 4 && xhr.status == 200) {
+//   //     let data = JSON.parse(xhr.response);
+//   //     this_.navigations = data.data;
+//   //     // alert(xhr.responseText);
+//   //   }
+//   //   // else {
+//   //   //   alert(xhr.statusText);
+//   //   // }
+//   // };
+// }
+// function post() {
+//   let this_ = this
+//   var xhr = new XMLHttpRequest();
+//   xhr.timeout = 3000;
+//   xhr.ontimeout = function (event) {
+//     Vue.prototype.$toast.fail(api.monmsg)
+//   };
+//   var formData = new FormData();
+//   // formData.append("tel", "18217767969");
+//   // formData.append("psw", "111111");
+//   xhr.open("POST", api.baseUrl + this.$api.getHomeCate);
+//   xhr.send(formData);
+//   xhr.onreadystatechange = function () {
+//     if (xhr.readyState == 4 && xhr.status == 200) {
+//       let data = JSON.parse(xhr.response);
+//       this_.navigations = data.data;
+//       // alert(xhr.responseText);
+//     }
+//     // else {
+//     //   alert(xhr.statusText);
+//     // }
+//   };
+// }
+
+import Promise from "promise-polyfill";
+import 'whatwg-fetch'
+if (!window.Promise) {
+  window.Promise = Promise;
+}
+
+// fetch(api.baseUrl + api.getHomeCate, {
+//   method: 'POST',
+//   headers: {
+//     'Content-Type': 'application/json'
+//   },
+// }).then(function (res) {
+//   res.json().then(function (obj) {
+//     // if (obj.errcode == '200') {
+//     alert('登录成功')
+//     //   _this.$router.push('/')
+//     // }
+//   })
+// })
 Vue.config.productionTip = false
 Vue.prototype.$api = api;
 new Vue({

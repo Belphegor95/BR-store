@@ -374,17 +374,6 @@ export default {
         // 总价格
         this.totalPrice = this.totalPrice + num;
       }
-      // for (let i = 0; i < data.length; i++) {
-      //   for (let j = 0; j < data[i].unit.length; j++) {
-      //     let item = data[i].unit[j];
-      //     // 因为返回值是小数 所以成 100
-      //     let num = item.buyNum * item.orderPrice * 100;
-      //     // 总数量
-      //     this.totalNum = this.totalNum + item.buyNum;
-      //     // 总价格
-      //     this.totalPrice = this.totalPrice + num;
-      //   }
-      // }
     },
     // 点击折叠收起
     foldClick: function () {
@@ -509,6 +498,9 @@ export default {
 }
 .van-button__text {
   display: flex;
+}
+.shopping .van-checkbox {
+  margin-right: 0.5rem;
 }
 .van-card_content .van-checkbox__label {
   color: red !important;

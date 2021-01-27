@@ -63,7 +63,11 @@
                 :name="item.priceId"
                 v-for="(item, index) in popUpData.price_lv.unitList"
                 :key="index"
-                >{{ item.unitName }}<i v-if="item.rate != 1">({{item.rate}}{{ popUpData.price_lv.unitList[0].unitName }})</i></van-radio
+                >{{ item.unitName
+                }}<i v-if="item.rate != 1"
+                  >({{ item.rate
+                  }}{{ popUpData.price_lv.unitList[0].unitName }})</i
+                ></van-radio
               >
             </van-radio-group>
           </li>
@@ -89,14 +93,14 @@ export default {
   },
   watch: {
     popUpShow(val) {
-      if (val)  this.getOrderPrice()
-    }
+      if (val) this.getOrderPrice();
+    },
   },
   methods: {
     getOrderPrice: function () {
-      this.popUpData.price_lv.cate.forEach(item => {
-        item.order = this.popUpData.price_lv.unitList[0].orderPrice
-      })
+      this.popUpData.price_lv.cate.forEach((item) => {
+        item.order = this.popUpData.price_lv.unitList[0].orderPrice;
+      });
     },
     rateTypeClick: function (cate, item) {
       this.$forceUpdate();
@@ -122,11 +126,12 @@ export default {
       if (arr.length == 0) return;
       this.axios
         .post(this.$api.addToShoppingCart, {
-          plist: JSON.stringify(arr), 
+          plist: JSON.stringify(arr),
         })
         .then((data) => {
           if (data.code == 200) {
             this.$emit("showClick", false);
+            this.$store.commit("show_token", data.data.certificate);
             this.$store.commit("show_count", data.data.count);
           } else {
             this.$toast(this.ErrCode(data.msg));

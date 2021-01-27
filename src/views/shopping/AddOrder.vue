@@ -276,6 +276,7 @@ export default {
           this.$toast.fail(this.$api.monmsg);
         });
     },
+
     // 获取优惠券
     getTicket: function () {
       this.axios

@@ -67,6 +67,11 @@ const routes = [
     component: () => import('../views/shopping/OrderForm.vue'),
   },
   {
+    path: '/shopping/payment',
+    name: 'payment',
+    component: () => import('../views/shopping/Payment.vue'),
+  },
+  {
     path: '/shopping/aftermarket', // 退货/售后
     name: 'aftermarket',
     component: () => import('../views/shopping/Aftermarket.vue'),

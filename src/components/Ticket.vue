@@ -73,11 +73,12 @@ export default {
 }
 .ticket > div:nth-child(2) {
   flex: auto;
+  height: 4rem;
   display: flex;
   align-items: center;
   justify-content: space-around;
   padding-right: 0.5rem;
-  padding-bottom: 15%;
+  padding-bottom: 3rem;
   flex-direction: column;
 }
 .ticket > div:nth-child(2) > div {

@@ -10,10 +10,14 @@ export default new Vuex.Store({
     commodity: {}, // 商品属性
     order: {},// 订单属性
     order_: {}, // 提交订单属性
+    token: "",
   },
   mutations: {
     show_activeid(state, payload) {
       state.activeid = payload;
+    },
+    show_token(state, payload) {
+      state.token = payload;
     },
     show_user(state, payload) {
       state.user = payload;

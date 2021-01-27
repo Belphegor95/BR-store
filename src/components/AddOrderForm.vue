@@ -44,8 +44,24 @@ export default {
       this.$emit("popuClick", false);
     },
     onPay: function () {
-      let url = `http://kzf.banruogame.com/wxPay/pay/jsapi.php?tradeNo=${this.order.tradeNo}1&money=${this.order.money}&orderType=0&baseUrl=${this.$api.baseUrl}`;
+      // 根据打包设置的 app还是网站来 区分支付方式
+      this.$api.isApp ? this.appPay() : this.h5Pay();
+      // this.h5Pay();
+    },
+    // 网站支付
+    h5Pay: function () {
+      let url = `http://www.kaixintu.cn/wxPay/pay/jsapi.php?tradeNo=${this.order.tradeNo}1&money=${this.order.money}&orderType=0&baseUrl=${this.$api.baseUrl}`;
       window.location.href = url;
+    },
+    // app支付
+    appPay: function () {
+      this.$router.push({
+        path: "/shopping/payment",
+        query: {
+          tradeNo: this.order.tradeNo,
+          money: this.order.money,
+        },
+      });
     },
   },
 };

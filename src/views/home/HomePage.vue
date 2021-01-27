@@ -3,10 +3,14 @@
   <div class="homePage">
     <!-- 头部 -->
     <div class="head">
-      <van-search disabled @click="searchShow= true" placeholder="请输入搜索关键词" />
+      <van-search
+        disabled
+        @click="searchShow = true"
+        placeholder="请输入搜索关键词"
+      />
       <div class="icoBox" @click="$router.push('/manage/information')">
         <!--  <van-icon :name="lingdang" badge="0" />-->
-        <van-icon :name="lingdang"  />
+        <van-icon :name="lingdang" />
       </div>
     </div>
     <div class="content">
@@ -17,18 +21,23 @@
         <div class="swipeBox">
           <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
             <van-swipe-item v-for="(item, index) in picUrls" :key="index">
-              <img :src="item.picUrl" style="width:100%" />
+              <img :src="item.picUrl" style="width: 100%" />
             </van-swipe-item>
           </van-swipe>
         </div>
         <!-- 商品导航 -->
         <div class="navigation">
           <van-grid>
-            <van-grid-item @click="gridClick(index,item)" class="navigationBox" v-for="(item,index) in navigations" :key="index">
+            <van-grid-item
+              @click="gridClick(index, item)"
+              class="navigationBox"
+              v-for="(item, index) in navigations"
+              :key="index"
+            >
               <img :src="item.img_url" />
               <p>{{ item.name }}</p>
             </van-grid-item>
-            <van-grid-item @click="gridClick( -1)" class="navigationBox">
+            <van-grid-item @click="gridClick(-1)" class="navigationBox">
               <img src="../../assets/img/home/shouhou.png" />
               <p>售后及维修</p>
             </van-grid-item>
@@ -38,18 +47,26 @@
         <topic name="推荐商品" color="#3ba8fa" />
         <van-empty v-if="recommend.length == 0" description="暂无数据" />
         <ul v-else>
-          <li v-for="(item,index) in recommend" :key="index">
+          <li v-for="(item, index) in recommend" :key="index">
             <div class="goodsList">
               <img :src="item.plist_img_url[0]" @click="rutparClick(item)" />
               <p class="goodsName">{{ item.plist_name }}</p>
-              <div class="goodsPrice" v-for="(unitList,index1) in item.price_lv.unitList" :key="index1" v-show="unitList.rate == 1">
+              <div
+                class="goodsPrice"
+                v-for="(unitList, index1) in item.price_lv.unitList"
+                :key="index1"
+                v-show="unitList.rate == 1"
+              >
                 <!-- <p v-if="unitList.rate == 1">会员价: ￥{{ `${unitList.orderPrice}/${unitList.unitName}` }}</p> -->
                 <p>{{ unitList.orderPrice }}/{{ unitList.unitName }}</p>
               </div>
               <div class="moneyBox">
                 <span>{{ item.price_lv.cate.length }}个规格可选</span>
                 <span @click="shoppingclick(item)">
-                  <img class="shoppingCart" src="../../assets/img/home/gouwu.png" />
+                  <img
+                    class="shoppingCart"
+                    src="../../assets/img/home/gouwu.png"
+                  />
                 </span>
               </div>
             </div>
@@ -57,8 +74,16 @@
         </ul>
       </van-pull-refresh>
     </div>
-    <search :popUpShow="searchShow" @showClick="searchShow = false" v-if="searchShow" />
-    <popUp :popUpShow="popUpShow" :popUpData="popUpData" @showClick="showClick" />
+    <search
+      :popUpShow="searchShow"
+      @showClick="searchShow = false"
+      v-if="searchShow"
+    />
+    <popUp
+      :popUpShow="popUpShow"
+      :popUpData="popUpData"
+      @showClick="showClick"
+    />
   </div>
 </template>
 <script>
@@ -152,6 +177,27 @@ export default {
     },
     // 首页分类入口
     getHomeCate: function () {
+      // let this_ = this;
+      // var xhr = new XMLHttpRequest();
+      // xhr.timeout = 3000;
+      // xhr.ontimeout = function (event) {
+      //   alert("请求超时！");
+      // };
+      // var formData = new FormData();
+      // // formData.append("tel", "18217767969");
+      // // formData.append("psw", "111111");
+      // xhr.open("POST", this.$api.baseUrl + this.$api.getHomeCate);
+      // xhr.send(formData);
+      // xhr.onreadystatechange = function () {
+      //   if (xhr.readyState == 4 && xhr.status == 200) {
+      //     let data = JSON.parse(xhr.response);
+      //     this_.navigations = data.data;
+      //     // alert(xhr.responseText);
+      //   }
+      //   // else {
+      //   //   alert(xhr.statusText);
+      //   // }
+      // };
       this.axios
         .post(this.$api.getHomeCate)
         .then((data) => {
@@ -170,7 +216,7 @@ export default {
         this.$router.push({
           path: "/classification",
           query: item,
-        });
+        }); 
       } else {
         this.$router.push("/maintainRecord");
       }
@@ -235,9 +281,9 @@ export default {
   align-items: center;
 }
 .swipeBox {
-  width: 90%;
   /* width: 100%; */
-  margin: 0.5rem auto;
+  margin: 1rem 0.5rem;
+  /* box-sizing: border-box; */
 }
 .my-swipe .van-swipe-item {
   color: #fff;

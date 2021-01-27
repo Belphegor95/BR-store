@@ -25,6 +25,7 @@
       position="right"
       :style="{ height: height, width: '100%' }"
     >
+      <div class="headBox" :style="'height:'+ $height + 'px'"></div>
       <phone @onBack="onBack" v-if="tarbarType == 0" />
       <password @onBack="onBack" v-else-if="tarbarType == 1" />
       <orderName @onBack="onBack" v-else-if="tarbarType == 2" />
@@ -37,6 +38,7 @@ import phone from "./subfile/Phone";
 import password from "./subfile/Password_";
 import orderName from "./subfile/OrderName";
 import happyRabbit from "./subfile/HappyRabbit";
+import { Info } from 'vant';
 export default {
   components: {
     phone,
@@ -58,11 +60,12 @@ export default {
     this.height = this.height + "px";
     // 如果没登录让他跳转到首页
     if (!this.$store.state.user.companyName) this.$router.push("/");
-    this.onBack();
   },
   methods: {
     tarPush: function (type) {
       this.$router.replace(`/manage/setting?tarbar=${type}`);
+      this.tarbarType = type;
+      this.popupShow = true;
     },
     // 退出登录
     quitClick: function () {
@@ -90,9 +93,7 @@ export default {
     },
     onBack: function () {
       this.popupShow = false;
-      this.$route.path != "/manage/setting"
-        ? this.$router.replace(`/manage/setting`)
-        : "";
+      this.$route.query.tarbar ? this.$router.replace(`/manage/setting`) : "";
     },
   },
 };
@@ -112,5 +113,9 @@ export default {
   line-height: 3rem;
   align-items: center;
   justify-content: center;
+}
+.headBox {
+  background-image: linear-gradient(to right, #ffc474, #ff855a);
+  width: 100%;
 }
 </style>

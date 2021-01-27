@@ -43,7 +43,9 @@
       >
     </div>
     <footer>
-      登录代表同意<span @click="$router.push('/policy?name=policy')">开心兔隐私政策</span>,并授权使用您的开心兔账号信息(如昵称、头像、收货地址)以便您统一管理
+      登录代表同意<span @click="$router.push('/policy?name=policy')"
+        >开心兔隐私政策</span
+      >,并授权使用您的开心兔账号信息(如昵称、头像、收货地址)以便您统一管理
     </footer>
   </div>
 </template>
@@ -71,8 +73,7 @@ export default {
   mounted() {},
   methods: {
     ok: function () {
-      console.info(123)
-
+      console.info(123);
     },
     loginClick: function () {
       if (!/^1[3456789]\d{9}$/.test(this.phoneNum)) {
@@ -116,10 +117,12 @@ export default {
         .then((data) => {
           this.btnload = false;
           if (data.code == 200) {
+            console.info(data.data.certificate)
             this.$toast("登录成功");
             // 删除重新赋值
             localStorage.removeItem("vuex");
             this.$store.commit("resetState");
+            this.$store.commit("show_token", data.data.certificate);
             this.$store.commit("show_user", data.data);
             if (data.data.type) {
               this.$router.push({
@@ -217,7 +220,8 @@ export default {
 }
 footer {
   position: absolute;
-  bottom: 0;
+  /* bottom: 0; */
+  /* margin-top: 5rem; */
   padding: 0.5rem;
   font-size: 0.8rem;
   /* display: flex; */

@@ -114,6 +114,7 @@
       :style="{ height: height, width: '100%' }"
       class="popup"
     >
+      <div class="headBox" :style="'height:' + $height + 'px'"></div>
       <van-nav-bar
         left-arrow
         class="navBar"
@@ -306,7 +307,7 @@ export default {
         });
     },
     onPay: function (data) {
-      let url = `http://kzf.banruogame.com/wxPay/pay/jsapi.php?tradeNo=${data.tradeNo}1&money=${data.money}&orderType=1&baseUrl=${this.$api.baseUrl}`;
+      let url = `http://www.kaixintu.cn/wxPay/pay/jsapi.php?tradeNo=${data.tradeNo}1&money=${data.money}&orderType=1&baseUrl=${this.$api.baseUrl}`;
       window.location.href = url;
     },
     // 点击确定
@@ -451,6 +452,10 @@ export default {
 .btnForm {
   width: 5rem;
   border-radius: 2rem !important;
+}
+.headBox {
+  background-image: linear-gradient(to right, #ffc474, #ff855a);
+  width: 100%;
 }
 </style>
 <style>

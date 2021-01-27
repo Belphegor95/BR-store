@@ -13,7 +13,6 @@
         left-arrow
         class="navBar"
         @click-left="show_ = false"
-        fixed
         placeholder
         title="昵称"
       />

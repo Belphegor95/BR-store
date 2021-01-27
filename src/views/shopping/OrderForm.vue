@@ -39,7 +39,7 @@
                   class="paybtn"
                   type="default"
                   size="small"
-                  @click="onPay"
+                  @click="onPay(item)"
                   >立即支付</van-button
                 >
                 <van-button
@@ -65,6 +65,7 @@
       :style="{ height: height, width: '100%' }"
       class="popup"
     >
+      <div class="headBox" :style="'height:' + $height + 'px'"></div>
       <addOrderForm :order="order" @popuClick="popuClick" />
     </van-popup>
   </div>
@@ -168,9 +169,19 @@ export default {
       return obj;
     },
     // 点击支付
-    onPay: function () {
-      let url = `http://kzf.banruogame.com/wxPay/pay/jsapi.php?tradeNo=${this.order.tradeNo}1&money=${this.order.money}&orderType=0&baseUrl=${this.$api.baseUrl}`;
-      window.location.href = url;
+    onPay: function (item) {
+      if (this.$api.isApp) {
+        this.$router.push({
+          path: "/shopping/payment",
+          query: {
+            tradeNo: item.tradeNo,
+            money: item.money,
+          },
+        });
+      } else {
+        let url = `http://www.kaixintu.cn/wxPay/pay/jsapi.php?tradeNo=${this.order.tradeNo}1&money=${this.order.money}&orderType=0&baseUrl=${this.$api.baseUrl}`;
+        window.location.href = url;
+      }
     },
   },
 };
@@ -236,6 +247,10 @@ li > p {
 .btnBox .paybtn {
   color: #feb35c;
   border: 1px solid #feb35c;
+}
+.headBox {
+  background-image: linear-gradient(to right, #ffc474, #ff855a);
+  width: 100%;
 }
 </style>
 <style>

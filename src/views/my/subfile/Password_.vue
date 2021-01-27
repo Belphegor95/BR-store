@@ -5,7 +5,6 @@
       left-arrow
       class="navBar"
       @click-left="onBack"
-      fixed
       placeholder
       title="修改密码"
     />

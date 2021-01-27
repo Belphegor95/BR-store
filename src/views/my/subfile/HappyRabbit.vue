@@ -20,6 +20,9 @@
         </van-button>
       </div>
     </div>
+    <div class="copyrightBox">
+      <p>河南般若网络技术有限公司 版权所有</p>
+    </div>
   </div>
 </template>
 
@@ -61,5 +64,11 @@ export default {
 }
 .btnbox > button {
   margin-top: 1rem;
+}
+.copyrightBox {
+  color:#a5a6a9;
+  font-size: 0.85rem;
+  margin-top: 5rem;
+  text-align: center;
 }
 </style>

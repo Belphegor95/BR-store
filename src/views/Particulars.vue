@@ -1,6 +1,11 @@
 <!-- 详情页 -->
 <template>
   <div class="particulars">
+    <img
+      class="backImg"
+      @click="backClick"
+      src="../assets/img/product/particulars/fanhui.png"
+    />
     <div class="content">
       <div class="imgBox">
         <van-swipe
@@ -15,20 +20,26 @@
             :key="index"
             @click="swipeClick(index)"
           >
-            <img :src="item" style="width:100%" />
+            <img :src="item" style="width: 100%" />
           </van-swipe-item>
           <template #indicator>
-            <div
-              class="custom-indicator"
-            >{{ current + 1 }}/{{ particularsData.plist_img_url?particularsData.plist_img_url.length: 0 }}</div>
+            <div class="custom-indicator">
+              {{ current + 1 }}/{{
+                particularsData.plist_img_url
+                  ? particularsData.plist_img_url.length
+                  : 0
+              }}
+            </div>
           </template>
         </van-swipe>
-        <img class="backImg" @click="backClick" src="../assets/img/product/particulars/fanhui.png" />
       </div>
       <!-- 商品价格 -->
       <div class="attributeBox">
         <div class="priceBox" v-if="particularsData.price_lv">
-          <div v-for="(item,index) in particularsData.price_lv.unitList" :key="index">
+          <div
+            v-for="(item, index) in particularsData.price_lv.unitList"
+            :key="index"
+          >
             <p v-html="integer(item)"></p>
           </div>
         </div>
@@ -47,7 +58,11 @@
       <!-- 商品详情页 -->
       <div class="presentationBox" v-if="particularsData.plist_detail_img_url">
         <topic name="商品介绍" color="#3ba8fa" />
-        <img v-for="(item,index) in particularsData.plist_detail_img_url" :key="index" :src="item" />
+        <img
+          v-for="(item, index) in particularsData.plist_detail_img_url"
+          :key="index"
+          :src="item"
+        />
       </div>
     </div>
     <van-goods-action>
@@ -55,9 +70,17 @@
       <van-goods-action-icon icon="cart-o" text="购物车" to="/shopping" />
       <!-- <van-goods-action-icon v-if="false" icon="star-o" text="已收藏" /> -->
       <!-- <van-goods-action-icon v-else icon="star" text="已收藏" color="#feb35c" /> -->
-      <van-goods-action-button type="warning" text="加入购物车" @click="popClick" />
+      <van-goods-action-button
+        type="warning"
+        text="加入购物车"
+        @click="popClick"
+      />
     </van-goods-action>
-    <popUp :popUpShow="popUpShow" :popUpData="particularsData" @showClick="showClick" />
+    <popUp
+      :popUpShow="popUpShow"
+      :popUpData="particularsData"
+      @showClick="showClick"
+    />
   </div>
 </template>
 <script>
@@ -77,22 +100,8 @@ export default {
     };
   },
   mounted() {
-    this.particularsData = this.$store.state.commodity
+    this.particularsData = this.$store.state.commodity;
     // 避免刷新 数据丢失
-    // this.particularsData = this.$route.query;
-    // if (typeof this.particularsData.plist_detail_img_url == "string") {
-    //   this.particularsData.plist_detail_img_url = JSON.parse(
-    //     this.particularsData.plist_detail_img_url
-    //   );
-    // }
-    // if (typeof this.particularsData.plist_img_url == "string") {
-    //   this.particularsData.plist_img_url = JSON.parse(
-    //     this.particularsData.plist_img_url
-    //   );
-    // }
-    // if (typeof this.particularsData.price_lv == "string") {
-    //   this.particularsData.price_lv = JSON.parse(this.particularsData.price_lv);
-    // }
   },
   methods: {
     integer: function (data) {
@@ -155,6 +164,7 @@ export default {
   display: flex;
   flex: 1;
   flex-direction: column;
+  position: relative;
 }
 .content {
   height: 100%;
@@ -170,14 +180,14 @@ export default {
 }
 /* 头部图片 */
 .imgBox {
-  position: relative;
   font-size: 0;
 }
 .backImg {
   width: 2rem;
-  position: fixed;
+  position: absolute;
   top: 0.5rem;
   left: 0.5rem;
+  z-index: 9;
 }
 .custom-indicator {
   position: absolute;

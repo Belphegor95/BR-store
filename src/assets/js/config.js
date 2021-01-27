@@ -1,5 +1,7 @@
 var api = api || {};
 
+api.isApp = true // 是app包 还是 网页包
+// api.isApp = false // 是app包 还是 网页包
 
 // api.baseUrl = "http://121.196.123.181:3000"
 
@@ -9,9 +11,9 @@ var api = api || {};
 
 // api.baseUrl = "http://8.131.87.240:3000"   // 孙飞请求地址
 
-api.baseUrl = "http://www.kaixintu.cn:3000"   // 孙飞请求地址
+api.baseUrl = "https://www.kaixintu.cn:3000"   // 孙飞请求地址
 
-api.masterUrl = "http://www.kaixintu.cn:3002"   // 公告请求地址
+api.masterUrl = "https://www.kaixintu.cn:3002"   // 公告请求地址
 
 api.monmsg = "网络遇到问题,请重试!";
 
@@ -92,5 +94,7 @@ api.getServerNotice = "/api/master/getServerNotice"  // 获取公告  单独端�
 api.getFixDoorMoney = "/api/getFixDoorMoney"  // 获取上门维修费用
 
 api.editOrder = "/api/editOrder"  // 修改订单
+
+api.pay = "/api/pay"  // 修改订单
 
 export { api };
